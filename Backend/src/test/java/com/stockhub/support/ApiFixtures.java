@@ -2,6 +2,7 @@ package com.stockhub.support;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import jakarta.servlet.http.Cookie;
@@ -116,6 +117,22 @@ public class ApiFixtures {
 
     public MockHttpServletRequestBuilder jsonPost(String url, Session session, Object body) {
         return post(url).header("Authorization", session.bearer()).contentType(MediaType.APPLICATION_JSON).content(toJson(body));
+    }
+
+    public MockHttpServletRequestBuilder jsonPut(String url, Session session, Object body) {
+        return put(url).header("Authorization", session.bearer()).contentType(MediaType.APPLICATION_JSON).content(toJson(body));
+    }
+
+    /** POSTs JSON and returns the parsed body, expecting 201 Created. */
+    public JsonNode create(String url, Session session, Object body) throws Exception {
+        return read(mvc.perform(jsonPost(url, session, body)).andExpect(status().isCreated()).andReturn());
+    }
+
+    /** Signs a new user of the given role in (temporary password already replaced). */
+    public Session userSession(Session admin, String role, List<UUID> locationIds) throws Exception {
+        String email = uniqueEmail(role.toLowerCase());
+        createUser(admin, role, locationIds, email);
+        return activate(email);
     }
 
     public String toJson(Object value) {
