@@ -1,0 +1,150 @@
+<section class="sh-card overflow-hidden" [attr.aria-busy]="loading()">
+  @if (error(); as err) {
+    <app-error-state [error]="err" (retry)="retry.emit()" />
+  } @else if (!loading() && rows().length === 0) {
+    <app-empty-state [title]="emptyTitle()" [description]="emptyDescription()">
+      <ng-content select="[empty-actions]" />
+    </app-empty-state>
+  } @else {
+    <!-- Desktop / tablet: semantic table -->
+    <div class="hidden overflow-x-auto md:block">
+      <table class="w-full text-left text-sm">
+        <caption class="sr-only">
+          {{
+            caption()
+          }}
+        </caption>
+        <thead
+          class="border-b border-border bg-surface-muted/60 text-xs uppercase tracking-wide text-fg-muted"
+        >
+          <tr>
+            @for (column of columns(); track column.key) {
+              <th
+                scope="col"
+                class="px-4 py-3 font-semibold"
+                [class]="
+                  (column.hideBelow ? hide[column.hideBelow] : '') +
+                  (column.align === 'end' ? ' text-right' : '')
+                "
+                [attr.aria-sort]="ariaSort(column)"
+              >
+                @if (column.sortable) {
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1 uppercase hover:text-fg"
+                    (click)="toggleSort(column)"
+                  >
+                    {{ column.header }}
+                    <i
+                      class="pi text-[0.65rem]"
+                      [class.pi-sort-alt]="sort()?.field !== column.key"
+                      [class.pi-sort-amount-up-alt]="
+                        sort()?.field === column.key && sort()?.direction === 'asc'
+                      "
+                      [class.pi-sort-amount-down]="
+                        sort()?.field === column.key && sort()?.direction === 'desc'
+                      "
+                      aria-hidden="true"
+                    ></i>
+                  </button>
+                } @else {
+                  {{ column.header }}
+                }
+              </th>
+            }
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-border">
+          @if (loading() && rows().length === 0) {
+            @for (i of skeletonRows; track i) {
+              <tr>
+                @for (column of columns(); track column.key) {
+                  <td class="px-4 py-3" [class]="column.hideBelow ? hide[column.hideBelow] : ''">
+                    <p-skeleton height="1rem" />
+                  </td>
+                }
+              </tr>
+            }
+          } @else {
+            @for (row of rows(); track rowKey()(row)) {
+              <tr
+                class="transition-colors hover:bg-surface-muted/50"
+                [class.cursor-pointer]="clickable()"
+                [class.opacity-60]="loading()"
+                [attr.tabindex]="clickable() ? 0 : null"
+                (click)="clickable() && rowSelect.emit(row)"
+                (keydown.enter)="clickable() && rowSelect.emit(row)"
+              >
+                @for (column of columns(); track column.key) {
+                  <td
+                    class="px-4 py-3 text-fg"
+                    [class]="
+                      (column.hideBelow ? hide[column.hideBelow] : '') +
+                      (column.align === 'end' ? ' text-right' : '')
+                    "
+                  >
+                    @if (templates().get(column.key); as tpl) {
+                      <ng-container *ngTemplateOutlet="tpl; context: { $implicit: row }" />
+                    } @else {
+                      {{ cellValue(row, column.key) }}
+                    }
+                  </td>
+                }
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Phones: stacked cards -->
+    <ul class="divide-y divide-border md:hidden" [attr.aria-label]="caption()">
+      @if (loading() && rows().length === 0) {
+        @for (i of skeletonRows; track i) {
+          <li class="space-y-2 p-4"><p-skeleton width="60%" /><p-skeleton width="40%" /></li>
+        }
+      } @else {
+        @for (row of rows(); track rowKey()(row)) {
+          <li
+            class="p-4 focus-visible:bg-surface-muted"
+            [class.cursor-pointer]="clickable()"
+            [attr.tabindex]="clickable() ? 0 : null"
+            (click)="clickable() && rowSelect.emit(row)"
+            (keydown.enter)="clickable() && rowSelect.emit(row)"
+          >
+            <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
+              @for (column of columns(); track column.key) {
+                @if (column.primary) {
+                  <dt class="sr-only">{{ column.header }}</dt>
+                  <dd class="col-span-2 font-semibold text-fg">
+                    @if (templates().get(column.key); as tpl) {
+                      <ng-container *ngTemplateOutlet="tpl; context: { $implicit: row }" />
+                    } @else {
+                      {{ cellValue(row, column.key) }}
+                    }
+                  </dd>
+                } @else {
+                  <dt class="text-fg-muted">{{ column.header }}</dt>
+                  <dd class="min-w-0 text-fg">
+                    @if (templates().get(column.key); as tpl) {
+                      <ng-container *ngTemplateOutlet="tpl; context: { $implicit: row }" />
+                    } @else {
+                      {{ cellValue(row, column.key) }}
+                    }
+                  </dd>
+                }
+              }
+            </dl>
+          </li>
+        }
+      }
+    </ul>
+
+    <app-pagination
+      [page]="page()"
+      [size]="size()"
+      [total]="total()"
+      (pageChange)="pageChange.emit($event)"
+    />
+  }
+</section>

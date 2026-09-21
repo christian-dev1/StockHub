@@ -18,6 +18,10 @@
 
   <p-drawer [(visible)]="mobileNavOpen" [modal]="true" styleClass="!w-72" [header]="'StockHub'">
     <app-sidebar-nav (navigate)="mobileNavOpen.set(false)" />
+    <div class="mt-6 flex flex-wrap gap-2 border-t border-border pt-4 sm:hidden">
+      <app-language-switcher />
+      <app-theme-switcher />
+    </div>
   </p-drawer>
 
   <div class="flex min-w-0 flex-1 flex-col">
@@ -34,9 +38,25 @@
         <i class="pi pi-bars text-lg" aria-hidden="true"></i>
       </button>
       <span class="text-base font-semibold lg:hidden">StockHub</span>
+      @if (auth.company(); as company) {
+        <span
+          class="hidden items-center gap-2 rounded-lg bg-surface-muted px-3 py-1.5 text-sm font-medium text-fg lg:inline-flex"
+        >
+          <i class="pi pi-building text-fg-muted" aria-hidden="true"></i>{{ company.name }}
+        </span>
+      } @else if (auth.isSuperAdmin()) {
+        <span
+          class="hidden items-center gap-2 rounded-lg bg-danger/10 px-3 py-1.5 text-sm font-medium text-danger lg:inline-flex"
+        >
+          <i class="pi pi-shield" aria-hidden="true"></i>{{ 'nav.platformMode' | translate }}
+        </span>
+      }
       <div class="ml-auto flex items-center gap-2">
-        <app-language-switcher />
-        <app-theme-switcher />
+        <div class="hidden items-center gap-2 sm:flex">
+          <app-language-switcher />
+          <app-theme-switcher />
+        </div>
+        <app-user-menu />
       </div>
     </header>
 

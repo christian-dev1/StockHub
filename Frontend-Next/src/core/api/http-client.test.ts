@@ -36,15 +36,13 @@ describe('httpRequest', () => {
   it('throws a normalized AppError with backend code and field errors', async () => {
     vi.stubGlobal(
       'fetch',
-      vi
-        .fn()
-        .mockResolvedValue(
-          jsonResponse(409, {
-            code: 'PRODUCT_SKU_ALREADY_EXISTS',
-            message: 'SKU déjà utilisé',
-            requestId: 'r-12345678',
-          }),
-        ),
+      vi.fn().mockResolvedValue(
+        jsonResponse(409, {
+          code: 'PRODUCT_SKU_ALREADY_EXISTS',
+          message: 'SKU déjà utilisé',
+          requestId: 'r-12345678',
+        }),
+      ),
     );
 
     const error = await httpRequest('/x').catch((e: unknown) => e);

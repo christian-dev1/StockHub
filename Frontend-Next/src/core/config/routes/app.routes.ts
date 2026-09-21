@@ -5,6 +5,7 @@
 export const APP_ROUTES = {
   HOME: '/',
   LOGIN: '/login',
+  CHANGE_PASSWORD: '/change-password',
   POS: '/pos',
   SCAN: '/scan',
   PRODUCTS: {

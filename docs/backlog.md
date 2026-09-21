@@ -13,17 +13,24 @@ Statuts : ✅ fait · 🔄 en cours · ⏳ à faire
 - ✅ Dockerfiles (backend en couches, nginx same-origin, Next standalone), `docker-compose.yml` avec health checks
 - ✅ CI GitHub Actions (backend, Angular, Next, stack Docker + smoke test)
 
-## Phase 2 — Sécurité & entreprises ⏳
-- ⏳ Migration V2 : companies, locations (principal), users, roles, permissions, role_permissions, user_locations, refresh_tokens, support_sessions, audit_logs (append-only)
-- ⏳ Auth : login, refresh rotatif + détection de réutilisation, logout, me, change-password ; Argon2id ; JWT HS512
-- ⏳ TenantContext, CurrentUser, LocationAccessPolicy, cache des autorités
-- ⏳ Company : création atomique (entreprise + emplacement principal + 1er ADMIN), activation/désactivation, paramètres
-- ⏳ User : CRUD, rôle, emplacements, activation, reset mot de passe, garde « dernier ADMIN »
-- ⏳ Audit minimal des actions sensibles
-- ⏳ Données de démonstration (profil dev)
-- ⏳ Tests sécurité : JWT invalide/expiré, 403 permission, 404 inter-entreprises, entreprise désactivée, réutilisation refresh
-- ⏳ Angular : login, AuthStore, intercepteurs (bearer, refresh 401), guards (auth, permission), écrans plateforme (entreprises) et utilisateurs
-- ⏳ Next : login, session, protection des routes, intercepteur refresh
+## Phase 2 — Sécurité & entreprises ✅
+- ✅ Migration V2 : companies, locations, users, roles, permissions, role_permissions, user_locations, refresh_tokens, audit_logs (append-only par trigger)
+- ✅ Auth : login, refresh rotatif + détection de réutilisation, logout, me, change-password ; Argon2id ; JWT HS512 (Spring Resource Server) ; limitation des tentatives
+- ✅ CurrentUser résolu côté serveur, token version, LocationAccessPolicy, caches d'autorités invalidés après commit
+- ✅ Company : création atomique (entreprise + emplacement principal + 1er ADMIN), activation/désactivation motivée, profil, paramètres, optimistic locking
+- ✅ User : création, profil, rôle, emplacements, activation, reset mot de passe, garde « dernier ADMIN » et « pas soi-même »
+- ✅ Audit synchrone dans la transaction (connexions, échecs, réutilisation de token, entreprises, utilisateurs)
+- ✅ Profil `demo` (Alpha Market, Beta Distribution) + bootstrap super admin par variables d'environnement
+- ✅ Tests : JWT absent/altéré/expiré/révoqué, 403 permission, 404 inter-entreprises, entreprise/utilisateur désactivé, réutilisation refresh, verrouillage login
+- ✅ Angular : login, changement de mot de passe, AuthStore (token en mémoire), intercepteur refresh single-flight, guards, menu utilisateur, navigation par permissions, écrans entreprises (plateforme), utilisateurs, paramètres entreprise ; composants DataTable/Pagination/FormField/SearchField/StatusBadge/ErrorState
+- ✅ Next : login, changement de mot de passe, session en mémoire, AuthGate, client HTTP avec refresh, menu utilisateur, restriction aux rôles de vente
+- ⏳ Reporté en Phase 8 (audit) : sessions support SUPER_ADMIN (lecture seule, motivées, auditées) et écran du journal d'audit
 
-## Phases 3 → 12 ⏳
+## Phase 3 — Catalogue ⏳
+- ⏳ Emplacements (CRUD, principal, activation) — UX adaptative mono/multi-sites
+- ⏳ Catégories, fournisseurs
+- ⏳ Produits (recherche avancée, image, import CSV/Excel avec prévisualisation)
+- ⏳ Codes-barres (CODE128, EAN-13, étiquettes PDF) ; lookup par scan côté Next
+
+## Phases 4 → 12 ⏳
 Voir `00-architecture-plan.md` §11 et §13.

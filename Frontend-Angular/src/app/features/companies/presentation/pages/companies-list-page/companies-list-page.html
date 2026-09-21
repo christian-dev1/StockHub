@@ -1,0 +1,64 @@
+<app-page-header
+  [title]="'companies.list.title' | translate"
+  [subtitle]="'companies.list.subtitle' | translate"
+>
+  <a
+    actions
+    [routerLink]="routes.PLATFORM.COMPANY_CREATE"
+    class="p-button p-component no-underline"
+  >
+    <i class="pi pi-plus mr-2" aria-hidden="true"></i>{{ 'companies.actions.create' | translate }}
+  </a>
+</app-page-header>
+
+<div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+  <app-search-field
+    class="sm:max-w-sm sm:flex-1"
+    [label]="'companies.list.search' | translate"
+    (searchChange)="onSearch($event)"
+  />
+  <p-select
+    [options]="statusOptions()"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    [placeholder]="'companies.list.allStatuses' | translate"
+    [ariaLabel]="'companies.fields.status' | translate"
+    [ngModel]="list.filters().status"
+    (ngModelChange)="onStatus($event)"
+    styleClass="w-full sm:w-52"
+  />
+</div>
+
+<app-data-table
+  [caption]="'companies.list.title' | translate"
+  [columns]="columns()"
+  [rows]="list.rows()"
+  [rowKey]="rowKey"
+  [loading]="list.loading()"
+  [error]="list.error()"
+  [total]="list.total()"
+  [page]="list.page()"
+  [size]="list.size()"
+  [sort]="list.sort()"
+  [clickable]="true"
+  [emptyTitle]="'companies.list.empty' | translate"
+  [emptyDescription]="'companies.list.emptyHint' | translate"
+  (sortChange)="list.changeSort($event)"
+  (pageChange)="list.changePage($event)"
+  (rowSelect)="open($event)"
+  (retry)="list.load()"
+>
+  <ng-template appCell="name" let-row>
+    <a
+      [routerLink]="routes.PLATFORM.COMPANY_DETAIL(row.id)"
+      class="font-medium text-fg hover:text-primary"
+      (click)="$event.stopPropagation()"
+    >
+      {{ row.name }}
+    </a>
+  </ng-template>
+  <ng-template appCell="status" let-row
+    ><app-company-status-badge [status]="row.status"
+  /></ng-template>
+</app-data-table>

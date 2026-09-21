@@ -1,14 +1,45 @@
 {
-  "meta": { "description": "StockHub — caisse et consultation rapide du stock" },
-  "a11y": { "skipToContent": "Aller au contenu principal" },
-  "common": { "refresh": "Actualiser", "loading": "Chargement…", "retry": "Réessayer" },
-  "nav": { "main": "Navigation principale", "sidebar": "Barre latérale", "home": "Accueil" },
-  "theme": { "label": "Thème", "light": "Clair", "dark": "Sombre", "system": "Système" },
-  "language": { "label": "Langue", "fr": "Français", "en": "Anglais" },
-  "home": { "title": "Accueil", "subtitle": "Votre espace de vente" },
+  "meta": {
+    "description": "StockHub — caisse et consultation rapide du stock"
+  },
+  "a11y": {
+    "skipToContent": "Aller au contenu principal"
+  },
+  "common": {
+    "refresh": "Actualiser",
+    "loading": "Chargement…",
+    "retry": "Réessayer",
+    "save": "Enregistrer",
+    "cancel": "Annuler"
+  },
+  "nav": {
+    "main": "Navigation principale",
+    "sidebar": "Barre latérale",
+    "home": "Accueil",
+    "userMenu": "Menu utilisateur"
+  },
+  "theme": {
+    "label": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  },
+  "language": {
+    "label": "Langue",
+    "fr": "Français",
+    "en": "Anglais"
+  },
+  "home": {
+    "title": "Accueil",
+    "subtitle": "Votre espace de vente"
+  },
   "system": {
     "title": "État de la plateforme",
-    "status": { "UP": "Opérationnelle", "DOWN": "Indisponible", "UNKNOWN": "Inconnu" },
+    "status": {
+      "UP": "Opérationnelle",
+      "DOWN": "Indisponible",
+      "UNKNOWN": "Inconnu"
+    },
     "checkedAt": "Vérifié à",
     "unreachable": "Le serveur est injoignable"
   },
@@ -18,7 +49,7 @@
       "retry": "Réessayer",
       "403": {
         "title": "Accès refusé",
-        "description": "Vous n'avez pas les droits nécessaires pour accéder à cette page."
+        "description": "Cette application est réservée aux équipes de vente de votre entreprise. Utilisez le back-office pour l'administration."
       },
       "404": {
         "title": "Page introuvable",
@@ -28,6 +59,60 @@
         "title": "Erreur inattendue",
         "description": "Un problème est survenu. Réessayez dans quelques instants."
       }
+    },
+    "kind": {
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion.",
+      "unauthorized": "Votre session a expiré. Reconnectez-vous.",
+      "forbidden": "Action non autorisée.",
+      "not-found": "Élément introuvable.",
+      "validation": "Certaines informations sont invalides.",
+      "conflict": "Conflit avec des données existantes.",
+      "business": "Opération impossible.",
+      "server": "Une erreur inattendue est survenue."
+    },
+    "api": {
+      "AUTH_INVALID_CREDENTIALS": "E-mail ou mot de passe incorrect.",
+      "AUTH_ACCOUNT_DISABLED": "Ce compte est désactivé.",
+      "AUTH_COMPANY_DISABLED": "Le compte de votre entreprise est désactivé.",
+      "AUTH_TOO_MANY_ATTEMPTS": "Trop de tentatives. Réessayez dans quelques minutes.",
+      "PASSWORD_CURRENT_INVALID": "Le mot de passe actuel est incorrect.",
+      "PASSWORD_UNCHANGED": "Le nouveau mot de passe doit être différent."
     }
+  },
+  "roles": {
+    "SUPER_ADMIN": "Super administrateur",
+    "ADMIN": "Administrateur",
+    "MANAGER": "Manager",
+    "MAGASINIER": "Magasinier",
+    "VENDEUR": "Vendeur"
+  },
+  "auth": {
+    "login": {
+      "title": "Connexion",
+      "subtitle": "Accédez à votre espace de vente.",
+      "submit": "Se connecter"
+    },
+    "fields": {
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmer le mot de passe"
+    },
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "passwordRules": "10 caractères minimum, avec des lettres et des chiffres.",
+    "passwordProblem": {
+      "length": "Entre 10 et 128 caractères.",
+      "weak": "Doit contenir des lettres et des chiffres.",
+      "mismatch": "Les mots de passe ne correspondent pas."
+    },
+    "changePassword": {
+      "title": "Changer le mot de passe",
+      "subtitle": "Toutes vos autres sessions seront déconnectées.",
+      "requiredSubtitle": "Choisissez un mot de passe personnel avant de continuer.",
+      "submit": "Mettre à jour"
+    },
+    "logout": "Se déconnecter"
   }
 }

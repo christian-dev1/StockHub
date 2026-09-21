@@ -1,13 +1,41 @@
 import { Routes } from '@angular/router';
 import { APP_PATHS } from './core/config/routes/app.routes';
-import { Shell } from './core/layout/shell/shell';
+import {
+  authGuard,
+  companyGuard,
+  guestGuard,
+  passwordChangeGuard,
+  permissionGuard,
+  platformGuard,
+} from './core/guards/auth.guards';
+import { COMPANIES_PROVIDERS } from './features/companies/companies.providers';
 import { DASHBOARD_PROVIDERS } from './features/dashboard/dashboard.providers';
+import { SETTINGS_PROVIDERS } from './features/settings/settings.providers';
+import { USERS_PROVIDERS } from './features/users/users.providers';
 import { ErrorStatusPage } from './shared/pages/error-status/error-status-page';
 
 export const routes: Routes = [
   {
+    path: APP_PATHS.LOGIN,
+    canActivate: [guestGuard],
+    title: 'StockHub',
+    loadComponent: () =>
+      import('./features/auth/presentation/pages/login-page/login-page').then((m) => m.LoginPage),
+  },
+  {
+    path: APP_PATHS.CHANGE_PASSWORD,
+    canActivate: [passwordChangeGuard],
+    title: 'StockHub',
+    loadComponent: () =>
+      import('./features/auth/presentation/pages/change-password-page/change-password-page').then(
+        (m) => m.ChangePasswordPage,
+      ),
+  },
+  {
     path: '',
-    component: Shell,
+    loadComponent: () => import('./core/layout/shell/shell').then((m) => m.Shell),
+    canActivate: [authGuard],
+    canActivateChild: [authGuard],
     children: [
       { path: '', pathMatch: 'full', redirectTo: APP_PATHS.DASHBOARD },
       {
@@ -17,6 +45,79 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/dashboard/presentation/pages/dashboard-page/dashboard-page').then(
             (m) => m.DashboardPage,
+          ),
+      },
+      {
+        path: `${APP_PATHS.PLATFORM.ROOT}/${APP_PATHS.PLATFORM.COMPANIES}`,
+        canActivate: [platformGuard, permissionGuard],
+        data: { permissions: ['COMPANY_VIEW'] },
+        providers: COMPANIES_PROVIDERS,
+        children: [
+          {
+            path: '',
+            title: 'StockHub',
+            loadComponent: () =>
+              import('./features/companies/presentation/pages/companies-list-page/companies-list-page').then(
+                (m) => m.CompaniesListPage,
+              ),
+          },
+          {
+            path: APP_PATHS.PLATFORM.CREATE,
+            canActivate: [permissionGuard],
+            data: { permissions: ['COMPANY_CREATE'] },
+            loadComponent: () =>
+              import('./features/companies/presentation/pages/company-create-page/company-create-page').then(
+                (m) => m.CompanyCreatePage,
+              ),
+          },
+          {
+            path: APP_PATHS.PLATFORM.DETAIL,
+            loadComponent: () =>
+              import('./features/companies/presentation/pages/company-detail-page/company-detail-page').then(
+                (m) => m.CompanyDetailPage,
+              ),
+          },
+        ],
+      },
+      {
+        path: APP_PATHS.USERS.ROOT,
+        canActivate: [companyGuard, permissionGuard],
+        data: { permissions: ['USER_VIEW'] },
+        providers: USERS_PROVIDERS,
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./features/users/presentation/pages/users-list-page/users-list-page').then(
+                (m) => m.UsersListPage,
+              ),
+          },
+          {
+            path: APP_PATHS.USERS.CREATE,
+            canActivate: [permissionGuard],
+            data: { permissions: ['USER_CREATE'] },
+            loadComponent: () =>
+              import('./features/users/presentation/pages/user-create-page/user-create-page').then(
+                (m) => m.UserCreatePage,
+              ),
+          },
+          {
+            path: APP_PATHS.USERS.DETAIL,
+            loadComponent: () =>
+              import('./features/users/presentation/pages/user-detail-page/user-detail-page').then(
+                (m) => m.UserDetailPage,
+              ),
+          },
+        ],
+      },
+      {
+        path: `${APP_PATHS.SETTINGS.ROOT}/${APP_PATHS.SETTINGS.COMPANY}`,
+        canActivate: [companyGuard, permissionGuard],
+        data: { permissions: ['COMPANY_VIEW'] },
+        providers: SETTINGS_PROVIDERS,
+        loadComponent: () =>
+          import('./features/settings/presentation/pages/company-settings-page/company-settings-page').then(
+            (m) => m.CompanySettingsPage,
           ),
       },
     ],

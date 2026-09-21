@@ -1,0 +1,139 @@
+<app-page-header
+  [title]="'users.create.title' | translate"
+  [subtitle]="'users.create.subtitle' | translate"
+>
+  <a
+    actions
+    [routerLink]="routes.USERS.ROOT"
+    class="text-sm font-medium text-fg-muted hover:text-fg"
+  >
+    <i class="pi pi-arrow-left mr-1" aria-hidden="true"></i>{{ 'common.back' | translate }}
+  </a>
+</app-page-header>
+
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate class="grid gap-6 pb-8 lg:grid-cols-2">
+  <section class="sh-card p-5 sm:p-6" aria-labelledby="sec-identity">
+    <h2 id="sec-identity" class="mb-5 text-base font-semibold">
+      {{ 'users.sections.identity' | translate }}
+    </h2>
+    <div class="grid gap-5 sm:grid-cols-2" formGroupName="profile">
+      <app-form-field
+        [label]="'users.fields.firstName' | translate"
+        forId="u-first"
+        [control]="form.controls.profile.controls.firstName"
+        [required]="true"
+      >
+        <input
+          pInputText
+          id="u-first"
+          formControlName="firstName"
+          class="w-full"
+          autocomplete="off"
+        />
+      </app-form-field>
+      <app-form-field
+        [label]="'users.fields.lastName' | translate"
+        forId="u-last"
+        [control]="form.controls.profile.controls.lastName"
+        [required]="true"
+      >
+        <input
+          pInputText
+          id="u-last"
+          formControlName="lastName"
+          class="w-full"
+          autocomplete="off"
+        />
+      </app-form-field>
+      <app-form-field
+        [label]="'users.fields.phone' | translate"
+        forId="u-phone"
+        [control]="form.controls.profile.controls.phone"
+      >
+        <input
+          pInputText
+          id="u-phone"
+          type="tel"
+          formControlName="phone"
+          class="w-full"
+          autocomplete="off"
+        />
+      </app-form-field>
+    </div>
+    <div class="mt-5">
+      <app-form-field
+        [label]="'users.fields.email' | translate"
+        forId="u-email"
+        [control]="form.controls.email"
+        [required]="true"
+      >
+        <input
+          pInputText
+          id="u-email"
+          type="email"
+          formControlName="email"
+          class="w-full"
+          autocomplete="off"
+        />
+      </app-form-field>
+    </div>
+  </section>
+
+  <section class="sh-card p-5 sm:p-6" aria-labelledby="sec-access">
+    <h2 id="sec-access" class="mb-5 text-base font-semibold">
+      {{ 'users.sections.access' | translate }}
+    </h2>
+    <app-user-access-fields
+      [form]="form.controls.access"
+      [roles]="reference.roles()"
+      [locations]="reference.locations()"
+      [roleLabels]="reference.roleLabels()"
+    />
+    @if (form.controls.access.hasError('locationsRequired') && form.controls.access.touched) {
+      <p class="mt-2 text-xs text-danger" role="alert">
+        {{ 'validation.locationsRequired' | translate }}
+      </p>
+    }
+    <div class="mt-5">
+      <app-form-field
+        [label]="'users.fields.temporaryPassword' | translate"
+        forId="u-password"
+        [control]="form.controls.temporaryPassword"
+        [required]="true"
+        [hint]="'users.hints.temporaryPassword' | translate"
+      >
+        <div class="flex gap-2">
+          <input
+            pInputText
+            id="u-password"
+            formControlName="temporaryPassword"
+            class="w-full font-mono"
+            autocomplete="off"
+          />
+          <button
+            type="button"
+            class="shrink-0 rounded-lg border border-border px-3 text-sm font-medium hover:bg-surface-muted"
+            (click)="generatePassword()"
+          >
+            <i class="pi pi-sparkles mr-1" aria-hidden="true"></i
+            >{{ 'users.actions.generatePassword' | translate }}
+          </button>
+        </div>
+      </app-form-field>
+    </div>
+  </section>
+
+  <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end lg:col-span-2">
+    <a
+      [routerLink]="routes.USERS.ROOT"
+      class="p-button p-button-text p-component justify-center no-underline"
+      >{{ 'common.cancel' | translate }}</a
+    >
+    <p-button
+      type="submit"
+      [label]="'users.actions.create' | translate"
+      icon="pi pi-check"
+      [loading]="saving()"
+    />
+  </div>
+</form>

@@ -1,0 +1,193 @@
+@switch (store.state().status) {
+  @case ('error') {
+    @if (store.state(); as s) {
+      @if (s.status === 'error') {
+        <app-error-state [error]="s.error" (retry)="store.load(companyId())" />
+      }
+    }
+  }
+  @case ('success') {
+    @if (store.company(); as company) {
+      <app-page-header [title]="company.name" [subtitle]="company.legalName ?? ''">
+        <a
+          actions
+          [routerLink]="routes.PLATFORM.COMPANIES"
+          class="text-sm font-medium text-fg-muted hover:text-fg"
+        >
+          <i class="pi pi-arrow-left mr-1" aria-hidden="true"></i
+          >{{ 'companies.list.title' | translate }}
+        </a>
+      </app-page-header>
+
+      <div class="grid gap-6 lg:grid-cols-3">
+        <div class="space-y-6 lg:col-span-2">
+          <form
+            class="sh-card p-5 sm:p-6"
+            [formGroup]="profile"
+            (ngSubmit)="saveProfile()"
+            novalidate
+            aria-labelledby="sec-profile"
+          >
+            <h2 id="sec-profile" class="mb-5 text-base font-semibold">
+              {{ 'companies.detail.profile' | translate }}
+            </h2>
+            <app-company-profile-fields [form]="profile" />
+            <div class="mt-6 flex justify-end">
+              <p-button
+                type="submit"
+                [label]="'common.save' | translate"
+                icon="pi pi-check"
+                [loading]="savingProfile()"
+                [disabled]="profile.pristine"
+              />
+            </div>
+          </form>
+        </div>
+
+        <aside class="space-y-6">
+          <section class="sh-card p-5" aria-labelledby="sec-status">
+            <div class="flex items-center justify-between">
+              <h2 id="sec-status" class="text-base font-semibold">
+                {{ 'companies.fields.status' | translate }}
+              </h2>
+              <app-company-status-badge [status]="company.status" />
+            </div>
+            <p class="mt-3 text-sm text-fg-muted">
+              {{
+                (company.status === 'ACTIVE'
+                  ? 'companies.detail.activeHint'
+                  : 'companies.detail.disabledHint'
+                ) | translate
+              }}
+            </p>
+            @if (company.status === 'ACTIVE') {
+              <p-button
+                styleClass="mt-4 w-full"
+                severity="danger"
+                [outlined]="true"
+                icon="pi pi-ban"
+                [label]="'companies.actions.disable' | translate"
+                (onClick)="statusDialog.set(true)"
+              />
+            } @else {
+              <p-button
+                styleClass="mt-4 w-full"
+                severity="success"
+                icon="pi pi-check-circle"
+                [label]="'companies.actions.activate' | translate"
+                [loading]="busy()"
+                (onClick)="activate()"
+              />
+            }
+          </section>
+
+          <section class="sh-card p-5" aria-labelledby="sec-loc">
+            <h2 id="sec-loc" class="mb-3 text-base font-semibold">
+              {{ 'companies.create.sections.localization' | translate }}
+            </h2>
+            <dl class="space-y-2 text-sm">
+              <div class="flex justify-between gap-4">
+                <dt class="text-fg-muted">{{ 'companies.fields.currency' | translate }}</dt>
+                <dd class="font-medium">{{ company.currency }}</dd>
+              </div>
+              <div class="flex justify-between gap-4">
+                <dt class="text-fg-muted">{{ 'companies.fields.timezone' | translate }}</dt>
+                <dd class="font-medium">{{ company.timezone }}</dd>
+              </div>
+              <div class="flex justify-between gap-4">
+                <dt class="text-fg-muted">{{ 'companies.fields.locale' | translate }}</dt>
+                <dd class="font-medium uppercase">{{ company.locale }}</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="sh-card p-5" aria-labelledby="sec-admins">
+            <h2 id="sec-admins" class="text-base font-semibold">
+              {{ 'companies.detail.administrators' | translate }}
+            </h2>
+            <p class="mt-2 text-sm text-fg-muted">
+              {{ 'companies.detail.administratorsHint' | translate }}
+            </p>
+            <p-button
+              styleClass="mt-4 w-full"
+              [outlined]="true"
+              icon="pi pi-user-plus"
+              [label]="'companies.actions.addAdmin' | translate"
+              (onClick)="adminDialog.set(true)"
+            />
+          </section>
+        </aside>
+      </div>
+
+      <p-dialog
+        [header]="'companies.actions.disable' | translate"
+        [(visible)]="statusDialog"
+        [modal]="true"
+        [style]="{ width: 'min(32rem, 95vw)' }"
+      >
+        <p class="mb-4 text-sm text-fg-muted">
+          {{ 'companies.detail.disableWarning' | translate: { name: company.name } }}
+        </p>
+        <app-form-field
+          [label]="'companies.fields.disableReason' | translate"
+          forId="disable-reason"
+          [control]="disableReason"
+          [required]="true"
+        >
+          <textarea
+            pTextarea
+            id="disable-reason"
+            [formControl]="disableReason"
+            rows="3"
+            class="w-full"
+          ></textarea>
+        </app-form-field>
+        <ng-template #footer>
+          <p-button
+            [text]="true"
+            [label]="'common.cancel' | translate"
+            (onClick)="statusDialog.set(false)"
+          />
+          <p-button
+            severity="danger"
+            icon="pi pi-ban"
+            [label]="'companies.actions.disable' | translate"
+            [loading]="busy()"
+            (onClick)="confirmDisable()"
+          />
+        </ng-template>
+      </p-dialog>
+
+      <p-dialog
+        [header]="'companies.actions.addAdmin' | translate"
+        [(visible)]="adminDialog"
+        [modal]="true"
+        [style]="{ width: 'min(40rem, 95vw)' }"
+      >
+        <app-admin-account-fields [form]="admin" prefix="extra-admin" />
+        <ng-template #footer>
+          <p-button
+            [text]="true"
+            [label]="'common.cancel' | translate"
+            (onClick)="adminDialog.set(false)"
+          />
+          <p-button
+            icon="pi pi-check"
+            [label]="'common.create' | translate"
+            [loading]="busy()"
+            (onClick)="createAdmin()"
+          />
+        </ng-template>
+      </p-dialog>
+    }
+  }
+  @default {
+    <div class="space-y-4" [attr.aria-label]="'common.loading' | translate" aria-busy="true">
+      <p-skeleton width="16rem" height="2rem" />
+      <div class="grid gap-6 lg:grid-cols-3">
+        <p-skeleton styleClass="lg:col-span-2" height="22rem" />
+        <p-skeleton height="12rem" />
+      </div>
+    </div>
+  }
+}

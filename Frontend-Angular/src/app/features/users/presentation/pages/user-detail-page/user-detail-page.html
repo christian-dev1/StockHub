@@ -1,0 +1,260 @@
+@switch (store.state().status) {
+  @case ('error') {
+    @if (store.state(); as s) {
+      @if (s.status === 'error') {
+        <app-error-state [error]="s.error" (retry)="store.load(userId())" />
+      }
+    }
+  }
+  @case ('success') {
+    @if (store.user(); as user) {
+      <app-page-header [title]="user.fullName" [subtitle]="user.email">
+        <a
+          actions
+          [routerLink]="routes.USERS.ROOT"
+          class="text-sm font-medium text-fg-muted hover:text-fg"
+        >
+          <i class="pi pi-arrow-left mr-1" aria-hidden="true"></i
+          >{{ 'users.list.title' | translate }}
+        </a>
+      </app-page-header>
+
+      <div class="grid gap-6 lg:grid-cols-3">
+        <div class="space-y-6 lg:col-span-2">
+          <form
+            class="sh-card p-5 sm:p-6"
+            [formGroup]="profile"
+            (ngSubmit)="saveProfile()"
+            novalidate
+            aria-labelledby="sec-profile"
+          >
+            <h2 id="sec-profile" class="mb-5 text-base font-semibold">
+              {{ 'users.sections.identity' | translate }}
+            </h2>
+            <div class="grid gap-5 sm:grid-cols-2">
+              <app-form-field
+                [label]="'users.fields.firstName' | translate"
+                forId="ud-first"
+                [control]="profile.controls.firstName"
+                [required]="true"
+              >
+                <input
+                  pInputText
+                  id="ud-first"
+                  formControlName="firstName"
+                  class="w-full"
+                  [readonly]="!canEdit()"
+                />
+              </app-form-field>
+              <app-form-field
+                [label]="'users.fields.lastName' | translate"
+                forId="ud-last"
+                [control]="profile.controls.lastName"
+                [required]="true"
+              >
+                <input
+                  pInputText
+                  id="ud-last"
+                  formControlName="lastName"
+                  class="w-full"
+                  [readonly]="!canEdit()"
+                />
+              </app-form-field>
+              <app-form-field
+                [label]="'users.fields.phone' | translate"
+                forId="ud-phone"
+                [control]="profile.controls.phone"
+              >
+                <input
+                  pInputText
+                  id="ud-phone"
+                  type="tel"
+                  formControlName="phone"
+                  class="w-full"
+                  [readonly]="!canEdit()"
+                />
+              </app-form-field>
+            </div>
+            @if (canEdit()) {
+              <div class="mt-6 flex justify-end">
+                <p-button
+                  type="submit"
+                  [label]="'common.save' | translate"
+                  icon="pi pi-check"
+                  [loading]="savingProfile()"
+                  [disabled]="profile.pristine"
+                />
+              </div>
+            }
+          </form>
+
+          <form
+            class="sh-card p-5 sm:p-6"
+            [formGroup]="access"
+            (ngSubmit)="saveAccess()"
+            novalidate
+            aria-labelledby="sec-access"
+          >
+            <h2 id="sec-access" class="mb-5 text-base font-semibold">
+              {{ 'users.sections.access' | translate }}
+            </h2>
+            @if (isSelf()) {
+              <p class="mb-4 flex items-center gap-2 text-sm text-fg-muted">
+                <i class="pi pi-lock" aria-hidden="true"></i
+                >{{ 'users.detail.selfHint' | translate }}
+              </p>
+            }
+            <app-user-access-fields
+              [form]="access"
+              [roles]="reference.roles()"
+              [locations]="reference.locations()"
+              [roleLabels]="reference.roleLabels()"
+            />
+            @if (access.hasError('locationsRequired') && access.touched) {
+              <p class="mt-2 text-xs text-danger" role="alert">
+                {{ 'validation.locationsRequired' | translate }}
+              </p>
+            }
+            @if (canEdit() && !isSelf()) {
+              <div class="mt-6 flex justify-end">
+                <p-button
+                  type="submit"
+                  [label]="'common.save' | translate"
+                  icon="pi pi-check"
+                  [loading]="savingAccess()"
+                  [disabled]="access.pristine"
+                />
+              </div>
+            }
+          </form>
+        </div>
+
+        <aside class="space-y-6">
+          <section class="sh-card p-5" aria-labelledby="sec-summary">
+            <h2 id="sec-summary" class="sr-only">{{ 'users.sections.summary' | translate }}</h2>
+            <dl class="space-y-3 text-sm">
+              <div class="flex items-center justify-between gap-4">
+                <dt class="text-fg-muted">{{ 'users.fields.role' | translate }}</dt>
+                <dd><app-role-badge [role]="user.role" /></dd>
+              </div>
+              <div class="flex items-center justify-between gap-4">
+                <dt class="text-fg-muted">{{ 'users.fields.status' | translate }}</dt>
+                <dd><app-user-status-badge [status]="user.status" /></dd>
+              </div>
+              <div class="flex justify-between gap-4">
+                <dt class="text-fg-muted">{{ 'users.fields.lastLogin' | translate }}</dt>
+                <dd>
+                  {{
+                    user.lastLoginAt
+                      ? (user.lastLoginAt | date: 'medium' : undefined : language.locale())
+                      : ('users.neverLoggedIn' | translate)
+                  }}
+                </dd>
+              </div>
+              <div class="flex justify-between gap-4">
+                <dt class="text-fg-muted">{{ 'users.fields.locations' | translate }}</dt>
+                <dd class="text-right">
+                  {{
+                    user.allLocations
+                      ? ('users.allLocations' | translate)
+                      : locationNames().join(', ')
+                  }}
+                </dd>
+              </div>
+              @if (user.mustChangePassword) {
+                <div class="rounded-lg bg-warning/10 p-2 text-xs text-warning">
+                  {{ 'users.detail.pendingPassword' | translate }}
+                </div>
+              }
+            </dl>
+          </section>
+
+          @if (!isSelf() && (auth.can('USER_DISABLE') || auth.can('USER_UPDATE'))) {
+            <section class="sh-card space-y-3 p-5" aria-labelledby="sec-security">
+              <h2 id="sec-security" class="text-base font-semibold">
+                {{ 'users.sections.security' | translate }}
+              </h2>
+              @if (auth.can('USER_UPDATE')) {
+                <p-button
+                  styleClass="w-full"
+                  [outlined]="true"
+                  icon="pi pi-key"
+                  [label]="'users.actions.resetPassword' | translate"
+                  (onClick)="passwordDialog.set(true)"
+                />
+              }
+              @if (auth.can('USER_DISABLE')) {
+                <p-button
+                  styleClass="w-full"
+                  [severity]="user.status === 'ACTIVE' ? 'danger' : 'success'"
+                  [outlined]="user.status === 'ACTIVE'"
+                  [icon]="user.status === 'ACTIVE' ? 'pi pi-ban' : 'pi pi-check-circle'"
+                  [label]="
+                    (user.status === 'ACTIVE' ? 'users.actions.disable' : 'users.actions.activate')
+                      | translate
+                  "
+                  [loading]="busy()"
+                  (onClick)="toggleStatus()"
+                />
+              }
+            </section>
+          }
+        </aside>
+      </div>
+
+      <p-dialog
+        [header]="'users.actions.resetPassword' | translate"
+        [(visible)]="passwordDialog"
+        [modal]="true"
+        [style]="{ width: 'min(30rem, 95vw)' }"
+      >
+        <p class="mb-4 text-sm text-fg-muted">{{ 'users.detail.resetHint' | translate }}</p>
+        <app-form-field
+          [label]="'users.fields.temporaryPassword' | translate"
+          forId="ud-temp"
+          [control]="temporaryPassword"
+          [required]="true"
+        >
+          <div class="flex gap-2">
+            <input
+              pInputText
+              id="ud-temp"
+              [formControl]="temporaryPassword"
+              class="w-full font-mono"
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              class="shrink-0 rounded-lg border border-border px-3 text-sm hover:bg-surface-muted"
+              [attr.aria-label]="'users.actions.generatePassword' | translate"
+              (click)="generatePassword()"
+            >
+              <i class="pi pi-sparkles" aria-hidden="true"></i>
+            </button>
+          </div>
+        </app-form-field>
+        <ng-template #footer>
+          <p-button
+            [text]="true"
+            [label]="'common.cancel' | translate"
+            (onClick)="passwordDialog.set(false)"
+          />
+          <p-button
+            icon="pi pi-key"
+            [label]="'users.actions.resetPassword' | translate"
+            [loading]="busy()"
+            (onClick)="resetPassword()"
+          />
+        </ng-template>
+      </p-dialog>
+    }
+  }
+  @default {
+    <div class="space-y-4" aria-busy="true" [attr.aria-label]="'common.loading' | translate">
+      <p-skeleton width="16rem" height="2rem" />
+      <div class="grid gap-6 lg:grid-cols-3">
+        <p-skeleton styleClass="lg:col-span-2" height="20rem" /><p-skeleton height="14rem" />
+      </div>
+    </div>
+  }
+}

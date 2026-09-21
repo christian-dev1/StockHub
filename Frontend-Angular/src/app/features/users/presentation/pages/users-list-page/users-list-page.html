@@ -1,0 +1,91 @@
+<app-page-header
+  [title]="'users.list.title' | translate"
+  [subtitle]="'users.list.subtitle' | translate"
+>
+  @if (auth.can('USER_CREATE')) {
+    <a actions [routerLink]="routes.USERS.CREATE" class="p-button p-component no-underline">
+      <i class="pi pi-user-plus mr-2" aria-hidden="true"></i
+      >{{ 'users.actions.create' | translate }}
+    </a>
+  }
+</app-page-header>
+
+<div class="mb-4 flex flex-col gap-3 md:flex-row md:items-center">
+  <app-search-field
+    class="md:max-w-sm md:flex-1"
+    [label]="'users.list.search' | translate"
+    (searchChange)="filter({ text: $event })"
+  />
+  <p-select
+    [options]="roleOptions()"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    [placeholder]="'users.list.allRoles' | translate"
+    [ariaLabel]="'users.fields.role' | translate"
+    [ngModel]="list.filters().role"
+    (ngModelChange)="filter({ role: $event })"
+    styleClass="w-full md:w-48"
+  />
+  <p-select
+    [options]="statusOptions()"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    [placeholder]="'users.list.allStatuses' | translate"
+    [ariaLabel]="'users.fields.status' | translate"
+    [ngModel]="list.filters().status"
+    (ngModelChange)="filter({ status: $event })"
+    styleClass="w-full md:w-44"
+  />
+</div>
+
+<app-data-table
+  [caption]="'users.list.title' | translate"
+  [columns]="columns()"
+  [rows]="list.rows()"
+  [rowKey]="rowKey"
+  [loading]="list.loading()"
+  [error]="list.error()"
+  [total]="list.total()"
+  [page]="list.page()"
+  [size]="list.size()"
+  [sort]="list.sort()"
+  [clickable]="true"
+  [emptyTitle]="'users.list.empty' | translate"
+  (sortChange)="list.changeSort($event)"
+  (pageChange)="list.changePage($event)"
+  (rowSelect)="open($event)"
+  (retry)="list.load()"
+>
+  <ng-template appCell="lastName" let-row>
+    <div class="flex items-center gap-3">
+      <span
+        class="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary"
+        aria-hidden="true"
+      >
+        {{ row.firstName.charAt(0) }}{{ row.lastName.charAt(0) }}
+      </span>
+      <div class="min-w-0">
+        <a
+          [routerLink]="routes.USERS.DETAIL(row.id)"
+          class="block truncate font-medium text-fg hover:text-primary"
+          (click)="$event.stopPropagation()"
+          >{{ row.fullName }}</a
+        >
+        <span class="block truncate text-xs text-fg-muted lg:hidden">{{ row.email }}</span>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template appCell="role" let-row><app-role-badge [role]="row.role" /></ng-template>
+  <ng-template appCell="status" let-row
+    ><app-user-status-badge [status]="row.status"
+  /></ng-template>
+  <ng-template appCell="lastLoginAt" let-row>
+    <span class="text-fg-muted">{{
+      row.lastLoginAt
+        ? (row.lastLoginAt | date: 'short' : undefined : language.locale())
+        : ('users.neverLoggedIn' | translate)
+    }}</span>
+  </ng-template>
+</app-data-table>

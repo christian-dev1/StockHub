@@ -82,6 +82,7 @@ Le backend peut aussi démarrer sur une base PostgreSQL éphémère (Testcontain
 | `JWT_SECRET` | backend | Secret HS512 encodé en Base64 (≥ 64 octets) |
 | `SPRING_PROFILES_ACTIVE` | backend | `dev`, `test` ou `prod` |
 | `SWAGGER_ENABLED` | backend | Active Swagger UI en production |
+| `STOCKHUB_SUPERADMIN_EMAIL`, `STOCKHUB_SUPERADMIN_PASSWORD` | backend | Super admin créé au premier démarrage (aucun identifiant en dur) |
 | `BACKEND_URL` | Angular (nginx), Next (build) | Adresse interne du backend |
 | `POSTGRES_PORT`, `BACKEND_PORT`, `ANGULAR_PORT`, `NEXT_PORT` | compose | Ports exposés sur l'hôte |
 
@@ -99,7 +100,22 @@ La CI GitHub Actions (`.github/workflows/`) exécute ces commandes, puis démarr
 
 ## Rôles
 
-`SUPER_ADMIN` (plateforme), puis, par entreprise : `ADMIN`, `MANAGER`, `MAGASINIER`, `VENDEUR`. Les droits reposent sur des **permissions** regroupées par rôle et limitées aux emplacements autorisés. Voir la matrice complète dans le plan d'architecture.
+`SUPER_ADMIN` (plateforme), puis, par entreprise : `ADMIN`, `MANAGER`, `MAGASINIER`, `VENDEUR`. Les droits reposent sur des **permissions** regroupées par rôle et limitées aux emplacements autorisés. Voir la matrice complète dans le plan d'architecture et [`docs/04-security.md`](docs/04-security.md).
+
+## Comptes de démonstration
+
+Avec le profil Spring `demo` (activé par défaut dans `.env.example`), deux entreprises indépendantes sont créées au premier démarrage :
+
+| Compte | Rôle | Application conseillée |
+|---|---|---|
+| `superadmin@stockhub.local` / valeur de `STOCKHUB_SUPERADMIN_PASSWORD` | SUPER_ADMIN | Angular (4300) |
+| `admin@alpha.cm` / `StockHub2026` | ADMIN — Alpha Market | Angular |
+| `manager@alpha.cm` / `StockHub2026` | MANAGER | Angular |
+| `magasinier@alpha.cm` / `StockHub2026` | MAGASINIER (emplacement principal) | Angular |
+| `vendeur@alpha.cm` / `StockHub2026` | VENDEUR (emplacement principal) | Next.js (3100) |
+| `admin@beta.cm`, `manager@beta.cm`, … / `StockHub2026` | Beta Distribution (isolation) | — |
+
+En profil `dev`, le super admin par défaut est `superadmin@stockhub.local` / `SuperAdmin2026`. **Ne jamais utiliser le profil `demo` en production.**
 
 ## Avancement
 
@@ -107,5 +123,6 @@ La CI GitHub Actions (`.github/workflows/`) exécute ces commandes, puis démarr
 |---|---|
 | 0 — Audit et plan | ✅ |
 | 1 — Squelette (3 projets, Docker, CI, thème, i18n) | ✅ |
-| 2 — Sécurité, entreprises, utilisateurs | ⏳ |
-| 3 → 12 | à venir |
+| 2 — Sécurité, entreprises, utilisateurs | ✅ |
+| 3 — Catalogue (emplacements, catégories, produits, fournisseurs, codes-barres) | ⏳ |
+| 4 → 12 | à venir |

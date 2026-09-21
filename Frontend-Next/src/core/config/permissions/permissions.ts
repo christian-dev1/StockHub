@@ -3,6 +3,7 @@
  * the backend remains the authority.
  */
 export const PERMISSIONS = [
+  'USER_VIEW',
   'PRODUCT_VIEW',
   'STOCK_VIEW',
   'WAREHOUSE_VIEW',
@@ -17,3 +18,6 @@ export const PERMISSIONS = [
 export type Permission = (typeof PERMISSIONS)[number];
 
 export type RoleCode = 'SUPER_ADMIN' | 'ADMIN' | 'MANAGER' | 'MAGASINIER' | 'VENDEUR';
+
+/** Roles allowed in the sales app; the platform super admin works in the back-office. */
+export const SALES_APP_ROLES: readonly RoleCode[] = ['ADMIN', 'MANAGER', 'MAGASINIER', 'VENDEUR'];

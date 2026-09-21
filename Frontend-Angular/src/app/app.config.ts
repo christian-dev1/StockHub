@@ -5,7 +5,12 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
-import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
+import {
+  provideRouter,
+  withComponentInputBinding,
+  withInMemoryScrolling,
+  withRouterConfig,
+} from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 import { environment } from '../environments/environment';
@@ -15,6 +20,7 @@ import { StockHubPreset } from './core/config/theme/stockhub-preset';
 import { GlobalErrorHandler } from './core/errors/global-error-handler';
 import { provideI18n } from './core/i18n/i18n.providers';
 import { acceptLanguageInterceptor } from './core/interceptors/accept-language.interceptor';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,9 +31,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(
       routes,
       withComponentInputBinding(),
+      withRouterConfig({ paramsInheritanceStrategy: 'always' }),
       withInMemoryScrolling({ scrollPositionRestoration: 'top' }),
     ),
-    provideHttpClient(withFetch(), withInterceptors([acceptLanguageInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([acceptLanguageInterceptor, authInterceptor])),
     providePrimeNG({
       theme: {
         preset: StockHubPreset,

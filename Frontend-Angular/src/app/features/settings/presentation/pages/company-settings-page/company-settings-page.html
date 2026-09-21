@@ -1,0 +1,215 @@
+<app-page-header
+  [title]="'settings.company.title' | translate"
+  [subtitle]="'settings.company.subtitle' | translate"
+/>
+
+@switch (store.state().status) {
+  @case ('error') {
+    @if (store.state(); as s) {
+      @if (s.status === 'error') {
+        <app-error-state [error]="s.error" (retry)="store.load()" />
+      }
+    }
+  }
+  @case ('success') {
+    <div class="grid gap-6 xl:grid-cols-2">
+      <form
+        class="sh-card p-5 sm:p-6"
+        [formGroup]="profile"
+        (ngSubmit)="saveProfile()"
+        novalidate
+        aria-labelledby="sec-identity"
+      >
+        <h2 id="sec-identity" class="mb-5 text-base font-semibold">
+          {{ 'settings.company.identity' | translate }}
+        </h2>
+        <div class="grid gap-5 sm:grid-cols-2">
+          <app-form-field
+            class="sm:col-span-2"
+            [label]="'companies.fields.name' | translate"
+            forId="s-name"
+            [control]="profile.controls.name"
+            [required]="true"
+          >
+            <input pInputText id="s-name" formControlName="name" class="w-full" />
+          </app-form-field>
+          <app-form-field
+            [label]="'companies.fields.legalName' | translate"
+            forId="s-legal"
+            [control]="profile.controls.legalName"
+          >
+            <input pInputText id="s-legal" formControlName="legalName" class="w-full" />
+          </app-form-field>
+          <app-form-field
+            [label]="'companies.fields.email' | translate"
+            forId="s-email"
+            [control]="profile.controls.email"
+          >
+            <input pInputText id="s-email" type="email" formControlName="email" class="w-full" />
+          </app-form-field>
+          <app-form-field
+            [label]="'companies.fields.phone' | translate"
+            forId="s-phone"
+            [control]="profile.controls.phone"
+          >
+            <input pInputText id="s-phone" type="tel" formControlName="phone" class="w-full" />
+          </app-form-field>
+          <app-form-field
+            [label]="'companies.fields.country' | translate"
+            forId="s-country"
+            [control]="profile.controls.country"
+          >
+            <input
+              pInputText
+              id="s-country"
+              formControlName="country"
+              maxlength="2"
+              class="w-full uppercase"
+            />
+          </app-form-field>
+          <app-form-field
+            [label]="'companies.fields.addressLine' | translate"
+            forId="s-address"
+            [control]="profile.controls.addressLine"
+          >
+            <input pInputText id="s-address" formControlName="addressLine" class="w-full" />
+          </app-form-field>
+          <app-form-field
+            [label]="'companies.fields.city' | translate"
+            forId="s-city"
+            [control]="profile.controls.city"
+          >
+            <input pInputText id="s-city" formControlName="city" class="w-full" />
+          </app-form-field>
+        </div>
+        @if (canEdit()) {
+          <div class="mt-6 flex justify-end">
+            <p-button
+              type="submit"
+              [label]="'common.save' | translate"
+              icon="pi pi-check"
+              [loading]="savingProfile()"
+              [disabled]="profile.pristine"
+            />
+          </div>
+        }
+      </form>
+
+      <form
+        class="sh-card p-5 sm:p-6"
+        [formGroup]="settings"
+        (ngSubmit)="saveSettings()"
+        novalidate
+        aria-labelledby="sec-ops"
+      >
+        <h2 id="sec-ops" class="mb-5 text-base font-semibold">
+          {{ 'settings.company.operations' | translate }}
+        </h2>
+        <div class="grid gap-5 sm:grid-cols-2">
+          <app-form-field
+            [label]="'companies.fields.currency' | translate"
+            forId="s-currency"
+            [control]="settings.controls.currency"
+            [required]="true"
+          >
+            <p-select
+              inputId="s-currency"
+              formControlName="currency"
+              [options]="currencies"
+              optionLabel="label"
+              optionValue="value"
+              [filter]="true"
+              styleClass="w-full"
+            />
+          </app-form-field>
+          <app-form-field
+            [label]="'companies.fields.timezone' | translate"
+            forId="s-tz"
+            [control]="settings.controls.timezone"
+            [required]="true"
+          >
+            <p-select
+              inputId="s-tz"
+              formControlName="timezone"
+              [options]="timeZones"
+              [filter]="true"
+              styleClass="w-full"
+            />
+          </app-form-field>
+          <app-form-field
+            [label]="'companies.fields.locale' | translate"
+            forId="s-locale"
+            [control]="settings.controls.locale"
+            [required]="true"
+          >
+            <p-select
+              inputId="s-locale"
+              formControlName="locale"
+              [options]="locales"
+              optionLabel="label"
+              optionValue="value"
+              styleClass="w-full"
+            />
+          </app-form-field>
+          <app-form-field
+            [label]="'settings.fields.expiryWarningDays' | translate"
+            forId="s-expiry"
+            [control]="settings.controls.expiryWarningDays"
+            [hint]="'settings.hints.expiryWarningDays' | translate"
+          >
+            <p-inputnumber
+              inputId="s-expiry"
+              formControlName="expiryWarningDays"
+              [min]="1"
+              [max]="365"
+              [showButtons]="true"
+              styleClass="w-full"
+            />
+          </app-form-field>
+          <app-form-field
+            [label]="'settings.fields.defaultLeadTimeDays' | translate"
+            forId="s-lead"
+            [control]="settings.controls.defaultLeadTimeDays"
+            [hint]="'settings.hints.defaultLeadTimeDays' | translate"
+          >
+            <p-inputnumber
+              inputId="s-lead"
+              formControlName="defaultLeadTimeDays"
+              [min]="0"
+              [max]="365"
+              [showButtons]="true"
+              styleClass="w-full"
+            />
+          </app-form-field>
+        </div>
+        <div class="mt-5 flex items-start gap-3 rounded-lg border border-border p-4">
+          <p-toggleswitch inputId="s-negative" formControlName="allowNegativeStock" />
+          <div>
+            <label for="s-negative" class="text-sm font-medium">{{
+              'settings.fields.allowNegativeStock' | translate
+            }}</label>
+            <p class="text-xs text-fg-muted">
+              {{ 'settings.hints.allowNegativeStock' | translate }}
+            </p>
+          </div>
+        </div>
+        @if (canEdit()) {
+          <div class="mt-6 flex justify-end">
+            <p-button
+              type="submit"
+              [label]="'common.save' | translate"
+              icon="pi pi-check"
+              [loading]="savingSettings()"
+              [disabled]="settings.pristine"
+            />
+          </div>
+        }
+      </form>
+    </div>
+  }
+  @default {
+    <div class="grid gap-6 xl:grid-cols-2" aria-busy="true">
+      <p-skeleton height="24rem" /><p-skeleton height="24rem" />
+    </div>
+  }
+}

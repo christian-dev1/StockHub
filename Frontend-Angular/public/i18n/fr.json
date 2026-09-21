@@ -1,21 +1,56 @@
 {
-  "a11y": { "skipToContent": "Aller au contenu principal" },
-  "common": { "refresh": "Actualiser", "loading": "Chargement…", "retry": "Réessayer" },
+  "a11y": {
+    "skipToContent": "Aller au contenu principal"
+  },
+  "common": {
+    "refresh": "Actualiser",
+    "loading": "Chargement…",
+    "retry": "Réessayer",
+    "save": "Enregistrer",
+    "saved": "Modifications enregistrées",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "create": "Créer",
+    "back": "Retour",
+    "clear": "Effacer"
+  },
   "nav": {
     "main": "Navigation principale",
     "sidebar": "Barre latérale",
     "openMenu": "Ouvrir le menu",
-    "section": { "overview": "Vue d'ensemble" },
-    "dashboard": "Tableau de bord"
+    "section": {
+      "overview": "Vue d'ensemble",
+      "platform": "Plateforme",
+      "administration": "Administration"
+    },
+    "dashboard": "Tableau de bord",
+    "companies": "Entreprises",
+    "users": "Utilisateurs",
+    "companySettings": "Paramètres de l'entreprise",
+    "userMenu": "Menu utilisateur",
+    "platformMode": "Administration plateforme"
   },
-  "theme": { "label": "Thème", "light": "Clair", "dark": "Sombre", "system": "Système" },
-  "language": { "label": "Langue", "fr": "Français", "en": "Anglais" },
+  "theme": {
+    "label": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  },
+  "language": {
+    "label": "Langue",
+    "fr": "Français",
+    "en": "Anglais"
+  },
   "dashboard": {
     "title": "Tableau de bord",
     "subtitle": "Vue d'ensemble de votre activité",
     "system": {
       "title": "État de la plateforme",
-      "status": { "UP": "Opérationnelle", "DOWN": "Indisponible", "UNKNOWN": "Inconnu" },
+      "status": {
+        "UP": "Opérationnelle",
+        "DOWN": "Indisponible",
+        "UNKNOWN": "Inconnu"
+      },
       "checkedAt": "Vérifié à",
       "unreachable": "Le serveur est injoignable"
     }
@@ -23,9 +58,242 @@
   "errors": {
     "page": {
       "backHome": "Retour à l'accueil",
-      "403": { "title": "Accès refusé", "description": "Vous n'avez pas les droits nécessaires pour accéder à cette page." },
-      "404": { "title": "Page introuvable", "description": "La page que vous cherchez n'existe pas ou a été déplacée." },
-      "500": { "title": "Erreur du serveur", "description": "Un problème inattendu est survenu. Réessayez dans quelques instants." }
+      "403": {
+        "title": "Accès refusé",
+        "description": "Vous n'avez pas les droits nécessaires pour accéder à cette page."
+      },
+      "404": {
+        "title": "Page introuvable",
+        "description": "La page que vous cherchez n'existe pas ou a été déplacée."
+      },
+      "500": {
+        "title": "Erreur du serveur",
+        "description": "Un problème inattendu est survenu. Réessayez dans quelques instants."
+      }
+    },
+    "reference": "Référence :",
+    "kind": {
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion.",
+      "unauthorized": "Votre session a expiré. Reconnectez-vous.",
+      "forbidden": "Vous n'avez pas l'autorisation d'effectuer cette action.",
+      "not-found": "Élément introuvable.",
+      "validation": "Certaines informations sont invalides.",
+      "conflict": "Cette opération est en conflit avec des données existantes.",
+      "business": "Opération impossible.",
+      "server": "Une erreur inattendue est survenue. Réessayez plus tard."
+    },
+    "api": {
+      "AUTH_INVALID_CREDENTIALS": "E-mail ou mot de passe incorrect.",
+      "AUTH_ACCOUNT_DISABLED": "Ce compte est désactivé.",
+      "AUTH_COMPANY_DISABLED": "Le compte de votre entreprise est désactivé.",
+      "AUTH_TOO_MANY_ATTEMPTS": "Trop de tentatives. Réessayez dans quelques minutes.",
+      "CONCURRENT_MODIFICATION": "Ces données ont été modifiées entre-temps. Rechargez la page puis réessayez.",
+      "USER_EMAIL_ALREADY_EXISTS": "Un utilisateur utilise déjà cet e-mail.",
+      "USER_LAST_ADMIN": "L'entreprise doit conserver au moins un administrateur actif.",
+      "USER_CANNOT_CHANGE_OWN_ACCESS": "Vous ne pouvez pas modifier votre propre statut ou rôle.",
+      "USER_ROLE_NOT_ASSIGNABLE": "Vous ne pouvez pas attribuer ce rôle.",
+      "COMPANY_NAME_ALREADY_EXISTS": "Une entreprise porte déjà ce nom.",
+      "PASSWORD_CURRENT_INVALID": "Le mot de passe actuel est incorrect.",
+      "PASSWORD_UNCHANGED": "Le nouveau mot de passe doit être différent de l'actuel."
+    }
+  },
+  "roles": {
+    "SUPER_ADMIN": "Super administrateur",
+    "ADMIN": "Administrateur",
+    "MANAGER": "Manager",
+    "MAGASINIER": "Magasinier",
+    "VENDEUR": "Vendeur"
+  },
+  "table": {
+    "pagination": "Pagination",
+    "range": "{{from}}–{{to}} sur {{total}}",
+    "noResults": "Aucun résultat",
+    "perPage": "Par page",
+    "previous": "Page précédente",
+    "next": "Page suivante"
+  },
+  "validation": {
+    "required": "Ce champ est obligatoire.",
+    "email": "Adresse e-mail invalide.",
+    "maxlength": "{{requiredLength}} caractères maximum.",
+    "minlength": "{{requiredLength}} caractères minimum.",
+    "min": "Valeur minimale : {{min}}.",
+    "max": "Valeur maximale : {{max}}.",
+    "pattern": "Format invalide.",
+    "passwordLength": "Entre {{min}} et {{max}} caractères.",
+    "passwordWeak": "Doit contenir des lettres et des chiffres.",
+    "mismatch": "Les mots de passe ne correspondent pas.",
+    "locationsRequired": "Sélectionnez au moins un emplacement."
+  },
+  "auth": {
+    "brand": {
+      "title": "Votre stock, maîtrisé sur tous vos sites.",
+      "subtitle": "Boutiques, entrepôts et dépôts réunis dans une seule plateforme sécurisée.",
+      "featureLocations": "Stock en temps réel par emplacement",
+      "featureTraceability": "Traçabilité complète et journal d'audit",
+      "featureForecast": "Prévisions de réapprovisionnement"
+    },
+    "login": {
+      "title": "Connexion",
+      "subtitle": "Accédez à votre espace de gestion.",
+      "submit": "Se connecter",
+      "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter."
+    },
+    "fields": {
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmer le mot de passe"
+    },
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "passwordRules": "10 caractères minimum, avec des lettres et des chiffres.",
+    "changePassword": {
+      "title": "Changer le mot de passe",
+      "subtitle": "Toutes vos autres sessions seront déconnectées.",
+      "requiredSubtitle": "Pour des raisons de sécurité, choisissez un mot de passe personnel avant de continuer.",
+      "submit": "Mettre à jour",
+      "success": "Mot de passe mis à jour."
+    },
+    "logout": "Se déconnecter"
+  },
+  "companies": {
+    "list": {
+      "title": "Entreprises",
+      "subtitle": "Entreprises utilisant la plateforme StockHub",
+      "search": "Rechercher une entreprise",
+      "allStatuses": "Tous les statuts",
+      "empty": "Aucune entreprise",
+      "emptyHint": "Créez la première entreprise pour commencer."
+    },
+    "create": {
+      "title": "Nouvelle entreprise",
+      "subtitle": "L'entreprise, son emplacement principal et son premier administrateur sont créés ensemble.",
+      "success": "Entreprise « {{name}} » créée.",
+      "primaryLocationInfo": "Un emplacement principal « <nom> - Principal » est créé automatiquement.",
+      "sections": {
+        "company": "Entreprise",
+        "companyHint": "Identité et coordonnées.",
+        "localization": "Localisation",
+        "admin": "Premier administrateur",
+        "adminHint": "Il devra choisir son propre mot de passe à la première connexion."
+      }
+    },
+    "detail": {
+      "profile": "Profil",
+      "activeHint": "Les utilisateurs de l'entreprise peuvent se connecter.",
+      "disabledHint": "Aucun utilisateur de l'entreprise ne peut se connecter.",
+      "disableWarning": "Tous les utilisateurs de « {{name}} » seront immédiatement déconnectés.",
+      "disabled": "Entreprise désactivée.",
+      "activated": "Entreprise réactivée.",
+      "administrators": "Administrateurs",
+      "administratorsHint": "Ajoutez un administrateur supplémentaire, par exemple si le compte principal est perdu.",
+      "adminCreated": "Administrateur créé."
+    },
+    "fields": {
+      "name": "Nom",
+      "legalName": "Raison sociale",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "addressLine": "Adresse",
+      "city": "Ville",
+      "country": "Pays",
+      "currency": "Devise",
+      "timezone": "Fuseau horaire",
+      "locale": "Langue",
+      "status": "Statut",
+      "disableReason": "Motif"
+    },
+    "hints": {
+      "country": "Code ISO à 2 lettres (ex. CM, FR)"
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "DISABLED": "Désactivée"
+    },
+    "actions": {
+      "create": "Créer l'entreprise",
+      "disable": "Désactiver",
+      "activate": "Réactiver",
+      "addAdmin": "Ajouter un administrateur"
+    }
+  },
+  "users": {
+    "list": {
+      "title": "Utilisateurs",
+      "subtitle": "Membres de votre entreprise et leurs accès",
+      "search": "Rechercher (nom, e-mail)",
+      "allRoles": "Tous les rôles",
+      "allStatuses": "Tous les statuts",
+      "empty": "Aucun utilisateur trouvé"
+    },
+    "create": {
+      "title": "Nouvel utilisateur",
+      "subtitle": "L'utilisateur choisira son mot de passe à la première connexion.",
+      "success": "Utilisateur {{name}} créé."
+    },
+    "detail": {
+      "selfHint": "Vous ne pouvez pas modifier votre propre rôle ni vos accès.",
+      "confirmDisable": "{{name}} sera immédiatement déconnecté et ne pourra plus se connecter.",
+      "confirmActivate": "{{name}} pourra de nouveau se connecter.",
+      "pendingPassword": "Mot de passe temporaire en attente de changement.",
+      "resetHint": "Toutes les sessions de l'utilisateur seront fermées. Communiquez-lui ce mot de passe de façon sécurisée.",
+      "passwordReset": "Mot de passe réinitialisé."
+    },
+    "sections": {
+      "identity": "Identité",
+      "access": "Rôle et accès",
+      "security": "Sécurité",
+      "summary": "Résumé"
+    },
+    "fields": {
+      "name": "Nom",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "role": "Rôle",
+      "status": "Statut",
+      "lastLogin": "Dernière connexion",
+      "locations": "Emplacements",
+      "allLocations": "Accès à tous les emplacements",
+      "temporaryPassword": "Mot de passe temporaire"
+    },
+    "hints": {
+      "temporaryPassword": "10 caractères minimum, lettres et chiffres. À changer à la première connexion.",
+      "adminAllLocations": "Les administrateurs ont accès à tous les emplacements."
+    },
+    "status": {
+      "ACTIVE": "Actif",
+      "DISABLED": "Désactivé"
+    },
+    "allLocations": "Tous",
+    "neverLoggedIn": "Jamais",
+    "actions": {
+      "create": "Nouvel utilisateur",
+      "disable": "Désactiver",
+      "activate": "Réactiver",
+      "resetPassword": "Réinitialiser le mot de passe",
+      "generatePassword": "Générer"
+    }
+  },
+  "settings": {
+    "company": {
+      "title": "Paramètres de l'entreprise",
+      "subtitle": "Identité, localisation et règles de gestion",
+      "identity": "Identité",
+      "operations": "Localisation et règles"
+    },
+    "fields": {
+      "allowNegativeStock": "Autoriser le stock négatif",
+      "expiryWarningDays": "Alerte d'expiration (jours)",
+      "defaultLeadTimeDays": "Délai fournisseur par défaut (jours)"
+    },
+    "hints": {
+      "allowNegativeStock": "Désactivé par défaut : une sortie supérieure au stock disponible est refusée.",
+      "expiryWarningDays": "Nombre de jours avant expiration déclenchant une alerte.",
+      "defaultLeadTimeDays": "Utilisé pour les prévisions si le fournisseur n'en définit pas."
     }
   }
 }

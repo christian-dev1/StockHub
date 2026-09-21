@@ -13,6 +13,7 @@ import com.stockhub.user.domain.service.PasswordPolicy;
 import com.stockhub.user.domain.valueobject.Email;
 import com.stockhub.user.domain.valueobject.LocationAssignment;
 import com.stockhub.user.domain.valueobject.PersonName;
+import java.util.Set;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,17 +40,34 @@ class UserProvisioningService implements UserProvisioning {
     @Transactional(propagation = Propagation.MANDATORY)
     public UUID createCompanyAdmin(UUID companyId, String email, String firstName, String lastName,
                                    String temporaryPassword) {
+        return provisionUser(companyId, email, firstName, lastName, RoleCode.ADMIN, true, Set.of(),
+                temporaryPassword, true);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.MANDATORY)
+    public UUID provisionUser(UUID companyId, String email, String firstName, String lastName, RoleCode role,
+                              boolean allLocations, Set<UUID> locationIds, String password, boolean temporary) {
         Email address = new Email(email);
-        PasswordPolicy.validate(temporaryPassword, address.value());
+        PasswordPolicy.validate(password, address.value());
         if (users.existsByEmail(address)) {
             throw UserErrors.emailAlreadyUsed();
         }
-        User admin = User.newCompanyUser(companyId, address, new PersonName(firstName, lastName), null,
-                RoleCode.ADMIN, LocationAssignment.ALL, hasher.hash(temporaryPassword));
-        users.save(admin);
-        audit.record(AuditEntry.of("USER_CREATED", "User", admin.id()).inCompany(companyId)
-                .change(null, UserView.from(admin).auditSnapshot()));
-        return admin.id();
+        User user = User.newCompanyUser(companyId, address, new PersonName(firstName, lastName), null, role,
+                new LocationAssignment(allLocations, locationIds), hasher.hash(password));
+        if (!temporary) {
+            user.changePassword(user.passwordHash());
+        }
+        users.save(user);
+        audit.record(AuditEntry.of("USER_CREATED", "User", user.id()).inCompany(companyId)
+                .change(null, UserView.from(user).auditSnapshot()));
+        return user.id();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean exists(String email) {
+        return users.existsByEmail(new Email(email));
     }
 
     @Override

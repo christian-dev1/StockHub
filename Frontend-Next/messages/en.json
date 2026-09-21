@@ -1,14 +1,45 @@
 {
-  "meta": { "description": "StockHub — point of sale and quick stock lookup" },
-  "a11y": { "skipToContent": "Skip to main content" },
-  "common": { "refresh": "Refresh", "loading": "Loading…", "retry": "Retry" },
-  "nav": { "main": "Main navigation", "sidebar": "Sidebar", "home": "Home" },
-  "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "System" },
-  "language": { "label": "Language", "fr": "French", "en": "English" },
-  "home": { "title": "Home", "subtitle": "Your sales workspace" },
+  "meta": {
+    "description": "StockHub — point of sale and quick stock lookup"
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content"
+  },
+  "common": {
+    "refresh": "Refresh",
+    "loading": "Loading…",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "nav": {
+    "main": "Main navigation",
+    "sidebar": "Sidebar",
+    "home": "Home",
+    "userMenu": "User menu"
+  },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "label": "Language",
+    "fr": "French",
+    "en": "English"
+  },
+  "home": {
+    "title": "Home",
+    "subtitle": "Your sales workspace"
+  },
   "system": {
     "title": "Platform status",
-    "status": { "UP": "Operational", "DOWN": "Unavailable", "UNKNOWN": "Unknown" },
+    "status": {
+      "UP": "Operational",
+      "DOWN": "Unavailable",
+      "UNKNOWN": "Unknown"
+    },
     "checkedAt": "Checked at",
     "unreachable": "The server cannot be reached"
   },
@@ -18,7 +49,7 @@
       "retry": "Try again",
       "403": {
         "title": "Access denied",
-        "description": "You do not have the required permissions to access this page."
+        "description": "This app is for your company's sales teams. Use the back-office for administration."
       },
       "404": {
         "title": "Page not found",
@@ -28,6 +59,60 @@
         "title": "Unexpected error",
         "description": "Something went wrong. Please try again in a moment."
       }
+    },
+    "kind": {
+      "network": "The server cannot be reached. Check your connection.",
+      "unauthorized": "Your session has expired. Please sign in again.",
+      "forbidden": "You are not allowed to do this.",
+      "not-found": "Item not found.",
+      "validation": "Some information is invalid.",
+      "conflict": "Conflicts with existing data.",
+      "business": "Operation not possible.",
+      "server": "An unexpected error occurred."
+    },
+    "api": {
+      "AUTH_INVALID_CREDENTIALS": "Incorrect email or password.",
+      "AUTH_ACCOUNT_DISABLED": "This account is disabled.",
+      "AUTH_COMPANY_DISABLED": "Your company account is disabled.",
+      "AUTH_TOO_MANY_ATTEMPTS": "Too many attempts. Try again in a few minutes.",
+      "PASSWORD_CURRENT_INVALID": "The current password is incorrect.",
+      "PASSWORD_UNCHANGED": "The new password must be different."
     }
+  },
+  "roles": {
+    "SUPER_ADMIN": "Super admin",
+    "ADMIN": "Administrator",
+    "MANAGER": "Manager",
+    "MAGASINIER": "Storekeeper",
+    "VENDEUR": "Seller"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Access your sales workspace.",
+      "submit": "Sign in"
+    },
+    "fields": {
+      "email": "Email address",
+      "password": "Password",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password"
+    },
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "passwordRules": "At least 10 characters, with letters and digits.",
+    "passwordProblem": {
+      "length": "Between 10 and 128 characters.",
+      "weak": "Must contain letters and digits.",
+      "mismatch": "Passwords do not match."
+    },
+    "changePassword": {
+      "title": "Change password",
+      "subtitle": "All your other sessions will be signed out.",
+      "requiredSubtitle": "Choose a personal password before continuing.",
+      "submit": "Update"
+    },
+    "logout": "Sign out"
   }
 }

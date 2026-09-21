@@ -1,0 +1,88 @@
+<app-auth-layout>
+  <h1 class="text-2xl font-semibold tracking-tight text-fg">
+    {{ 'auth.login.title' | translate }}
+  </h1>
+  <p class="mt-1 text-sm text-fg-muted">{{ 'auth.login.subtitle' | translate }}</p>
+
+  @if (sessionExpired() && !errorMessage()) {
+    <p
+      class="mt-6 flex items-start gap-2 rounded-lg border border-info/30 bg-info/10 p-3 text-sm text-info"
+      role="status"
+    >
+      <i class="pi pi-info-circle mt-0.5" aria-hidden="true"></i
+      >{{ 'auth.login.sessionExpired' | translate }}
+    </p>
+  }
+  @if (errorMessage(); as message) {
+    <p
+      class="mt-6 flex items-start gap-2 rounded-lg border border-danger/30 bg-danger/10 p-3 text-sm text-danger"
+      role="alert"
+    >
+      <i class="pi pi-exclamation-circle mt-0.5" aria-hidden="true"></i>{{ message }}
+    </p>
+  }
+
+  <form class="mt-6 space-y-5" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <app-form-field
+      [label]="'auth.fields.email' | translate"
+      forId="login-email"
+      [control]="form.controls.email"
+      [required]="true"
+    >
+      <input
+        pInputText
+        id="login-email"
+        type="email"
+        formControlName="email"
+        autocomplete="username"
+        class="w-full"
+        aria-describedby="login-email-message"
+        [attr.aria-invalid]="form.controls.email.invalid && form.controls.email.touched"
+      />
+    </app-form-field>
+
+    <app-form-field
+      [label]="'auth.fields.password' | translate"
+      forId="login-password"
+      [control]="form.controls.password"
+      [required]="true"
+    >
+      <div class="relative">
+        <input
+          pInputText
+          id="login-password"
+          [type]="showPassword() ? 'text' : 'password'"
+          formControlName="password"
+          autocomplete="current-password"
+          class="w-full pr-11"
+          aria-describedby="login-password-message"
+          [attr.aria-invalid]="form.controls.password.invalid && form.controls.password.touched"
+        />
+        <button
+          type="button"
+          class="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-fg-muted hover:text-fg"
+          [attr.aria-label]="
+            (showPassword() ? 'auth.hidePassword' : 'auth.showPassword') | translate
+          "
+          [attr.aria-pressed]="showPassword()"
+          (click)="showPassword.set(!showPassword())"
+        >
+          <i
+            class="pi"
+            [class.pi-eye]="!showPassword()"
+            [class.pi-eye-slash]="showPassword()"
+            aria-hidden="true"
+          ></i>
+        </button>
+      </div>
+    </app-form-field>
+
+    <p-button
+      type="submit"
+      [label]="'auth.login.submit' | translate"
+      [loading]="submitting()"
+      styleClass="w-full"
+      icon="pi pi-sign-in"
+    />
+  </form>
+</app-auth-layout>

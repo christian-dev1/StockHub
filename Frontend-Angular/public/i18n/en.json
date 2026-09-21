@@ -1,21 +1,56 @@
 {
-  "a11y": { "skipToContent": "Skip to main content" },
-  "common": { "refresh": "Refresh", "loading": "Loading…", "retry": "Retry" },
+  "a11y": {
+    "skipToContent": "Skip to main content"
+  },
+  "common": {
+    "refresh": "Refresh",
+    "loading": "Loading…",
+    "retry": "Retry",
+    "save": "Save",
+    "saved": "Changes saved",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "create": "Create",
+    "back": "Back",
+    "clear": "Clear"
+  },
   "nav": {
     "main": "Main navigation",
     "sidebar": "Sidebar",
     "openMenu": "Open menu",
-    "section": { "overview": "Overview" },
-    "dashboard": "Dashboard"
+    "section": {
+      "overview": "Overview",
+      "platform": "Platform",
+      "administration": "Administration"
+    },
+    "dashboard": "Dashboard",
+    "companies": "Companies",
+    "users": "Users",
+    "companySettings": "Company settings",
+    "userMenu": "User menu",
+    "platformMode": "Platform administration"
   },
-  "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "System" },
-  "language": { "label": "Language", "fr": "French", "en": "English" },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "label": "Language",
+    "fr": "French",
+    "en": "English"
+  },
   "dashboard": {
     "title": "Dashboard",
     "subtitle": "Overview of your activity",
     "system": {
       "title": "Platform status",
-      "status": { "UP": "Operational", "DOWN": "Unavailable", "UNKNOWN": "Unknown" },
+      "status": {
+        "UP": "Operational",
+        "DOWN": "Unavailable",
+        "UNKNOWN": "Unknown"
+      },
       "checkedAt": "Checked at",
       "unreachable": "The server cannot be reached"
     }
@@ -23,9 +58,242 @@
   "errors": {
     "page": {
       "backHome": "Back to home",
-      "403": { "title": "Access denied", "description": "You do not have the required permissions to access this page." },
-      "404": { "title": "Page not found", "description": "The page you are looking for does not exist or has been moved." },
-      "500": { "title": "Server error", "description": "An unexpected problem occurred. Please try again in a moment." }
+      "403": {
+        "title": "Access denied",
+        "description": "You do not have the required permissions to access this page."
+      },
+      "404": {
+        "title": "Page not found",
+        "description": "The page you are looking for does not exist or has been moved."
+      },
+      "500": {
+        "title": "Server error",
+        "description": "An unexpected problem occurred. Please try again in a moment."
+      }
+    },
+    "reference": "Reference:",
+    "kind": {
+      "network": "The server cannot be reached. Check your connection.",
+      "unauthorized": "Your session has expired. Please sign in again.",
+      "forbidden": "You are not allowed to perform this action.",
+      "not-found": "Item not found.",
+      "validation": "Some information is invalid.",
+      "conflict": "This operation conflicts with existing data.",
+      "business": "Operation not possible.",
+      "server": "An unexpected error occurred. Please try again later."
+    },
+    "api": {
+      "AUTH_INVALID_CREDENTIALS": "Incorrect email or password.",
+      "AUTH_ACCOUNT_DISABLED": "This account is disabled.",
+      "AUTH_COMPANY_DISABLED": "Your company account is disabled.",
+      "AUTH_TOO_MANY_ATTEMPTS": "Too many attempts. Try again in a few minutes.",
+      "CONCURRENT_MODIFICATION": "This data was changed in the meantime. Reload the page and try again.",
+      "USER_EMAIL_ALREADY_EXISTS": "A user already uses this email.",
+      "USER_LAST_ADMIN": "The company must keep at least one active administrator.",
+      "USER_CANNOT_CHANGE_OWN_ACCESS": "You cannot change your own status or role.",
+      "USER_ROLE_NOT_ASSIGNABLE": "You cannot assign this role.",
+      "COMPANY_NAME_ALREADY_EXISTS": "A company already has this name.",
+      "PASSWORD_CURRENT_INVALID": "The current password is incorrect.",
+      "PASSWORD_UNCHANGED": "The new password must differ from the current one."
+    }
+  },
+  "roles": {
+    "SUPER_ADMIN": "Super admin",
+    "ADMIN": "Administrator",
+    "MANAGER": "Manager",
+    "MAGASINIER": "Storekeeper",
+    "VENDEUR": "Seller"
+  },
+  "table": {
+    "pagination": "Pagination",
+    "range": "{{from}}–{{to}} of {{total}}",
+    "noResults": "No results",
+    "perPage": "Per page",
+    "previous": "Previous page",
+    "next": "Next page"
+  },
+  "validation": {
+    "required": "This field is required.",
+    "email": "Invalid email address.",
+    "maxlength": "At most {{requiredLength}} characters.",
+    "minlength": "At least {{requiredLength}} characters.",
+    "min": "Minimum value: {{min}}.",
+    "max": "Maximum value: {{max}}.",
+    "pattern": "Invalid format.",
+    "passwordLength": "Between {{min}} and {{max}} characters.",
+    "passwordWeak": "Must contain letters and digits.",
+    "mismatch": "Passwords do not match.",
+    "locationsRequired": "Select at least one location."
+  },
+  "auth": {
+    "brand": {
+      "title": "Your stock, under control across every site.",
+      "subtitle": "Stores, warehouses and depots in a single secure platform.",
+      "featureLocations": "Real-time stock per location",
+      "featureTraceability": "Full traceability and audit trail",
+      "featureForecast": "Replenishment forecasts"
+    },
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Access your management workspace.",
+      "submit": "Sign in",
+      "sessionExpired": "Your session has expired. Please sign in again."
+    },
+    "fields": {
+      "email": "Email address",
+      "password": "Password",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password"
+    },
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "passwordRules": "At least 10 characters, with letters and digits.",
+    "changePassword": {
+      "title": "Change password",
+      "subtitle": "All your other sessions will be signed out.",
+      "requiredSubtitle": "For security reasons, choose a personal password before continuing.",
+      "submit": "Update",
+      "success": "Password updated."
+    },
+    "logout": "Sign out"
+  },
+  "companies": {
+    "list": {
+      "title": "Companies",
+      "subtitle": "Companies using the StockHub platform",
+      "search": "Search a company",
+      "allStatuses": "All statuses",
+      "empty": "No companies",
+      "emptyHint": "Create the first company to get started."
+    },
+    "create": {
+      "title": "New company",
+      "subtitle": "The company, its primary location and its first administrator are created together.",
+      "success": "Company “{{name}}” created.",
+      "primaryLocationInfo": "A primary location “<name> - Principal” is created automatically.",
+      "sections": {
+        "company": "Company",
+        "companyHint": "Identity and contact details.",
+        "localization": "Localization",
+        "admin": "First administrator",
+        "adminHint": "They will choose their own password at first sign-in."
+      }
+    },
+    "detail": {
+      "profile": "Profile",
+      "activeHint": "Company users can sign in.",
+      "disabledHint": "No user of this company can sign in.",
+      "disableWarning": "Every user of “{{name}}” will be signed out immediately.",
+      "disabled": "Company disabled.",
+      "activated": "Company reactivated.",
+      "administrators": "Administrators",
+      "administratorsHint": "Add another administrator, for example if the main account is lost.",
+      "adminCreated": "Administrator created."
+    },
+    "fields": {
+      "name": "Name",
+      "legalName": "Legal name",
+      "email": "Email",
+      "phone": "Phone",
+      "addressLine": "Address",
+      "city": "City",
+      "country": "Country",
+      "currency": "Currency",
+      "timezone": "Time zone",
+      "locale": "Language",
+      "status": "Status",
+      "disableReason": "Reason"
+    },
+    "hints": {
+      "country": "2-letter ISO code (e.g. CM, FR)"
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "DISABLED": "Disabled"
+    },
+    "actions": {
+      "create": "Create company",
+      "disable": "Disable",
+      "activate": "Reactivate",
+      "addAdmin": "Add an administrator"
+    }
+  },
+  "users": {
+    "list": {
+      "title": "Users",
+      "subtitle": "Members of your company and their access",
+      "search": "Search (name, email)",
+      "allRoles": "All roles",
+      "allStatuses": "All statuses",
+      "empty": "No users found"
+    },
+    "create": {
+      "title": "New user",
+      "subtitle": "The user will choose a password at first sign-in.",
+      "success": "User {{name}} created."
+    },
+    "detail": {
+      "selfHint": "You cannot change your own role or access.",
+      "confirmDisable": "{{name}} will be signed out immediately and will no longer be able to sign in.",
+      "confirmActivate": "{{name}} will be able to sign in again.",
+      "pendingPassword": "Temporary password awaiting change.",
+      "resetHint": "All of the user's sessions will be closed. Share this password securely.",
+      "passwordReset": "Password reset."
+    },
+    "sections": {
+      "identity": "Identity",
+      "access": "Role and access",
+      "security": "Security",
+      "summary": "Summary"
+    },
+    "fields": {
+      "name": "Name",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "phone": "Phone",
+      "role": "Role",
+      "status": "Status",
+      "lastLogin": "Last sign-in",
+      "locations": "Locations",
+      "allLocations": "Access to all locations",
+      "temporaryPassword": "Temporary password"
+    },
+    "hints": {
+      "temporaryPassword": "At least 10 characters, letters and digits. Must be changed at first sign-in.",
+      "adminAllLocations": "Administrators have access to every location."
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "DISABLED": "Disabled"
+    },
+    "allLocations": "All",
+    "neverLoggedIn": "Never",
+    "actions": {
+      "create": "New user",
+      "disable": "Disable",
+      "activate": "Reactivate",
+      "resetPassword": "Reset password",
+      "generatePassword": "Generate"
+    }
+  },
+  "settings": {
+    "company": {
+      "title": "Company settings",
+      "subtitle": "Identity, localization and business rules",
+      "identity": "Identity",
+      "operations": "Localization and rules"
+    },
+    "fields": {
+      "allowNegativeStock": "Allow negative stock",
+      "expiryWarningDays": "Expiry warning (days)",
+      "defaultLeadTimeDays": "Default supplier lead time (days)"
+    },
+    "hints": {
+      "allowNegativeStock": "Off by default: an exit larger than the available stock is refused.",
+      "expiryWarningDays": "Days before expiry that trigger an alert.",
+      "defaultLeadTimeDays": "Used by forecasts when a supplier defines none."
     }
   }
 }

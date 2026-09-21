@@ -1,4 +1,24 @@
+import { API_ROUTES, PUBLIC_AUTH_ENDPOINTS } from '../config/routes/api.routes';
 import { AppError, toAppError } from './api-error';
+
+/**
+ * Hooks installed by the auth module (avoids a circular import): token lookup
+ * and a single-flight refresh used to replay a request after a 401.
+ */
+export interface AuthHooks {
+  token(): string | null;
+  refresh(): Promise<string>;
+}
+
+let authHooks: AuthHooks | null = null;
+
+export function installAuthHooks(hooks: AuthHooks): void {
+  authHooks = hooks;
+}
+
+function needsAuth(url: string): boolean {
+  return url.startsWith(API_ROUTES.BASE) && !PUBLIC_AUTH_ENDPOINTS.includes(url);
+}
 
 export interface RequestOptions {
   readonly method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -30,7 +50,21 @@ function currentLanguage(): string | undefined {
  * credentials (refresh cookie), language header and normalized {@link AppError}s.
  */
 export async function httpRequest<T>(url: string, options: RequestOptions = {}): Promise<T> {
+  const authenticated = needsAuth(url) && authHooks !== null;
+  try {
+    return await send<T>(url, options, authenticated ? authHooks?.token() : null);
+  } catch (error) {
+    if (!(error instanceof AppError) || error.status !== 401 || !authenticated || !authHooks) {
+      throw error;
+    }
+    const token = await authHooks.refresh();
+    return send<T>(url, options, token);
+  }
+}
+
+async function send<T>(url: string, options: RequestOptions, token: string | null | undefined): Promise<T> {
   const headers: Record<string, string> = { Accept: 'application/json', ...options.headers };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
   const language = currentLanguage();
   if (language) headers['Accept-Language'] = language;
   if (options.body !== undefined) headers['Content-Type'] = 'application/json';

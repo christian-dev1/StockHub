@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { AuthStore } from '../../auth/auth-store';
 import { NAVIGATION } from '../navigation';
 
 @Component({
@@ -9,7 +10,7 @@ import { NAVIGATION } from '../navigation';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <nav [attr.aria-label]="'nav.main' | translate" class="flex flex-col gap-6">
-      @for (section of sections; track section.labelKey) {
+      @for (section of sections(); track section.labelKey) {
         <div>
           <p class="px-3 pb-2 text-xs font-semibold uppercase tracking-wide text-fg-muted">
             {{ section.labelKey | translate }}
@@ -38,5 +39,14 @@ import { NAVIGATION } from '../navigation';
 export class SidebarNav {
   /** Emitted on navigation so the mobile drawer can close itself. */
   readonly navigate = output<void>();
-  protected readonly sections = NAVIGATION;
+  private readonly auth = inject(AuthStore);
+
+  /** Sections filtered by audience (platform vs company) and permissions. */
+  protected readonly sections = computed(() => {
+    this.auth.session();
+    const audience = this.auth.isSuperAdmin() ? 'platform' : 'company';
+    return NAVIGATION.filter((s) => s.audience === 'all' || s.audience === audience)
+      .map((s) => ({ ...s, items: s.items.filter((i) => this.auth.canAny(i.permissions ?? [])) }))
+      .filter((s) => s.items.length > 0);
+  });
 }

@@ -8,6 +8,7 @@ import { Link, usePathname } from '../i18n/navigation';
 import { LanguageSwitcher } from './language-switcher';
 import { NAVIGATION } from './navigation';
 import { ThemeSwitcher } from './theme-switcher';
+import { UserMenu } from './user-menu';
 
 /**
  * Mobile-first frame: top bar + bottom tab bar on phones/tablets (thumb reach
@@ -59,8 +60,11 @@ export function AppShell({ children }: { readonly children: ReactNode }) {
               <Brand compact />
             </div>
             <div className="ml-auto flex items-center gap-2">
-              <LanguageSwitcher />
-              <ThemeSwitcher />
+              <div className="hidden items-center gap-2 sm:flex">
+                <LanguageSwitcher />
+                <ThemeSwitcher />
+              </div>
+              <UserMenu />
             </div>
           </header>
 

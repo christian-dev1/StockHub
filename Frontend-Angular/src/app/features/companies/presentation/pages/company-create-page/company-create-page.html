@@ -1,0 +1,105 @@
+<app-page-header
+  [title]="'companies.create.title' | translate"
+  [subtitle]="'companies.create.subtitle' | translate"
+>
+  <a
+    actions
+    [routerLink]="routes.PLATFORM.COMPANIES"
+    class="text-sm font-medium text-fg-muted hover:text-fg"
+  >
+    <i class="pi pi-arrow-left mr-1" aria-hidden="true"></i>{{ 'common.back' | translate }}
+  </a>
+</app-page-header>
+
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate class="space-y-6 pb-8">
+  <section class="sh-card p-5 sm:p-6" aria-labelledby="sec-company">
+    <h2 id="sec-company" class="mb-1 text-base font-semibold">
+      {{ 'companies.create.sections.company' | translate }}
+    </h2>
+    <p class="mb-5 text-sm text-fg-muted">
+      {{ 'companies.create.sections.companyHint' | translate }}
+    </p>
+    <app-company-profile-fields [form]="form.controls.profile" />
+  </section>
+
+  <section class="sh-card p-5 sm:p-6" aria-labelledby="sec-locale">
+    <h2 id="sec-locale" class="mb-5 text-base font-semibold">
+      {{ 'companies.create.sections.localization' | translate }}
+    </h2>
+    <div class="grid gap-5 sm:grid-cols-3">
+      <app-form-field
+        [label]="'companies.fields.currency' | translate"
+        forId="co-currency"
+        [control]="form.controls.currency"
+        [required]="true"
+      >
+        <p-select
+          inputId="co-currency"
+          formControlName="currency"
+          [options]="currencies"
+          optionLabel="label"
+          optionValue="value"
+          [filter]="true"
+          styleClass="w-full"
+        />
+      </app-form-field>
+      <app-form-field
+        [label]="'companies.fields.timezone' | translate"
+        forId="co-tz"
+        [control]="form.controls.timezone"
+        [required]="true"
+      >
+        <p-select
+          inputId="co-tz"
+          formControlName="timezone"
+          [options]="timeZones"
+          [filter]="true"
+          styleClass="w-full"
+        />
+      </app-form-field>
+      <app-form-field
+        [label]="'companies.fields.locale' | translate"
+        forId="co-locale"
+        [control]="form.controls.locale"
+        [required]="true"
+      >
+        <p-select
+          inputId="co-locale"
+          formControlName="locale"
+          [options]="locales"
+          optionLabel="label"
+          optionValue="value"
+          styleClass="w-full"
+        />
+      </app-form-field>
+    </div>
+    <p class="mt-4 flex items-start gap-2 text-sm text-fg-muted">
+      <i class="pi pi-info-circle mt-0.5" aria-hidden="true"></i
+      >{{ 'companies.create.primaryLocationInfo' | translate }}
+    </p>
+  </section>
+
+  <section class="sh-card p-5 sm:p-6" aria-labelledby="sec-admin">
+    <h2 id="sec-admin" class="mb-1 text-base font-semibold">
+      {{ 'companies.create.sections.admin' | translate }}
+    </h2>
+    <p class="mb-5 text-sm text-fg-muted">
+      {{ 'companies.create.sections.adminHint' | translate }}
+    </p>
+    <app-admin-account-fields [form]="form.controls.admin" />
+  </section>
+
+  <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+    <a
+      [routerLink]="routes.PLATFORM.COMPANIES"
+      class="p-button p-button-text p-component justify-center no-underline"
+      >{{ 'common.cancel' | translate }}</a
+    >
+    <p-button
+      type="submit"
+      [label]="'companies.actions.create' | translate"
+      icon="pi pi-check"
+      [loading]="saving()"
+    />
+  </div>
+</form>

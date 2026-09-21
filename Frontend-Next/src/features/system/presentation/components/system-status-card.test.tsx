@@ -9,14 +9,12 @@ describe('SystemStatusCard', () => {
   it('shows the operational status', async () => {
     vi.stubGlobal(
       'fetch',
-      vi
-        .fn()
-        .mockResolvedValue(
-          new Response(JSON.stringify({ status: 'UP' }), {
-            status: 200,
-            headers: { 'content-type': 'application/json' },
-          }),
-        ),
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ status: 'UP' }), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        }),
+      ),
     );
     renderWithProviders(<SystemStatusCard />);
     expect(await screen.findByText('Opérationnelle')).toBeInTheDocument();
