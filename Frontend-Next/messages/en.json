@@ -1,0 +1,33 @@
+{
+  "meta": { "description": "StockHub — point of sale and quick stock lookup" },
+  "a11y": { "skipToContent": "Skip to main content" },
+  "common": { "refresh": "Refresh", "loading": "Loading…", "retry": "Retry" },
+  "nav": { "main": "Main navigation", "sidebar": "Sidebar", "home": "Home" },
+  "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "System" },
+  "language": { "label": "Language", "fr": "French", "en": "English" },
+  "home": { "title": "Home", "subtitle": "Your sales workspace" },
+  "system": {
+    "title": "Platform status",
+    "status": { "UP": "Operational", "DOWN": "Unavailable", "UNKNOWN": "Unknown" },
+    "checkedAt": "Checked at",
+    "unreachable": "The server cannot be reached"
+  },
+  "errors": {
+    "page": {
+      "backHome": "Back to home",
+      "retry": "Try again",
+      "403": {
+        "title": "Access denied",
+        "description": "You do not have the required permissions to access this page."
+      },
+      "404": {
+        "title": "Page not found",
+        "description": "The page you are looking for does not exist or has been moved."
+      },
+      "500": {
+        "title": "Unexpected error",
+        "description": "Something went wrong. Please try again in a moment."
+      }
+    }
+  }
+}

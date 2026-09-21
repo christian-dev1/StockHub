@@ -1,0 +1,30 @@
+name: Frontend Next
+
+on:
+  push:
+    branches: [main]
+    paths: ['Frontend-Next/**', '.github/workflows/frontend-next.yml']
+  pull_request:
+    paths: ['Frontend-Next/**', '.github/workflows/frontend-next.yml']
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Frontend-Next
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: Frontend-Next/package-lock.json
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build

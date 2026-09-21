@@ -1,0 +1,33 @@
+{
+  "meta": { "description": "StockHub — caisse et consultation rapide du stock" },
+  "a11y": { "skipToContent": "Aller au contenu principal" },
+  "common": { "refresh": "Actualiser", "loading": "Chargement…", "retry": "Réessayer" },
+  "nav": { "main": "Navigation principale", "sidebar": "Barre latérale", "home": "Accueil" },
+  "theme": { "label": "Thème", "light": "Clair", "dark": "Sombre", "system": "Système" },
+  "language": { "label": "Langue", "fr": "Français", "en": "Anglais" },
+  "home": { "title": "Accueil", "subtitle": "Votre espace de vente" },
+  "system": {
+    "title": "État de la plateforme",
+    "status": { "UP": "Opérationnelle", "DOWN": "Indisponible", "UNKNOWN": "Inconnu" },
+    "checkedAt": "Vérifié à",
+    "unreachable": "Le serveur est injoignable"
+  },
+  "errors": {
+    "page": {
+      "backHome": "Retour à l'accueil",
+      "retry": "Réessayer",
+      "403": {
+        "title": "Accès refusé",
+        "description": "Vous n'avez pas les droits nécessaires pour accéder à cette page."
+      },
+      "404": {
+        "title": "Page introuvable",
+        "description": "La page que vous cherchez n'existe pas ou a été déplacée."
+      },
+      "500": {
+        "title": "Erreur inattendue",
+        "description": "Un problème est survenu. Réessayez dans quelques instants."
+      }
+    }
+  }
+}

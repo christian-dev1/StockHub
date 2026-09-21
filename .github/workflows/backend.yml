@@ -1,0 +1,32 @@
+name: Backend
+
+on:
+  push:
+    branches: [main]
+    paths: ['Backend/**', '.github/workflows/backend.yml']
+  pull_request:
+    paths: ['Backend/**', '.github/workflows/backend.yml']
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      # Unit, integration (Testcontainers/PostgreSQL), security and architecture tests.
+      - run: ./mvnw -B verify
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-reports
+          path: |
+            Backend/target/surefire-reports
+            Backend/target/site/jacoco
+            Backend/target/spring-modulith-docs

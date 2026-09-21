@@ -1,0 +1,31 @@
+{
+  "a11y": { "skipToContent": "Skip to main content" },
+  "common": { "refresh": "Refresh", "loading": "Loading…", "retry": "Retry" },
+  "nav": {
+    "main": "Main navigation",
+    "sidebar": "Sidebar",
+    "openMenu": "Open menu",
+    "section": { "overview": "Overview" },
+    "dashboard": "Dashboard"
+  },
+  "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "System" },
+  "language": { "label": "Language", "fr": "French", "en": "English" },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Overview of your activity",
+    "system": {
+      "title": "Platform status",
+      "status": { "UP": "Operational", "DOWN": "Unavailable", "UNKNOWN": "Unknown" },
+      "checkedAt": "Checked at",
+      "unreachable": "The server cannot be reached"
+    }
+  },
+  "errors": {
+    "page": {
+      "backHome": "Back to home",
+      "403": { "title": "Access denied", "description": "You do not have the required permissions to access this page." },
+      "404": { "title": "Page not found", "description": "The page you are looking for does not exist or has been moved." },
+      "500": { "title": "Server error", "description": "An unexpected problem occurred. Please try again in a moment." }
+    }
+  }
+}

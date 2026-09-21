@@ -1,0 +1,4 @@
+logging:
+  level:
+    com.stockhub: INFO
+    org.testcontainers: WARN

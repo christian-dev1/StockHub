@@ -1,0 +1,27 @@
+name: Frontend Angular
+
+on:
+  push:
+    branches: [main]
+    paths: ['Frontend-Angular/**', '.github/workflows/frontend-angular.yml']
+  pull_request:
+    paths: ['Frontend-Angular/**', '.github/workflows/frontend-angular.yml']
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Frontend-Angular
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: Frontend-Angular/package-lock.json
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build

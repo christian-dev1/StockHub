@@ -1,0 +1,15 @@
+package com.stockhub.shared.infrastructure.config;
+
+import java.time.Clock;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/** A single injectable clock so time-dependent rules (expiry, delays) are testable. */
+@Configuration(proxyBeanMethods = false)
+class ClockConfig {
+
+    @Bean
+    Clock clock() {
+        return Clock.systemUTC();
+    }
+}

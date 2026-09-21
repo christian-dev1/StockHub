@@ -1,0 +1,28 @@
+name: Docker stack
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Create CI environment
+        run: |
+          cp .env.example .env
+          sed -i "s#^POSTGRES_PASSWORD=.*#POSTGRES_PASSWORD=$(openssl rand -hex 16)#" .env
+          sed -i "s#^JWT_SECRET=.*#JWT_SECRET=$(openssl rand -base64 64 | tr -d '\n')#" .env
+      - run: docker compose up -d --build --wait --wait-timeout 300
+      - name: Smoke test
+        run: |
+          curl -fsS http://localhost:8080/actuator/health | grep -q '"UP"'
+          curl -fsS http://localhost:8080/v3/api-docs > /dev/null
+          curl -fsS http://localhost:4300/ | grep -q '<app-root>'
+          curl -fsS http://localhost:4300/actuator/health | grep -q '"UP"'
+          curl -fsS http://localhost:3100/fr | grep -q 'StockHub'
+          curl -fsS http://localhost:3100/actuator/health | grep -q '"UP"'
+      - if: failure()
+        run: docker compose logs
