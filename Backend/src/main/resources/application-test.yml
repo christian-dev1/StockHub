@@ -2,3 +2,7 @@ logging:
   level:
     com.stockhub: INFO
     org.testcontainers: WARN
+
+stockhub:
+  auth:
+    jwt-secret: dGVzdC1vbmx5LXN0b2NraHViLWtleS10aGF0LWlzLWxvbmctZW5vdWdoLWZvci1oczUxMi1zaWduaW5nLTAxMjM0NTY3ODk=

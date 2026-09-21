@@ -2,6 +2,7 @@ package com.stockhub.shared.web;
 
 import com.stockhub.shared.domain.exception.DomainException;
 import com.stockhub.shared.domain.exception.ErrorKind;
+import com.stockhub.shared.domain.exception.InvalidInputException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
@@ -41,7 +42,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DomainException.class)
     ResponseEntity<ApiError> handleDomain(DomainException ex, HttpServletRequest request) {
         HttpStatus status = statusOf(ex.kind());
-        return respond(errors.create(status, ex.code(), ex.getMessage(), ex.arguments().toArray(), request, List.of()));
+        List<ApiError.FieldError> fields = ex instanceof InvalidInputException invalid
+                ? List.of(new ApiError.FieldError(invalid.field(), ex.code(), ex.getMessage()))
+                : List.of();
+        return respond(errors.create(status, ex.code(), ex.getMessage(), ex.arguments().toArray(), request, fields));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -108,6 +112,17 @@ public class GlobalExceptionHandler {
         return respond(errors.create(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_ERROR", request));
     }
 
+    /** Dispatches an exception to the matching handler (for advices that wrap failures). */
+    public ResponseEntity<ApiError> handle(RuntimeException ex, HttpServletRequest request) {
+        if (ex instanceof DomainException domain) {
+            return handleDomain(domain, request);
+        }
+        if (ex instanceof OptimisticLockingFailureException lock) {
+            return handleOptimisticLock(lock, request);
+        }
+        return handleUnexpected(ex, request);
+    }
+
     private static ResponseEntity<ApiError> respond(ApiError body) {
         return ResponseEntity.status(body.status()).body(body);
     }
@@ -120,6 +135,7 @@ public class GlobalExceptionHandler {
             case BUSINESS_RULE -> HttpStatus.UNPROCESSABLE_CONTENT;
             case FORBIDDEN -> HttpStatus.FORBIDDEN;
             case UNAUTHORIZED -> HttpStatus.UNAUTHORIZED;
+            case TOO_MANY_REQUESTS -> HttpStatus.TOO_MANY_REQUESTS;
         };
     }
 }

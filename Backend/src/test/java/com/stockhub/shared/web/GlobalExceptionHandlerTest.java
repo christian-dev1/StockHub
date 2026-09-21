@@ -16,7 +16,8 @@ class GlobalExceptionHandlerTest {
             "CONFLICT, CONFLICT",
             "BUSINESS_RULE, UNPROCESSABLE_CONTENT",
             "FORBIDDEN, FORBIDDEN",
-            "UNAUTHORIZED, UNAUTHORIZED"
+            "UNAUTHORIZED, UNAUTHORIZED",
+            "TOO_MANY_REQUESTS, TOO_MANY_REQUESTS"
     })
     void mapsEveryErrorKindToAnHttpStatus(ErrorKind kind, HttpStatus expected) {
         assertThat(GlobalExceptionHandler.statusOf(kind)).isEqualTo(expected);

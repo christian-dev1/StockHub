@@ -10,5 +10,6 @@ public enum ErrorKind {
     CONFLICT,
     BUSINESS_RULE,
     FORBIDDEN,
-    UNAUTHORIZED
+    UNAUTHORIZED,
+    TOO_MANY_REQUESTS
 }

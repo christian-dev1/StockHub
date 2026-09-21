@@ -22,7 +22,7 @@ jobs:
           curl -fsS http://localhost:8080/v3/api-docs > /dev/null
           curl -fsS http://localhost:4300/ | grep -q '<app-root>'
           curl -fsS http://localhost:4300/actuator/health | grep -q '"UP"'
-          curl -fsS http://localhost:3100/fr | grep -q 'StockHub'
+          curl -fsSL http://localhost:3100/ | grep -q 'StockHub'
           curl -fsS http://localhost:3100/actuator/health | grep -q '"UP"'
       - if: failure()
         run: docker compose logs
