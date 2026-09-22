@@ -1,0 +1,35 @@
+<app-page-header
+  [title]="'products.create.title' | translate"
+  [subtitle]="'products.create.subtitle' | translate"
+>
+  <a
+    actions
+    [routerLink]="routes.PRODUCTS.ROOT"
+    class="inline-flex min-h-11 items-center text-sm font-medium text-fg-muted hover:text-fg"
+  >
+    <i class="pi pi-arrow-left mr-1" aria-hidden="true"></i>{{ 'common.back' | translate }}
+  </a>
+</app-page-header>
+
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate class="sh-card max-w-4xl p-5 sm:p-6">
+  <app-product-fields
+    [form]="form"
+    [categories]="references.categoryOptions()"
+    [suppliers]="supplierOptions()"
+    [currency]="currency()"
+    [creating]="true"
+  />
+  <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+    <a
+      [routerLink]="routes.PRODUCTS.ROOT"
+      class="p-button p-button-text p-component justify-center no-underline"
+      >{{ 'common.cancel' | translate }}</a
+    >
+    <p-button
+      type="submit"
+      icon="pi pi-check"
+      [label]="'products.actions.create' | translate"
+      [loading]="saving()"
+    />
+  </div>
+</form>

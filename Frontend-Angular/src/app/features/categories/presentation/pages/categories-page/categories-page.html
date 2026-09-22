@@ -1,0 +1,202 @@
+<app-page-header
+  [title]="'categories.list.title' | translate"
+  [subtitle]="'categories.list.subtitle' | translate"
+>
+  @if (canManage()) {
+    <p-button
+      actions
+      icon="pi pi-plus"
+      [label]="'categories.actions.new' | translate"
+      (onClick)="openCreate()"
+    />
+  }
+</app-page-header>
+
+<div class="mb-4 sm:max-w-sm">
+  <app-search-field
+    [label]="'categories.list.search' | translate"
+    [value]="search()"
+    [debounce]="150"
+    (searchChange)="search.set($event)"
+  />
+</div>
+
+<section class="sh-card overflow-hidden" [attr.aria-busy]="store.loading()">
+  @if (store.error(); as error) {
+    <app-error-state [error]="error" (retry)="store.load()" />
+  } @else if (store.loading() && !store.loaded()) {
+    <ul class="divide-y divide-border">
+      @for (i of skeletons; track i) {
+        <li class="space-y-2 p-4"><p-skeleton width="40%" /><p-skeleton width="25%" /></li>
+      }
+    </ul>
+  } @else if (store.categories().length === 0) {
+    <app-empty-state
+      icon="pi-sitemap"
+      [title]="'categories.list.empty' | translate"
+      [description]="'categories.list.emptyHint' | translate"
+    />
+  } @else if (visible().length === 0) {
+    <app-empty-state
+      icon="pi-search"
+      [title]="'table.noResults' | translate"
+      [description]="'table.noResultsHint' | translate"
+    >
+      <button
+        type="button"
+        class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-4 text-sm font-medium text-fg hover:bg-surface-muted"
+        (click)="search.set('')"
+      >
+        <i class="pi pi-filter-slash" aria-hidden="true"></i>{{ 'table.clearFilters' | translate }}
+      </button>
+    </app-empty-state>
+  } @else {
+    <ul class="divide-y divide-border" [attr.aria-label]="'categories.list.title' | translate">
+      @for (category of visible(); track category.id) {
+        <li
+          class="flex flex-col gap-3 p-4 sm:flex-row sm:items-center"
+          [class.sm:pl-12]="category.level === 2"
+        >
+          <div class="min-w-0 flex-1">
+            <p class="flex items-center gap-2 font-medium break-words text-fg">
+              @if (category.level === 2) {
+                <i class="pi pi-arrow-down-right text-xs text-fg-muted" aria-hidden="true"></i>
+              }
+              {{ category.name }}
+            </p>
+            <p class="mt-1 flex flex-wrap items-center gap-2 text-xs text-fg-muted">
+              <app-status-badge
+                [label]="
+                  (category.level === 1 ? 'categories.level.root' : 'categories.level.child')
+                    | translate
+                "
+                [tone]="category.level === 1 ? 'primary' : 'neutral'"
+              />
+              @if (category.parentName) {
+                <span
+                  >{{ 'categories.fields.parent' | translate }} : {{ category.parentName }}</span
+                >
+              }
+              <span>{{
+                'categories.productCount' | translate: { count: category.productCount }
+              }}</span>
+            </p>
+            @if (category.description) {
+              <p class="mt-1 text-sm text-fg-muted">{{ category.description }}</p>
+            }
+          </div>
+          @if (canManage()) {
+            <div class="flex flex-wrap gap-2">
+              @if (category.level === 1) {
+                <button
+                  type="button"
+                  class="inline-flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-medium text-fg hover:bg-surface-muted"
+                  (click)="openCreate(category)"
+                  [attr.aria-label]="
+                    'categories.actions.addChild' | translate: { name: category.name }
+                  "
+                >
+                  <i class="pi pi-plus" aria-hidden="true"></i
+                  ><span class="sm:sr-only lg:not-sr-only">{{
+                    'categories.actions.addChildShort' | translate
+                  }}</span>
+                </button>
+              }
+              <button
+                type="button"
+                class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium text-fg hover:bg-surface-muted"
+                (click)="openEdit(category)"
+                [attr.aria-label]="('common.edit' | translate) + ' ' + category.name"
+              >
+                <i class="pi pi-pencil" aria-hidden="true"></i>{{ 'common.edit' | translate }}
+              </button>
+              <button
+                type="button"
+                class="inline-flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-medium text-danger hover:bg-surface-muted disabled:cursor-not-allowed disabled:text-fg-muted disabled:opacity-60"
+                [disabled]="!deletable(category)"
+                [attr.title]="
+                  deletable(category) ? null : ('categories.hints.cannotDelete' | translate)
+                "
+                [attr.aria-label]="('categories.actions.delete' | translate) + ' ' + category.name"
+                (click)="remove(category)"
+              >
+                <i class="pi pi-trash" aria-hidden="true"></i
+                >{{ 'categories.actions.delete' | translate }}
+              </button>
+            </div>
+          }
+        </li>
+      }
+    </ul>
+  }
+</section>
+
+<p-dialog
+  [visible]="dialogOpen()"
+  (visibleChange)="dialogOpen.set($event)"
+  [modal]="true"
+  [header]="(editing() ? 'categories.edit.title' : 'categories.create.title') | translate"
+  [style]="{ width: '32rem' }"
+  [breakpoints]="{ '640px': '95vw' }"
+  [draggable]="false"
+>
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="grid gap-5 pt-1">
+    <app-form-field
+      [label]="'categories.fields.name' | translate"
+      forId="cat-name"
+      [control]="form.controls.name"
+      [required]="true"
+    >
+      <input pInputText id="cat-name" formControlName="name" class="w-full" />
+    </app-form-field>
+    <app-form-field
+      [label]="'categories.fields.parent' | translate"
+      forId="cat-parent"
+      [control]="form.controls.parentId"
+      [hint]="
+        (parentLocked() ? 'categories.hints.parentLocked' : 'categories.hints.parent') | translate
+      "
+    >
+      <p-select
+        inputId="cat-parent"
+        ariaLabelledBy="cat-parent-label"
+        formControlName="parentId"
+        [options]="parentOptions()"
+        optionLabel="label"
+        optionValue="value"
+        [showClear]="true"
+        [disabled]="parentLocked()"
+        [placeholder]="'categories.noParent' | translate"
+        styleClass="w-full"
+        appendTo="body"
+      />
+    </app-form-field>
+    <app-form-field
+      [label]="'categories.fields.description' | translate"
+      forId="cat-description"
+      [control]="form.controls.description"
+    >
+      <textarea
+        pTextarea
+        id="cat-description"
+        formControlName="description"
+        rows="3"
+        class="w-full"
+      ></textarea>
+    </app-form-field>
+    <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+      <p-button
+        type="button"
+        [text]="true"
+        [label]="'common.cancel' | translate"
+        (onClick)="dialogOpen.set(false)"
+      />
+      <p-button
+        type="submit"
+        icon="pi pi-check"
+        [label]="(editing() ? 'common.save' : 'categories.actions.create') | translate"
+        [loading]="saving()"
+      />
+    </div>
+  </form>
+</p-dialog>

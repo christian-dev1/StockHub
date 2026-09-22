@@ -5,6 +5,7 @@ import {
   ACCOUNTS,
   ANGULAR_URL,
   NEXT_URL,
+  createProductViaApi,
   loginAngular,
   loginNext,
   rawTranslationKeys,
@@ -53,6 +54,15 @@ interface PageSpec {
   readonly account?: Account;
 }
 
+/** A product created once per worker for the detail page. */
+let productId = '';
+test.beforeAll(async ({ request }) => {
+  productId = await createProductViaApi(request, ACCOUNTS.ADMIN, {
+    name: `Smoke ${Date.now()}`,
+    salePrice: 500,
+  });
+});
+
 const PAGES: readonly PageSpec[] = [
   { name: 'Angular login', app: 'angular', path: () => '/login' },
   { name: 'Angular dashboard', app: 'angular', path: () => '/dashboard', account: ACCOUNTS.ADMIN },
@@ -60,6 +70,16 @@ const PAGES: readonly PageSpec[] = [
   { name: 'Users', app: 'angular', path: () => '/users', account: ACCOUNTS.ADMIN },
   { name: 'New user', app: 'angular', path: () => '/users/new', account: ACCOUNTS.ADMIN },
   { name: 'Company settings', app: 'angular', path: () => '/settings/company', account: ACCOUNTS.ADMIN },
+  { name: 'Products', app: 'angular', path: () => '/products', account: ACCOUNTS.ADMIN },
+  { name: 'New product', app: 'angular', path: () => '/products/new', account: ACCOUNTS.ADMIN },
+  { name: 'Product detail', app: 'angular', path: () => `/products/${productId}`, account: ACCOUNTS.ADMIN },
+  { name: 'Product import', app: 'angular', path: () => '/products/import', account: ACCOUNTS.ADMIN },
+  { name: 'Labels', app: 'angular', path: () => '/products/labels', account: ACCOUNTS.ADMIN },
+  { name: 'Categories', app: 'angular', path: () => '/categories', account: ACCOUNTS.ADMIN },
+  { name: 'Suppliers', app: 'angular', path: () => '/suppliers', account: ACCOUNTS.ADMIN },
+  { name: 'New supplier', app: 'angular', path: () => '/suppliers/new', account: ACCOUNTS.ADMIN },
+  { name: 'Locations', app: 'angular', path: () => '/locations', account: ACCOUNTS.ADMIN },
+  { name: 'New location', app: 'angular', path: () => '/locations/new', account: ACCOUNTS.ADMIN },
   { name: 'Next login', app: 'next', path: (lang) => `/${lang}/login` },
   { name: 'Next home', app: 'next', path: (lang) => `/${lang}`, account: ACCOUNTS.VENDEUR },
   { name: 'Change password', app: 'next', path: (lang) => `/${lang}/change-password`, account: ACCOUNTS.VENDEUR },

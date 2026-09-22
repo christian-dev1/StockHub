@@ -1,0 +1,78 @@
+@if (store.resource.state(); as state) {
+  @if (state.status === 'error') {
+    <section class="sh-card">
+      <app-error-state [error]="state.error" (retry)="store.load(supplierId())" />
+    </section>
+  } @else if (state.status === 'success') {
+    @let supplier = state.data;
+    <app-page-header [title]="supplier.name" [subtitle]="supplier.code">
+      <a
+        actions
+        [routerLink]="routes.SUPPLIERS.ROOT"
+        class="inline-flex min-h-11 items-center text-sm font-medium text-fg-muted hover:text-fg"
+      >
+        <i class="pi pi-arrow-left mr-1" aria-hidden="true"></i
+        >{{ 'suppliers.list.title' | translate }}
+      </a>
+    </app-page-header>
+
+    <div class="grid gap-6 lg:grid-cols-3">
+      <form
+        class="sh-card p-5 sm:p-6 lg:col-span-2"
+        [formGroup]="form"
+        (ngSubmit)="submit()"
+        novalidate
+        aria-labelledby="sup-details"
+      >
+        <h2 id="sup-details" class="mb-5 text-base font-semibold">
+          {{ 'suppliers.sections.details' | translate }}
+        </h2>
+        <app-supplier-fields [form]="form" [codeRequired]="true" [readonly]="!canEdit()" />
+        @if (canEdit()) {
+          <div class="mt-6 flex justify-end">
+            <p-button
+              type="submit"
+              icon="pi pi-check"
+              [label]="'common.save' | translate"
+              [loading]="saving()"
+              [disabled]="form.pristine"
+            />
+          </div>
+        }
+      </form>
+
+      <aside class="sh-card h-fit space-y-4 p-5 sm:p-6" aria-labelledby="sup-status">
+        <h2 id="sup-status" class="text-base font-semibold">
+          {{ 'suppliers.sections.status' | translate }}
+        </h2>
+        <app-active-badge [active]="supplier.active" />
+        <p class="text-sm text-fg-muted">
+          {{
+            (supplier.active ? 'suppliers.hints.active' : 'suppliers.hints.inactive') | translate
+          }}
+        </p>
+        @if (canEdit()) {
+          <p-button
+            [label]="
+              (supplier.active ? 'suppliers.actions.deactivate' : 'suppliers.actions.activate')
+                | translate
+            "
+            [icon]="supplier.active ? 'pi pi-ban' : 'pi pi-check-circle'"
+            [severity]="supplier.active ? 'danger' : 'secondary'"
+            [outlined]="true"
+            [loading]="busy()"
+            styleClass="w-full"
+            (onClick)="toggleStatus()"
+          />
+        }
+      </aside>
+    </div>
+  } @else {
+    <div class="grid gap-6 lg:grid-cols-3" aria-busy="true">
+      <div class="sh-card space-y-4 p-6 lg:col-span-2">
+        <p-skeleton height="2.5rem" /><p-skeleton height="2.5rem" /><p-skeleton height="2.5rem" />
+      </div>
+      <div class="sh-card space-y-3 p-6"><p-skeleton width="50%" /><p-skeleton /></div>
+    </div>
+  }
+}

@@ -1,0 +1,283 @@
+<div class="grid gap-6" [formGroup]="form()">
+  <fieldset class="grid gap-5 sm:grid-cols-2">
+    <legend class="mb-4 text-base font-semibold">
+      {{ 'products.sections.identity' | translate }}
+    </legend>
+    <app-form-field
+      class="sm:col-span-2"
+      [label]="'products.fields.name' | translate"
+      forId="p-name"
+      [control]="form().controls.name"
+      [required]="true"
+    >
+      <input pInputText id="p-name" formControlName="name" class="w-full" [readonly]="readonly()" />
+    </app-form-field>
+    <app-form-field
+      [label]="'products.fields.sku' | translate"
+      forId="p-sku"
+      [control]="form().controls.sku"
+      [hint]="(creating() ? 'products.hints.skuGenerated' : 'products.hints.skuKept') | translate"
+    >
+      <input
+        pInputText
+        id="p-sku"
+        formControlName="sku"
+        class="w-full font-mono uppercase"
+        autocomplete="off"
+        [readonly]="readonly()"
+      />
+    </app-form-field>
+    <app-form-field
+      [label]="'products.fields.unit' | translate"
+      forId="p-unit"
+      [control]="form().controls.unit"
+      [required]="true"
+    >
+      <p-select
+        inputId="p-unit"
+        ariaLabelledBy="p-unit-label"
+        formControlName="unit"
+        [options]="unitOptions()"
+        optionLabel="label"
+        optionValue="value"
+        [readonly]="readonly()"
+        styleClass="w-full"
+      />
+    </app-form-field>
+    <app-form-field
+      [label]="'products.fields.barcode' | translate"
+      forId="p-barcode"
+      [control]="form().controls.barcode"
+      [hint]="'products.hints.barcode' | translate"
+    >
+      <input
+        pInputText
+        id="p-barcode"
+        formControlName="barcode"
+        class="w-full font-mono"
+        autocomplete="off"
+        inputmode="text"
+        [readonly]="readonly()"
+      />
+    </app-form-field>
+    <app-form-field
+      [label]="'products.fields.barcodeFormat' | translate"
+      forId="p-barcode-format"
+      [control]="form().controls.barcodeFormat"
+    >
+      <p-select
+        inputId="p-barcode-format"
+        ariaLabelledBy="p-barcode-format-label"
+        formControlName="barcodeFormat"
+        [options]="formatOptions()"
+        optionLabel="label"
+        optionValue="value"
+        [showClear]="true"
+        [placeholder]="'products.barcodeFormats.AUTO' | translate"
+        [readonly]="readonly()"
+        styleClass="w-full"
+      />
+    </app-form-field>
+    <app-form-field
+      class="sm:col-span-2"
+      [label]="'products.fields.description' | translate"
+      forId="p-description"
+      [control]="form().controls.description"
+    >
+      <textarea
+        pTextarea
+        id="p-description"
+        formControlName="description"
+        rows="3"
+        class="w-full"
+        [readonly]="readonly()"
+      ></textarea>
+    </app-form-field>
+  </fieldset>
+
+  <fieldset class="grid gap-5 sm:grid-cols-2">
+    <legend class="mb-4 text-base font-semibold">
+      {{ 'products.sections.classification' | translate }}
+    </legend>
+    <app-form-field
+      [label]="'products.fields.category' | translate"
+      forId="p-category"
+      [control]="form().controls.categoryId"
+    >
+      <p-select
+        inputId="p-category"
+        ariaLabelledBy="p-category-label"
+        formControlName="categoryId"
+        [options]="categories()"
+        optionLabel="label"
+        optionValue="value"
+        [filter]="true"
+        [showClear]="true"
+        [placeholder]="'products.noCategory' | translate"
+        [readonly]="readonly()"
+        styleClass="w-full"
+      />
+    </app-form-field>
+    <app-form-field
+      [label]="'products.fields.supplier' | translate"
+      forId="p-supplier"
+      [control]="form().controls.defaultSupplierId"
+    >
+      <p-select
+        inputId="p-supplier"
+        ariaLabelledBy="p-supplier-label"
+        formControlName="defaultSupplierId"
+        [options]="suppliers()"
+        optionLabel="label"
+        optionValue="value"
+        [filter]="true"
+        [showClear]="true"
+        [placeholder]="'products.noSupplier' | translate"
+        [readonly]="readonly()"
+        styleClass="w-full"
+      />
+    </app-form-field>
+  </fieldset>
+
+  <fieldset class="grid gap-5 sm:grid-cols-2">
+    <legend class="mb-4 text-base font-semibold">
+      {{ 'products.sections.prices' | translate }}
+    </legend>
+    <app-form-field
+      [label]="'products.fields.purchasePrice' | translate"
+      forId="p-purchase"
+      [control]="form().controls.purchasePrice"
+    >
+      <p-inputnumber
+        inputId="p-purchase"
+        placeholder="0"
+        formControlName="purchasePrice"
+        mode="currency"
+        [currency]="currency()"
+        [locale]="language.locale()"
+        [min]="0"
+        [maxFractionDigits]="4"
+        [fluid]="true"
+        [readonly]="readonly()"
+      />
+    </app-form-field>
+    <app-form-field
+      [label]="'products.fields.salePrice' | translate"
+      forId="p-sale"
+      [control]="form().controls.salePrice"
+    >
+      <p-inputnumber
+        inputId="p-sale"
+        placeholder="0"
+        formControlName="salePrice"
+        mode="currency"
+        [currency]="currency()"
+        [locale]="language.locale()"
+        [min]="0"
+        [maxFractionDigits]="4"
+        [fluid]="true"
+        [readonly]="readonly()"
+      />
+    </app-form-field>
+    @if (sellsAtLoss()) {
+      <p class="flex items-start gap-2 text-sm text-warning sm:col-span-2" role="status">
+        <i class="pi pi-exclamation-triangle mt-0.5" aria-hidden="true"></i>
+        {{ 'products.hints.sellsAtLoss' | translate }}
+      </p>
+    }
+  </fieldset>
+
+  <fieldset class="grid gap-5 sm:grid-cols-2">
+    <legend class="mb-4 text-base font-semibold">
+      {{ 'products.sections.stock' | translate }}
+    </legend>
+    <app-form-field
+      [label]="'products.fields.minStock' | translate"
+      forId="p-min"
+      [control]="form().controls.minStock"
+      [hint]="'products.hints.minStock' | translate"
+    >
+      <p-inputnumber
+        inputId="p-min"
+        placeholder="0"
+        formControlName="minStock"
+        [min]="0"
+        [maxFractionDigits]="quantityDecimals()"
+        [locale]="language.locale()"
+        [fluid]="true"
+        [readonly]="readonly()"
+      />
+    </app-form-field>
+    <app-form-field
+      [label]="'products.fields.reorderQuantity' | translate"
+      forId="p-reorder"
+      [control]="form().controls.reorderQuantity"
+      [hint]="'products.hints.reorderQuantity' | translate"
+    >
+      <p-inputnumber
+        inputId="p-reorder"
+        formControlName="reorderQuantity"
+        [min]="0"
+        [maxFractionDigits]="quantityDecimals()"
+        [locale]="language.locale()"
+        [fluid]="true"
+        [readonly]="readonly()"
+      />
+    </app-form-field>
+    @if (form().hasError('wholeQuantity')) {
+      <p class="text-xs text-danger sm:col-span-2" role="alert">
+        {{ 'errors.api.QUANTITY_MUST_BE_WHOLE' | translate }}
+      </p>
+    }
+  </fieldset>
+
+  <fieldset class="grid gap-3">
+    <legend class="mb-4 text-base font-semibold">
+      {{ 'products.sections.tracking' | translate }}
+    </legend>
+    <div class="flex items-start gap-3 rounded-lg border border-border p-4">
+      <p-toggleswitch
+        class="shrink-0"
+        inputId="p-batch"
+        formControlName="batchTracked"
+        [readonly]="readonly()"
+      />
+      <div>
+        <label for="p-batch" class="text-sm font-medium">{{
+          'products.fields.batchTracked' | translate
+        }}</label>
+        <p class="text-xs text-fg-muted">{{ 'products.hints.batchTracked' | translate }}</p>
+      </div>
+    </div>
+    <div class="flex items-start gap-3 rounded-lg border border-border p-4">
+      <p-toggleswitch
+        class="shrink-0"
+        inputId="p-expiry"
+        formControlName="expiryTracked"
+        [readonly]="readonly()"
+      />
+      <div>
+        <label for="p-expiry" class="text-sm font-medium">{{
+          'products.fields.expiryTracked' | translate
+        }}</label>
+        <p class="text-xs text-fg-muted">{{ 'products.hints.expiryTracked' | translate }}</p>
+      </div>
+    </div>
+    @if (form().hasError('expiryRequiresBatch')) {
+      <p class="text-xs text-danger" role="alert">
+        {{ 'errors.api.PRODUCT_EXPIRY_REQUIRES_BATCH' | translate }}
+      </p>
+    }
+    @if (creating()) {
+      <div class="flex items-start gap-3 rounded-lg border border-border p-4">
+        <p-toggleswitch class="shrink-0" inputId="p-active" formControlName="active" />
+        <div>
+          <label for="p-active" class="text-sm font-medium">{{
+            'products.fields.active' | translate
+          }}</label>
+          <p class="text-xs text-fg-muted">{{ 'products.hints.active' | translate }}</p>
+        </div>
+      </div>
+    }
+  </fieldset>
+</div>

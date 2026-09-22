@@ -22,4 +22,11 @@ export class ErrorMessages {
     }
     return this.translate.instant(`errors.kind.${error.kind}`) as string;
   }
+
+  /** Message of a field error: frontend translation of its code, else the backend message. */
+  ofField(code: string, message: string): string {
+    const key = `errors.api.${code}`;
+    const translated = this.translate.instant(key) as string;
+    return translated !== key ? translated : message || code;
+  }
 }

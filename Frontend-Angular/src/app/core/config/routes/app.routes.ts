@@ -21,6 +21,26 @@ export const APP_PATHS = {
     ROOT: 'settings',
     COMPANY: 'company',
   },
+  LOCATIONS: {
+    ROOT: 'locations',
+    CREATE: 'new',
+    EDIT: ':locationId',
+  },
+  CATEGORIES: {
+    ROOT: 'categories',
+  },
+  SUPPLIERS: {
+    ROOT: 'suppliers',
+    CREATE: 'new',
+    DETAIL: ':supplierId',
+  },
+  PRODUCTS: {
+    ROOT: 'products',
+    CREATE: 'new',
+    IMPORT: 'import',
+    LABELS: 'labels',
+    DETAIL: ':productId',
+  },
   FORBIDDEN: 'forbidden',
   SALES_APP_ONLY: 'sales-app-only',
   SERVER_ERROR: 'error',
@@ -45,6 +65,26 @@ export const APP_ROUTES = {
   },
   SETTINGS: {
     COMPANY: `/${APP_PATHS.SETTINGS.ROOT}/${APP_PATHS.SETTINGS.COMPANY}`,
+  },
+  LOCATIONS: {
+    ROOT: `/${APP_PATHS.LOCATIONS.ROOT}`,
+    CREATE: `/${APP_PATHS.LOCATIONS.ROOT}/${APP_PATHS.LOCATIONS.CREATE}`,
+    EDIT: (id: string) => `/${APP_PATHS.LOCATIONS.ROOT}/${id}`,
+  },
+  CATEGORIES: {
+    ROOT: `/${APP_PATHS.CATEGORIES.ROOT}`,
+  },
+  SUPPLIERS: {
+    ROOT: `/${APP_PATHS.SUPPLIERS.ROOT}`,
+    CREATE: `/${APP_PATHS.SUPPLIERS.ROOT}/${APP_PATHS.SUPPLIERS.CREATE}`,
+    DETAIL: (id: string) => `/${APP_PATHS.SUPPLIERS.ROOT}/${id}`,
+  },
+  PRODUCTS: {
+    ROOT: `/${APP_PATHS.PRODUCTS.ROOT}`,
+    CREATE: `/${APP_PATHS.PRODUCTS.ROOT}/${APP_PATHS.PRODUCTS.CREATE}`,
+    IMPORT: `/${APP_PATHS.PRODUCTS.ROOT}/${APP_PATHS.PRODUCTS.IMPORT}`,
+    LABELS: `/${APP_PATHS.PRODUCTS.ROOT}/${APP_PATHS.PRODUCTS.LABELS}`,
+    DETAIL: (id: string) => `/${APP_PATHS.PRODUCTS.ROOT}/${id}`,
   },
   FORBIDDEN: `/${APP_PATHS.FORBIDDEN}`,
   SALES_APP_ONLY: `/${APP_PATHS.SALES_APP_ONLY}`,

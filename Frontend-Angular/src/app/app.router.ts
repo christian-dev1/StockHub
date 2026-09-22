@@ -10,9 +10,14 @@ import {
   platformGuard,
   salesAppOnlyGuard,
 } from './core/guards/auth.guards';
+import { BARCODES_PROVIDERS } from './features/barcodes/barcodes.providers';
+import { CATEGORIES_PROVIDERS } from './features/categories/categories.providers';
 import { COMPANIES_PROVIDERS } from './features/companies/companies.providers';
 import { DASHBOARD_PROVIDERS } from './features/dashboard/dashboard.providers';
+import { LOCATIONS_PROVIDERS } from './features/locations/locations.providers';
+import { PRODUCTS_PROVIDERS } from './features/products/products.providers';
 import { SETTINGS_PROVIDERS } from './features/settings/settings.providers';
+import { SUPPLIERS_PROVIDERS } from './features/suppliers/suppliers.providers';
 import { USERS_PROVIDERS } from './features/users/users.providers';
 import { ErrorStatusPage } from './shared/pages/error-status/error-status-page';
 
@@ -108,6 +113,133 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./features/users/presentation/pages/user-detail-page/user-detail-page').then(
                 (m) => m.UserDetailPage,
+              ),
+          },
+        ],
+      },
+      {
+        path: APP_PATHS.PRODUCTS.ROOT,
+        canActivate: [companyGuard, permissionGuard],
+        data: { permissions: ['PRODUCT_VIEW'] },
+        providers: [...PRODUCTS_PROVIDERS, ...BARCODES_PROVIDERS],
+        children: [
+          {
+            path: '',
+            title: 'StockHub',
+            loadComponent: () =>
+              import('./features/products/presentation/pages/products-list-page/products-list-page').then(
+                (m) => m.ProductsListPage,
+              ),
+          },
+          {
+            path: APP_PATHS.PRODUCTS.CREATE,
+            canActivate: [permissionGuard],
+            data: { permissions: ['PRODUCT_CREATE'] },
+            loadComponent: () =>
+              import('./features/products/presentation/pages/product-create-page/product-create-page').then(
+                (m) => m.ProductCreatePage,
+              ),
+          },
+          {
+            path: APP_PATHS.PRODUCTS.IMPORT,
+            canActivate: [permissionGuard],
+            data: { permissions: ['PRODUCT_IMPORT'] },
+            loadComponent: () =>
+              import('./features/products/presentation/pages/product-import-page/product-import-page').then(
+                (m) => m.ProductImportPage,
+              ),
+          },
+          {
+            path: APP_PATHS.PRODUCTS.LABELS,
+            canActivate: [permissionGuard],
+            data: { permissions: ['BARCODE_PRINT'] },
+            loadComponent: () =>
+              import('./features/barcodes/presentation/pages/labels-page/labels-page').then(
+                (m) => m.LabelsPage,
+              ),
+          },
+          {
+            path: APP_PATHS.PRODUCTS.DETAIL,
+            loadComponent: () =>
+              import('./features/products/presentation/pages/product-detail-page/product-detail-page').then(
+                (m) => m.ProductDetailPage,
+              ),
+          },
+        ],
+      },
+      {
+        path: APP_PATHS.CATEGORIES.ROOT,
+        canActivate: [companyGuard, permissionGuard],
+        data: { permissions: ['CATEGORY_VIEW'] },
+        providers: CATEGORIES_PROVIDERS,
+        title: 'StockHub',
+        loadComponent: () =>
+          import('./features/categories/presentation/pages/categories-page/categories-page').then(
+            (m) => m.CategoriesPage,
+          ),
+      },
+      {
+        path: APP_PATHS.SUPPLIERS.ROOT,
+        canActivate: [companyGuard, permissionGuard],
+        data: { permissions: ['SUPPLIER_VIEW'] },
+        providers: SUPPLIERS_PROVIDERS,
+        children: [
+          {
+            path: '',
+            title: 'StockHub',
+            loadComponent: () =>
+              import('./features/suppliers/presentation/pages/suppliers-list-page/suppliers-list-page').then(
+                (m) => m.SuppliersListPage,
+              ),
+          },
+          {
+            path: APP_PATHS.SUPPLIERS.CREATE,
+            canActivate: [permissionGuard],
+            data: { permissions: ['SUPPLIER_CREATE'] },
+            loadComponent: () =>
+              import('./features/suppliers/presentation/pages/supplier-create-page/supplier-create-page').then(
+                (m) => m.SupplierCreatePage,
+              ),
+          },
+          {
+            path: APP_PATHS.SUPPLIERS.DETAIL,
+            loadComponent: () =>
+              import('./features/suppliers/presentation/pages/supplier-detail-page/supplier-detail-page').then(
+                (m) => m.SupplierDetailPage,
+              ),
+          },
+        ],
+      },
+      {
+        path: APP_PATHS.LOCATIONS.ROOT,
+        canActivate: [companyGuard, permissionGuard],
+        data: { permissions: ['WAREHOUSE_VIEW'] },
+        providers: LOCATIONS_PROVIDERS,
+        children: [
+          {
+            path: '',
+            title: 'StockHub',
+            loadComponent: () =>
+              import('./features/locations/presentation/pages/locations-list-page/locations-list-page').then(
+                (m) => m.LocationsListPage,
+              ),
+          },
+          {
+            path: APP_PATHS.LOCATIONS.CREATE,
+            canActivate: [permissionGuard],
+            data: { permissions: ['WAREHOUSE_CREATE'] },
+            loadComponent: () =>
+              import('./features/locations/presentation/pages/location-form-page/location-form-page').then(
+                (m) => m.LocationFormPage,
+              ),
+          },
+          {
+            path: APP_PATHS.LOCATIONS.EDIT,
+            canActivate: [permissionGuard],
+            data: { permissions: ['WAREHOUSE_UPDATE'] },
+            loadComponent: () =>
+              import('./features/locations/presentation/pages/location-form-page/location-form-page').then(
+                (m) => m.LocationFormPage,
               ),
           },
         ],

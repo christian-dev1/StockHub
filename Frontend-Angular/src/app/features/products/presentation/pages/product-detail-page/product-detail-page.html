@@ -1,0 +1,107 @@
+@if (store.resource.state(); as state) {
+  @if (state.status === 'error') {
+    <section class="sh-card">
+      <app-error-state [error]="state.error" (retry)="store.load(productId())" />
+    </section>
+  } @else if (state.status === 'success') {
+    @let product = state.data;
+    <app-page-header [title]="product.name" [subtitle]="product.sku">
+      <a
+        actions
+        [routerLink]="routes.PRODUCTS.ROOT"
+        class="inline-flex min-h-11 items-center text-sm font-medium text-fg-muted hover:text-fg"
+      >
+        <i class="pi pi-arrow-left mr-1" aria-hidden="true"></i
+        >{{ 'products.list.title' | translate }}
+      </a>
+    </app-page-header>
+
+    <div class="mb-6 flex flex-wrap items-center gap-3">
+      <app-active-badge [active]="product.active" />
+      @if (canEdit()) {
+        <p-button
+          size="small"
+          [outlined]="true"
+          [severity]="product.active ? 'secondary' : 'success'"
+          [icon]="product.active ? 'pi pi-ban' : 'pi pi-check-circle'"
+          [label]="
+            (product.active ? 'products.actions.deactivate' : 'products.actions.activate')
+              | translate
+          "
+          [loading]="busy()"
+          (onClick)="toggleStatus()"
+        />
+      }
+      @if (canDelete()) {
+        <p-button
+          size="small"
+          [text]="true"
+          severity="danger"
+          icon="pi pi-trash"
+          [label]="'products.actions.delete' | translate"
+          [disabled]="busy()"
+          (onClick)="remove()"
+        />
+      }
+    </div>
+
+    <div class="grid gap-6 lg:grid-cols-3">
+      <form
+        class="sh-card p-5 sm:p-6 lg:col-span-2"
+        [formGroup]="form"
+        (ngSubmit)="submit()"
+        novalidate
+        [attr.aria-label]="'products.sections.details' | translate"
+      >
+        <app-product-fields
+          [form]="form"
+          [categories]="categoryOptions()"
+          [suppliers]="supplierOptions()"
+          [currency]="currency()"
+          [readonly]="!canEdit()"
+        />
+        @if (!canEdit()) {
+          <p class="mt-6 flex items-center gap-2 text-sm text-fg-muted">
+            <i class="pi pi-lock" aria-hidden="true"></i>{{ 'products.hints.readOnly' | translate }}
+          </p>
+        } @else {
+          <div class="mt-6 flex justify-end">
+            <p-button
+              type="submit"
+              icon="pi pi-check"
+              [label]="'common.save' | translate"
+              [loading]="saving()"
+              [disabled]="form.pristine"
+            />
+          </div>
+        }
+      </form>
+
+      <div class="space-y-6">
+        <app-product-image-panel
+          [productId]="product.id"
+          [productName]="product.name"
+          [hasImage]="product.hasImage"
+          [canEdit]="canEdit()"
+          (changed)="imageChanged($event)"
+        />
+        <app-barcode-panel
+          [productId]="product.id"
+          [sku]="product.sku"
+          [barcode]="product.barcode"
+          [barcodeFormat]="product.barcodeFormat"
+          [canGenerate]="canGenerate()"
+          [canPrint]="canPrint()"
+          (generated)="barcodeGenerated($event)"
+        />
+      </div>
+    </div>
+  } @else {
+    <div class="grid gap-6 lg:grid-cols-3" aria-busy="true">
+      <div class="sh-card space-y-4 p-6 lg:col-span-2">
+        <p-skeleton height="2.5rem" /><p-skeleton height="2.5rem" /><p-skeleton height="2.5rem" />
+      </div>
+      <div class="sh-card space-y-3 p-6"><p-skeleton height="12rem" /></div>
+    </div>
+  }
+}

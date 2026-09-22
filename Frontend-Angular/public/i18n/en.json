@@ -12,7 +12,13 @@
     "confirm": "Confirm",
     "create": "Create",
     "back": "Back",
-    "clear": "Clear"
+    "clear": "Clear",
+    "edit": "Edit",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "all": "All statuses"
+    }
   },
   "nav": {
     "main": "Main navigation",
@@ -21,14 +27,19 @@
     "section": {
       "overview": "Overview",
       "platform": "Platform",
-      "administration": "Administration"
+      "administration": "Administration",
+      "catalogue": "Catalogue"
     },
     "dashboard": "Dashboard",
     "companies": "Companies",
     "users": "Users",
     "companySettings": "Company settings",
     "userMenu": "User menu",
-    "platformMode": "Platform administration"
+    "platformMode": "Platform administration",
+    "products": "Products",
+    "categories": "Categories",
+    "suppliers": "Suppliers",
+    "locations": "Locations"
   },
   "theme": {
     "label": "Theme",
@@ -94,7 +105,93 @@
       "USER_ROLE_NOT_ASSIGNABLE": "You cannot assign this role.",
       "COMPANY_NAME_ALREADY_EXISTS": "A company already has this name.",
       "PASSWORD_CURRENT_INVALID": "The current password is incorrect.",
-      "PASSWORD_UNCHANGED": "The new password must differ from the current one."
+      "PASSWORD_UNCHANGED": "The new password must differ from the current one.",
+      "NotBlank": "This field is required.",
+      "NotNull": "This field is required.",
+      "NotEmpty": "This field is required.",
+      "Size": "Invalid length.",
+      "Email": "Invalid email address.",
+      "Pattern": "Invalid format.",
+      "Min": "Value too small.",
+      "Max": "Value too large.",
+      "DecimalMin": "The value cannot be negative.",
+      "Digits": "Too many digits.",
+      "INVALID_VALUE": "Invalid value.",
+      "INVALID_PARAMETER": "Invalid parameter.",
+      "MALFORMED_REQUEST": "The request is invalid.",
+      "UNSUPPORTED_MEDIA_TYPE": "Unsupported file type.",
+      "PAYLOAD_TOO_LARGE": "The file is too large.",
+      "VALIDATION_FAILED": "Some information is invalid.",
+      "FIELD_TOO_LONG": "Text too long.",
+      "EMAIL_INVALID": "Invalid email address.",
+      "COUNTRY_INVALID": "Invalid country code (2 letters, e.g. CM).",
+      "FILE_REQUIRED": "Choose a file.",
+      "LOCATION_NOT_FOUND": "Location not found.",
+      "LOCATION_CODE_ALREADY_EXISTS": "Another location already uses this code.",
+      "LOCATION_CODE_INVALID": "The code may only contain letters, digits, \"-\" and \"_\".",
+      "LOCATION_PRIMARY_CANNOT_BE_DISABLED": "The primary location cannot be disabled: make another location primary first.",
+      "LOCATION_INACTIVE": "An inactive location cannot become primary.",
+      "LOCATION_ACCESS_DENIED": "You do not have access to this location.",
+      "LOCATION_NAME_REQUIRED": "The name is required.",
+      "LOCATION_CODE_REQUIRED": "The code is required.",
+      "CATEGORY_NOT_FOUND": "Category not found.",
+      "CATEGORY_NAME_ALREADY_EXISTS": "A category with this name already exists.",
+      "CATEGORY_DEPTH_EXCEEDED": "Categories are limited to two levels (category and sub-category).",
+      "CATEGORY_PARENT_INVALID": "A category cannot be its own parent.",
+      "CATEGORY_PARENT_UNKNOWN": "The parent category does not exist.",
+      "CATEGORY_IN_USE": "This category still has products or sub-categories.",
+      "CATEGORY_NAME_REQUIRED": "The name is required.",
+      "SUPPLIER_NOT_FOUND": "Supplier not found.",
+      "SUPPLIER_CODE_ALREADY_EXISTS": "Another supplier already uses this code.",
+      "SUPPLIER_LEAD_TIME_INVALID": "The lead time must be between 0 and 365 days.",
+      "SUPPLIER_NAME_REQUIRED": "The name is required.",
+      "SUPPLIER_CODE_REQUIRED": "The code is required.",
+      "SUPPLIER_CODE_INVALID": "The code may only contain letters, digits, \"-\" and \"_\".",
+      "PRODUCT_NOT_FOUND": "Product not found.",
+      "PRODUCT_SKU_ALREADY_EXISTS": "Another product already uses this SKU.",
+      "PRODUCT_SKU_INVALID": "The SKU may only contain letters, digits, \".\", \"_\", \"/\" and \"-\".",
+      "PRODUCT_NAME_REQUIRED": "The name is required.",
+      "PRODUCT_BARCODE_ALREADY_EXISTS": "Another product already uses this barcode.",
+      "PRODUCT_BARCODE_INVALID_CHECK_DIGIT": "The barcode check digit is wrong: check what was typed.",
+      "PRODUCT_BARCODE_INVALID_LENGTH": "This barcode format does not have the right number of digits.",
+      "PRODUCT_BARCODE_INVALID_CHARACTERS": "The barcode contains characters that are not allowed.",
+      "PRODUCT_BARCODE_TOO_LONG": "The barcode is too long.",
+      "PRODUCT_BARCODE_REQUIRED": "A barcode is required for this format.",
+      "PRODUCT_CATEGORY_UNKNOWN": "This category does not exist.",
+      "PRODUCT_SUPPLIER_UNKNOWN": "This supplier does not exist or is inactive.",
+      "PRODUCT_PRICE_NEGATIVE": "Prices cannot be negative.",
+      "PRODUCT_PRICE_INVALID": "Invalid price (too many digits).",
+      "PRODUCT_MIN_STOCK_NEGATIVE": "The minimum stock cannot be negative.",
+      "PRODUCT_REORDER_QUANTITY_INVALID": "The reorder quantity must be positive.",
+      "QUANTITY_MUST_BE_WHOLE": "This unit only accepts whole quantities.",
+      "QUANTITY_INVALID": "Invalid quantity.",
+      "PRODUCT_EXPIRY_REQUIRES_BATCH": "Expiry tracking requires batch tracking.",
+      "PRODUCT_TRACKING_LOCKED": "Batch tracking cannot change while the product holds stock.",
+      "PRODUCT_HAS_STOCK": "This product holds stock: deactivate it instead of deleting it.",
+      "PRODUCT_DELETED": "This product has been deleted.",
+      "PRODUCT_IMAGE_TOO_LARGE": "The picture must not exceed 2 MB.",
+      "PRODUCT_IMAGE_UNSUPPORTED": "Only PNG, JPEG and WebP pictures are accepted.",
+      "IMPORT_NOT_FOUND": "This import was not found.",
+      "IMPORT_FORMAT_UNSUPPORTED": "Unsupported format: use a CSV or Excel (.xlsx) file.",
+      "IMPORT_FILE_TOO_LARGE": "The file must not exceed 5 MB.",
+      "IMPORT_FILE_UNREADABLE": "The file cannot be read.",
+      "IMPORT_EMPTY": "The file contains no rows.",
+      "IMPORT_TOO_MANY_ROWS": "The file contains too many rows.",
+      "IMPORT_HAS_ERRORS": "Some rows are invalid: fix the file and analyse it again.",
+      "IMPORT_EXPIRED": "This preview has expired: analyse the file again.",
+      "IMPORT_ALREADY_COMMITTED": "This import has already been applied.",
+      "IMPORT_DUPLICATE_SKU": "This SKU appears several times in the file.",
+      "IMPORT_DUPLICATE_BARCODE": "This barcode appears several times in the file.",
+      "IMPORT_CATEGORY_UNKNOWN": "Unknown category.",
+      "IMPORT_SUPPLIER_UNKNOWN": "Unknown or inactive supplier.",
+      "IMPORT_VALUE_INVALID": "Invalid value.",
+      "BARCODE_ALREADY_ASSIGNED": "This product already has a barcode.",
+      "BARCODE_FORMAT_NOT_GENERATABLE": "Only EAN-13 and CODE128 barcodes can be generated.",
+      "BARCODE_MISSING": "This product has no barcode yet.",
+      "BARCODE_NOT_ENCODABLE": "This barcode cannot be drawn.",
+      "BARCODE_RANGE_EXHAUSTED": "No more barcode numbers are available.",
+      "LABELS_COUNT_INVALID": "Between 1 and 1000 labels per print run.",
+      "LABELS_START_INVALID": "Invalid start position."
     }
   },
   "roles": {
@@ -303,6 +400,416 @@
       "allowNegativeStock": "Off by default: an exit larger than the available stock is refused.",
       "expiryWarningDays": "Days before expiry that trigger an alert.",
       "defaultLeadTimeDays": "Used by forecasts when a supplier defines none."
+    }
+  },
+  "locations": {
+    "list": {
+      "title": "Locations",
+      "subtitle": "Stores, warehouses and depots of the company",
+      "empty": "No locations",
+      "emptyHint": "Add your first store or warehouse.",
+      "singleSite": "Your company has a single location. Add another one if you run a warehouse, a depot or a second store."
+    },
+    "types": {
+      "STORE": "Store",
+      "WAREHOUSE": "Warehouse",
+      "DEPOT": "Depot"
+    },
+    "primary": "Primary",
+    "noAddress": "No address",
+    "fields": {
+      "name": "Name",
+      "code": "Code",
+      "type": "Type",
+      "address": "Address",
+      "addressLine": "Address",
+      "city": "City",
+      "phone": "Phone"
+    },
+    "hints": {
+      "code": "Letters, digits, \"-\" and \"_\" (e.g. DEP-NORTH).",
+      "primary": "Primary location of the company: it always stays active."
+    },
+    "actions": {
+      "new": "New location",
+      "create": "Create location",
+      "setPrimary": "Make primary",
+      "activate": "Activate",
+      "deactivate": "Deactivate"
+    },
+    "confirm": {
+      "setPrimary": "\"{{name}}\" will become the primary location of the company.",
+      "activate": "Reactivate \"{{name}}\"?",
+      "deactivate": "Deactivate \"{{name}}\"? It cannot be used while inactive."
+    },
+    "saved": {
+      "primary": "\"{{name}}\" is now the primary location.",
+      "created": "Location \"{{name}}\" created."
+    },
+    "create": {
+      "title": "New location",
+      "subtitle": "Store, warehouse or depot"
+    },
+    "edit": {
+      "title": "Edit location",
+      "subtitle": "Name, code, type and contact details"
+    }
+  },
+  "categories": {
+    "list": {
+      "title": "Categories",
+      "subtitle": "Two-level classification of products",
+      "search": "Search a category",
+      "empty": "No category has been created yet",
+      "emptyHint": "Create categories to classify your products."
+    },
+    "level": {
+      "root": "Category",
+      "child": "Sub-category"
+    },
+    "fields": {
+      "name": "Name",
+      "parent": "Parent category",
+      "description": "Description"
+    },
+    "productCount": "{{count}} product(s)",
+    "noParent": "None (main category)",
+    "actions": {
+      "new": "New category",
+      "create": "Create category",
+      "delete": "Delete",
+      "addChild": "Add a sub-category to {{name}}",
+      "addChildShort": "Sub-category"
+    },
+    "confirm": {
+      "delete": "Delete the category \"{{name}}\"? This cannot be undone."
+    },
+    "saved": {
+      "created": "Category \"{{name}}\" created.",
+      "deleted": "Category \"{{name}}\" deleted."
+    },
+    "hints": {
+      "cannotDelete": "Not possible: the category holds products or sub-categories.",
+      "parent": "Leave empty for a main category.",
+      "parentLocked": "This category has sub-categories: it stays a main category."
+    },
+    "create": {
+      "title": "New category"
+    },
+    "edit": {
+      "title": "Edit category"
+    }
+  },
+  "suppliers": {
+    "list": {
+      "title": "Suppliers",
+      "subtitle": "Companies that deliver your goods",
+      "search": "Search (name, code, contact, city)",
+      "empty": "No supplier has been created yet",
+      "emptyHint": "Add your suppliers to link them to products."
+    },
+    "fields": {
+      "name": "Name",
+      "code": "Code",
+      "contactName": "Contact",
+      "email": "Email",
+      "phone": "Phone",
+      "leadTimeDays": "Lead time",
+      "addressLine": "Address",
+      "city": "City",
+      "country": "Country",
+      "taxId": "Tax ID",
+      "notes": "Notes",
+      "status": "Status"
+    },
+    "hints": {
+      "code": "Leave empty for a generated code.",
+      "leadTimeDays": "In days (0 to 365); used later by replenishment forecasts.",
+      "country": "2-letter ISO code (e.g. CM).",
+      "active": "This supplier can be chosen for products.",
+      "inactive": "This supplier can no longer be chosen for new products."
+    },
+    "days": "{{count}} d",
+    "actions": {
+      "new": "New supplier",
+      "create": "Create supplier",
+      "activate": "Reactivate",
+      "deactivate": "Deactivate"
+    },
+    "confirm": {
+      "activate": "Reactivate the supplier \"{{name}}\"?",
+      "deactivate": "Deactivate the supplier \"{{name}}\"? It can no longer be chosen for new products."
+    },
+    "saved": {
+      "created": "Supplier \"{{name}}\" created."
+    },
+    "create": {
+      "title": "New supplier",
+      "subtitle": "Contact details and lead time"
+    },
+    "sections": {
+      "details": "Details",
+      "status": "Status"
+    }
+  },
+  "products": {
+    "list": {
+      "title": "Products",
+      "subtitle": "Company catalogue",
+      "search": "Search (name, SKU, barcode)",
+      "empty": "No product has been created yet",
+      "emptyHint": "Create your first product or import a file."
+    },
+    "fields": {
+      "name": "Name",
+      "sku": "SKU",
+      "unit": "Unit",
+      "barcode": "Barcode",
+      "barcodeFormat": "Barcode format",
+      "description": "Description",
+      "category": "Category",
+      "supplier": "Supplier",
+      "purchasePrice": "Purchase price",
+      "salePrice": "Sale price",
+      "minStock": "Minimum stock",
+      "reorderQuantity": "Reorder quantity",
+      "batchTracked": "Batch tracking",
+      "expiryTracked": "Expiry date tracking",
+      "active": "Active product",
+      "status": "Status"
+    },
+    "hints": {
+      "skuGenerated": "Leave empty for a generated SKU (PRD-000001…).",
+      "skuKept": "Leave empty to keep the current SKU.",
+      "barcode": "Manufacturer code, or leave empty and generate one later.",
+      "sellsAtLoss": "The sale price is below the purchase price.",
+      "minStock": "Low stock alert threshold.",
+      "reorderQuantity": "Quantity suggested when ordering.",
+      "batchTracked": "Each stock entry carries a batch number.",
+      "expiryTracked": "Each batch carries an expiry date (also turns batch tracking on).",
+      "active": "An inactive product can be neither sold nor ordered.",
+      "readOnly": "Read only: you cannot edit this product."
+    },
+    "units": {
+      "UNIT": "Unit",
+      "KG": "Kilogram",
+      "G": "Gram",
+      "L": "Litre",
+      "ML": "Millilitre",
+      "M": "Metre",
+      "BOX": "Box",
+      "PACK": "Pack"
+    },
+    "barcodeFormats": {
+      "EAN13": "EAN-13",
+      "EAN8": "EAN-8",
+      "UPC_A": "UPC-A",
+      "CODE128": "CODE128",
+      "AUTO": "Automatic detection"
+    },
+    "noCategory": "No category",
+    "noSupplier": "No supplier",
+    "sections": {
+      "identity": "Identification",
+      "classification": "Classification",
+      "prices": "Prices",
+      "stock": "Stock rules",
+      "tracking": "Traceability",
+      "details": "Product details"
+    },
+    "filters": {
+      "allCategories": "All categories",
+      "allSuppliers": "All suppliers",
+      "withBarcode": "With barcode",
+      "withoutBarcode": "Without barcode",
+      "anyBarcode": "Barcode: any",
+      "batchTracked": "Batch tracked",
+      "notBatchTracked": "Not batch tracked",
+      "anyTracking": "Tracking: any",
+      "toggle": "Filters"
+    },
+    "actions": {
+      "new": "New product",
+      "create": "Create product",
+      "import": "Import",
+      "labels": "Labels",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "delete": "Delete"
+    },
+    "confirm": {
+      "activate": "Reactivate the product \"{{name}}\"?",
+      "deactivate": "Deactivate the product \"{{name}}\"? It can no longer be sold or ordered.",
+      "delete": "Delete the product \"{{name}}\"? Its SKU and barcode become available again."
+    },
+    "saved": {
+      "created": "Product \"{{name}}\" created.",
+      "deleted": "Product \"{{name}}\" deleted."
+    },
+    "create": {
+      "title": "New product",
+      "subtitle": "Identification, prices and stock rules"
+    },
+    "image": {
+      "title": "Picture",
+      "preview": "Preview of the new picture",
+      "choose": "Choose a picture",
+      "upload": "Save picture",
+      "replace": "Replace",
+      "remove": "Remove picture",
+      "rules": "PNG, JPEG or WebP, {{max}} MB maximum.",
+      "saved": "Picture saved.",
+      "removed": "Picture removed.",
+      "confirmRemove": "Remove the picture of this product?",
+      "problems": {
+        "type": "Format not accepted: choose a PNG, JPEG or WebP picture.",
+        "size": "Picture too large: {{max}} MB maximum."
+      }
+    }
+  },
+  "barcodes": {
+    "title": "Barcode",
+    "previewAlt": "Barcode {{value}}",
+    "previewFailed": "Preview unavailable.",
+    "value": "Value",
+    "format": "Format",
+    "none": "This product has no barcode yet.",
+    "hints": {
+      "generate": "EAN-13: internal numeric code (prefix 20). CODE128: alphanumeric code.",
+      "replace": "Labels already printed will no longer be recognised."
+    },
+    "actions": {
+      "replace": "Replace barcode",
+      "downloadPng": "Download as PNG",
+      "downloadSvg": "Download as SVG",
+      "printLabel": "Print label",
+      "generate": {
+        "EAN13": "Generate an EAN-13",
+        "CODE128": "Generate a CODE128"
+      }
+    },
+    "confirm": {
+      "replace": "Replace the current barcode ({{current}}) with a new {{format}} code? Labels already printed will no longer be recognised."
+    },
+    "saved": {
+      "generated": "Barcode {{barcode}} assigned."
+    }
+  },
+  "imports": {
+    "title": "Import products",
+    "subtitle": "CSV or Excel file: preview, check, then confirm",
+    "steps": {
+      "label": "Import steps",
+      "file": "File",
+      "preview": "Check",
+      "done": "Done"
+    },
+    "file": {
+      "title": "Choose the file",
+      "help": "Download the template, fill one row per product, then choose the file. Nothing is saved before the final confirmation.",
+      "choose": "Choose a CSV or Excel file",
+      "change": "Click to choose another file",
+      "rules": "CSV or .xlsx, {{max}} MB maximum",
+      "problems": {
+        "type": "Format not accepted: choose a .csv or .xlsx file.",
+        "size": "File too large: {{max}} MB maximum."
+      },
+      "createCategories": "Create missing categories",
+      "createCategoriesHint": "Otherwise, an unknown category makes the row invalid."
+    },
+    "actions": {
+      "template": "Download template",
+      "analyse": "Analyse file",
+      "commit": "Import products",
+      "otherFile": "Choose another file",
+      "seeProducts": "See products",
+      "again": "New import",
+      "row": {
+        "CREATE": "Create",
+        "UPDATE": "Update",
+        "ERROR": "Error"
+      }
+    },
+    "summary": {
+      "title": "Summary of \"{{file}}\"",
+      "total": "Rows",
+      "valid": "Valid rows",
+      "split": "{{create}} to create, {{update}} to update",
+      "invalid": "Invalid rows",
+      "categories": "Categories to create",
+      "blocked": "The import is blocked while rows are invalid: fix the file and analyse it again.",
+      "nothing": "No row to import.",
+      "expires": "This preview stays valid until {{time}}."
+    },
+    "rows": {
+      "title": "Rows",
+      "errorsOnly": "Rows with errors only",
+      "line": "Row {{n}}",
+      "noName": "(no name)"
+    },
+    "confirm": {
+      "title": "Confirm the import",
+      "message": "{{create}} product(s) will be created and {{update}} updated, all at once."
+    },
+    "saved": "Import completed.",
+    "done": {
+      "title": "Import completed",
+      "summary": "{{created}} product(s) created, {{updated}} updated, {{categories}} category(ies) created."
+    },
+    "columns": {
+      "sku": "SKU",
+      "name": "Name",
+      "description": "Description",
+      "category": "Category",
+      "supplierCode": "Supplier",
+      "unit": "Unit",
+      "purchasePrice": "Purchase price",
+      "salePrice": "Sale price",
+      "minStock": "Minimum stock",
+      "reorderQuantity": "Reorder quantity",
+      "barcode": "Barcode",
+      "barcodeFormat": "Format",
+      "batchTracked": "Batches",
+      "expiryTracked": "Expiry",
+      "file": "File"
+    }
+  },
+  "labels": {
+    "title": "Labels",
+    "subtitle": "Pick products, then print an A4 sheet of labels",
+    "pick": {
+      "title": "Products",
+      "hint": "Only active products that have a barcode are listed.",
+      "search": "Search a product",
+      "add": "Add {{name}}",
+      "none": "No product with a barcode."
+    },
+    "selection": {
+      "title": "To print",
+      "empty": "No product selected",
+      "emptyHint": "Add products from the list.",
+      "copies": "Copies",
+      "copiesFor": "Number of copies for {{name}}",
+      "remove": "Remove {{name}}"
+    },
+    "options": {
+      "layout": "Sheet",
+      "start": "First free label",
+      "startHint": "To reuse a partly used sheet (1 = top left).",
+      "showPrice": "Show the sale price"
+    },
+    "layouts": {
+      "option": "A4 — {{columns}} × {{rows}} ({{count}} labels)"
+    },
+    "summary": "{{total}} label(s) on {{pages}} page(s)",
+    "problems": {
+      "tooMany": "{{max}} labels maximum per print run.",
+      "copies": "Between 1 and {{max}} copies per product.",
+      "start": "Start position outside the sheet."
+    },
+    "actions": {
+      "print": "Print",
+      "pdf": "Download PDF"
     }
   }
 }

@@ -1,0 +1,73 @@
+<app-page-header
+  [title]="'suppliers.list.title' | translate"
+  [subtitle]="'suppliers.list.subtitle' | translate"
+>
+  @if (auth.can('SUPPLIER_CREATE')) {
+    <a actions pButton [routerLink]="routes.SUPPLIERS.CREATE" class="no-underline">
+      <i pButtonIcon class="pi pi-plus" aria-hidden="true"></i>
+      <span pButtonLabel>{{ 'suppliers.actions.new' | translate }}</span>
+    </a>
+  }
+</app-page-header>
+
+<div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+  <app-search-field
+    class="sm:max-w-sm sm:flex-1"
+    [label]="'suppliers.list.search' | translate"
+    [value]="list.filters().text"
+    (searchChange)="filter({ text: $event })"
+  />
+  <p-select
+    [options]="statusOptions()"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    [placeholder]="'common.status.all' | translate"
+    [ariaLabel]="'suppliers.fields.status' | translate"
+    [ngModel]="list.filters().active"
+    (ngModelChange)="filter({ active: $event ?? null })"
+    styleClass="w-full sm:w-52"
+  />
+</div>
+
+<app-data-table
+  [caption]="'suppliers.list.title' | translate"
+  [columns]="columns()"
+  [rows]="list.rows()"
+  [rowKey]="rowKey"
+  [loading]="list.loading()"
+  [error]="list.error()"
+  [total]="list.total()"
+  [page]="list.page()"
+  [size]="list.size()"
+  [sort]="list.sort()"
+  [clickable]="true"
+  [emptyTitle]="'suppliers.list.empty' | translate"
+  [emptyDescription]="'suppliers.list.emptyHint' | translate"
+  [filtered]="list.filtered()"
+  (clearFilters)="list.clearFilters()"
+  (sortChange)="list.changeSort($event)"
+  (pageChange)="list.changePage($event)"
+  (rowSelect)="open($event)"
+  (retry)="list.load()"
+>
+  <ng-template appCell="name" let-row>
+    <a
+      [routerLink]="routes.SUPPLIERS.DETAIL(row.id)"
+      class="inline-flex min-h-11 items-center font-medium text-fg hover:text-primary md:min-h-6"
+      (click)="$event.stopPropagation()"
+      >{{ row.name }}</a
+    >
+  </ng-template>
+  <ng-template appCell="code" let-row
+    ><span class="font-mono text-xs">{{ row.code }}</span></ng-template
+  >
+  <ng-template appCell="email" let-row>{{ row.email ?? '—' }}</ng-template>
+  <ng-template appCell="phone" let-row>{{ row.phone ?? '—' }}</ng-template>
+  <ng-template appCell="leadTimeDays" let-row>
+    {{
+      row.leadTimeDays === null ? '—' : ('suppliers.days' | translate: { count: row.leadTimeDays })
+    }}
+  </ng-template>
+  <ng-template appCell="active" let-row><app-active-badge [active]="row.active" /></ng-template>
+</app-data-table>

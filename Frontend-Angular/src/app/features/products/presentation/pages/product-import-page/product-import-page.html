@@ -1,0 +1,282 @@
+<app-page-header [title]="'imports.title' | translate" [subtitle]="'imports.subtitle' | translate">
+  <a
+    actions
+    [routerLink]="routes.PRODUCTS.ROOT"
+    class="inline-flex min-h-11 items-center text-sm font-medium text-fg-muted hover:text-fg"
+  >
+    <i class="pi pi-arrow-left mr-1" aria-hidden="true"></i>{{ 'products.list.title' | translate }}
+  </a>
+</app-page-header>
+
+<ol
+  class="mb-6 grid grid-cols-3 gap-2 text-xs sm:text-sm"
+  [attr.aria-label]="'imports.steps.label' | translate"
+>
+  @for (step of steps; track step; let i = $index) {
+    <li
+      class="flex items-center gap-2 rounded-lg border px-3 py-2"
+      [class.border-primary]="store.step() === step"
+      [class.text-primary]="store.step() === step"
+      [class.border-border]="store.step() !== step"
+      [class.text-fg-muted]="store.step() !== step"
+      [attr.aria-current]="store.step() === step ? 'step' : null"
+    >
+      <span
+        class="flex size-6 shrink-0 items-center justify-center rounded-full bg-surface-muted font-semibold"
+        aria-hidden="true"
+        >{{ i + 1 }}</span
+      >
+      <span class="min-w-0 truncate">{{ 'imports.steps.' + step | translate }}</span>
+    </li>
+  }
+</ol>
+
+@if (store.error(); as error) {
+  <p
+    class="mb-4 flex items-start gap-2 rounded-lg border border-danger/40 bg-danger/10 p-4 text-sm text-danger"
+    role="alert"
+  >
+    <i class="pi pi-times-circle mt-0.5" aria-hidden="true"></i>{{ errorText(error) }}
+  </p>
+}
+
+@switch (store.step()) {
+  @case ('file') {
+    <section class="sh-card max-w-3xl space-y-5 p-5 sm:p-6" aria-labelledby="imp-file">
+      <h2 id="imp-file" class="text-base font-semibold">{{ 'imports.file.title' | translate }}</h2>
+      <p class="text-sm text-fg-muted">{{ 'imports.file.help' | translate }}</p>
+      <p-button
+        [outlined]="true"
+        severity="secondary"
+        icon="pi pi-download"
+        [label]="'imports.actions.template' | translate"
+        (onClick)="downloadTemplate()"
+      />
+      <label
+        class="flex min-h-32 cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border p-6 text-center hover:border-primary focus-within:border-primary"
+      >
+        <i class="pi pi-file-excel text-3xl text-fg-muted" aria-hidden="true"></i>
+        @if (store.file(); as file) {
+          <span class="font-medium break-all text-fg">{{ file.name }}</span>
+          <span class="text-xs text-fg-muted">{{ 'imports.file.change' | translate }}</span>
+        } @else {
+          <span class="font-medium text-fg">{{ 'imports.file.choose' | translate }}</span>
+          <span class="text-xs text-fg-muted">{{
+            'imports.file.rules' | translate: { max: maxMb }
+          }}</span>
+        }
+        <input
+          #fileInput
+          type="file"
+          class="sr-only"
+          accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          (change)="pick(fileInput)"
+        />
+      </label>
+      @if (store.fileProblem(); as problem) {
+        <p class="text-sm text-danger" role="alert">
+          {{ 'imports.file.problems.' + problem | translate: { max: maxMb } }}
+        </p>
+      }
+      <div class="flex items-start gap-3">
+        <p-checkbox
+          inputId="imp-create-categories"
+          [binary]="true"
+          [ngModel]="store.createMissingCategories()"
+          (ngModelChange)="store.createMissingCategories.set($event)"
+        />
+        <label for="imp-create-categories" class="text-sm">
+          <span class="font-medium">{{ 'imports.file.createCategories' | translate }}</span>
+          <span class="block text-xs text-fg-muted">{{
+            'imports.file.createCategoriesHint' | translate
+          }}</span>
+        </label>
+      </div>
+      <div class="flex justify-end">
+        <p-button
+          icon="pi pi-search"
+          [label]="'imports.actions.analyse' | translate"
+          [disabled]="!store.file()"
+          [loading]="store.busy()"
+          (onClick)="analyse()"
+        />
+      </div>
+    </section>
+  }
+  @case ('preview') {
+    @if (store.preview(); as preview) {
+      <section aria-labelledby="imp-summary" class="mb-6">
+        <h2 id="imp-summary" class="mb-3 text-base font-semibold">
+          {{ 'imports.summary.title' | translate: { file: preview.fileName } }}
+        </h2>
+        <dl class="grid grid-cols-2 gap-3 md:grid-cols-4">
+          <div class="sh-card p-4">
+            <dt class="text-xs text-fg-muted">{{ 'imports.summary.total' | translate }}</dt>
+            <dd class="text-2xl font-semibold text-fg" data-testid="import-total">
+              {{ preview.totalRows }}
+            </dd>
+          </div>
+          <div class="sh-card p-4">
+            <dt class="text-xs text-fg-muted">{{ 'imports.summary.valid' | translate }}</dt>
+            <dd class="text-2xl font-semibold text-success" data-testid="import-valid">
+              {{ store.validRows() }}
+            </dd>
+            <dd class="text-xs text-fg-muted">
+              {{
+                'imports.summary.split'
+                  | translate: { create: preview.createCount, update: preview.updateCount }
+              }}
+            </dd>
+          </div>
+          <div class="sh-card p-4">
+            <dt class="text-xs text-fg-muted">{{ 'imports.summary.invalid' | translate }}</dt>
+            <dd
+              class="text-2xl font-semibold"
+              [class.text-danger]="preview.errorCount > 0"
+              [class.text-fg]="preview.errorCount === 0"
+              data-testid="import-invalid"
+            >
+              {{ preview.errorCount }}
+            </dd>
+          </div>
+          <div class="sh-card p-4">
+            <dt class="text-xs text-fg-muted">{{ 'imports.summary.categories' | translate }}</dt>
+            <dd class="text-2xl font-semibold text-fg">{{ preview.categoriesToCreate.length }}</dd>
+            @if (preview.categoriesToCreate.length) {
+              <dd
+                class="truncate text-xs text-fg-muted"
+                [attr.title]="preview.categoriesToCreate.join(', ')"
+              >
+                {{ preview.categoriesToCreate.join(', ') }}
+              </dd>
+            }
+          </div>
+        </dl>
+      </section>
+
+      @if (preview.errorCount > 0) {
+        <p
+          class="mb-4 flex items-start gap-2 rounded-lg border border-warning/40 bg-warning/10 p-4 text-sm text-warning"
+          role="status"
+        >
+          <i class="pi pi-exclamation-triangle mt-0.5" aria-hidden="true"></i>
+          {{ 'imports.summary.blocked' | translate }}
+        </p>
+      } @else if (!store.committable()) {
+        <p
+          class="mb-4 rounded-lg border border-border bg-surface-muted/60 p-4 text-sm text-fg-muted"
+          role="status"
+        >
+          {{ 'imports.summary.nothing' | translate }}
+        </p>
+      }
+
+      <section class="sh-card overflow-hidden" aria-labelledby="imp-rows">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4">
+          <h2 id="imp-rows" class="text-base font-semibold">
+            {{ 'imports.rows.title' | translate }}
+          </h2>
+          @if (preview.errorCount > 0) {
+            <div class="flex items-center gap-2">
+              <p-checkbox
+                inputId="imp-errors-only"
+                [binary]="true"
+                [ngModel]="errorsOnly()"
+                (ngModelChange)="errorsOnly.set($event)"
+              />
+              <label for="imp-errors-only" class="text-sm">{{
+                'imports.rows.errorsOnly' | translate
+              }}</label>
+            </div>
+          }
+        </div>
+        <ul class="max-h-[32rem] divide-y divide-border overflow-y-auto">
+          @for (row of rows(); track row.rowNumber) {
+            <li class="flex flex-col gap-2 p-4 sm:flex-row sm:items-start">
+              <div class="flex shrink-0 items-center gap-3 sm:w-44">
+                <span class="text-xs text-fg-muted tabular-nums">{{
+                  'imports.rows.line' | translate: { n: row.rowNumber }
+                }}</span>
+                <app-status-badge
+                  [label]="actionLabel(row.action) | translate"
+                  [tone]="tones[row.action]"
+                />
+              </div>
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-sm font-medium text-fg">
+                  {{ row.name || ('imports.rows.noName' | translate) }}
+                  @if (row.sku) {
+                    <span class="ml-1 font-mono text-xs text-fg-muted">{{ row.sku }}</span>
+                  }
+                </p>
+                @if (row.issues.length) {
+                  <ul class="mt-1 space-y-0.5 text-xs text-danger">
+                    @for (issue of row.issues; track $index) {
+                      <li>{{ issueText(issue) }}</li>
+                    }
+                  </ul>
+                }
+              </div>
+            </li>
+          }
+        </ul>
+      </section>
+
+      <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p class="text-xs text-fg-muted">
+          {{
+            'imports.summary.expires' | translate: { time: (preview.expiresAt | dateTime: 'time') }
+          }}
+        </p>
+        <div class="flex flex-col-reverse gap-3 sm:flex-row">
+          <p-button
+            [text]="true"
+            icon="pi pi-arrow-left"
+            [label]="'imports.actions.otherFile' | translate"
+            (onClick)="store.restart()"
+          />
+          <p-button
+            icon="pi pi-check"
+            [label]="'imports.actions.commit' | translate"
+            [disabled]="!store.committable()"
+            [loading]="store.busy()"
+            (onClick)="commit()"
+          />
+        </div>
+      </div>
+    }
+  }
+  @case ('done') {
+    @if (store.result(); as result) {
+      <section class="sh-card max-w-2xl p-6 text-center" aria-labelledby="imp-done">
+        <span
+          class="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-success/10 text-success"
+        >
+          <i class="pi pi-check text-xl" aria-hidden="true"></i>
+        </span>
+        <h2 id="imp-done" class="text-lg font-semibold">{{ 'imports.done.title' | translate }}</h2>
+        <p class="mt-2 text-sm text-fg-muted">
+          {{
+            'imports.done.summary'
+              | translate
+                : {
+                    created: result.created,
+                    updated: result.updated,
+                    categories: result.categoriesCreated,
+                  }
+          }}
+        </p>
+        <div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+          <a pButton [routerLink]="routes.PRODUCTS.ROOT" class="no-underline">
+            <span pButtonLabel>{{ 'imports.actions.seeProducts' | translate }}</span>
+          </a>
+          <p-button
+            [outlined]="true"
+            [label]="'imports.actions.again' | translate"
+            (onClick)="store.restart()"
+          />
+        </div>
+      </section>
+    }
+  }
+}

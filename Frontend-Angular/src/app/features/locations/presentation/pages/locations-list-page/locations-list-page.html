@@ -1,0 +1,122 @@
+<app-page-header
+  [title]="'locations.list.title' | translate"
+  [subtitle]="'locations.list.subtitle' | translate"
+>
+  @if (canCreate()) {
+    <a actions pButton [routerLink]="routes.LOCATIONS.CREATE" class="no-underline">
+      <i pButtonIcon class="pi pi-plus" aria-hidden="true"></i>
+      <span pButtonLabel>{{ 'locations.actions.new' | translate }}</span>
+    </a>
+  }
+</app-page-header>
+
+@if (store.error(); as error) {
+  <section class="sh-card"><app-error-state [error]="error" (retry)="reload()" /></section>
+} @else if (store.loading() && !store.loaded()) {
+  <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3" aria-busy="true">
+    @for (i of skeletons; track i) {
+      <div class="sh-card space-y-3 p-5">
+        <p-skeleton width="60%" height="1.25rem" />
+        <p-skeleton width="40%" />
+        <p-skeleton width="80%" />
+      </div>
+    }
+  </div>
+} @else if (store.locations().length === 0) {
+  <section class="sh-card">
+    <app-empty-state
+      icon="pi-map-marker"
+      [title]="'locations.list.empty' | translate"
+      [description]="'locations.list.emptyHint' | translate"
+    />
+  </section>
+} @else {
+  @if (store.singleSite()) {
+    <p
+      class="mb-4 flex items-start gap-3 rounded-lg border border-border bg-surface-muted/60 p-4 text-sm text-fg-muted"
+    >
+      <i class="pi pi-info-circle mt-0.5 text-primary" aria-hidden="true"></i>
+      <span>{{ 'locations.list.singleSite' | translate }}</span>
+    </p>
+  }
+  <ul class="grid gap-4 md:grid-cols-2 xl:grid-cols-3" [attr.aria-busy]="store.loading()">
+    @for (location of store.locations(); track location.id) {
+      <li class="sh-card flex flex-col p-5" [class.opacity-70]="!location.active">
+        <div class="flex items-start justify-between gap-3">
+          <div class="min-w-0">
+            <h2 class="text-base font-semibold break-words text-fg">{{ location.name }}</h2>
+            <p class="font-mono text-xs text-fg-muted">{{ location.code }}</p>
+          </div>
+          @if (location.primary) {
+            <app-status-badge [label]="'locations.primary' | translate" tone="primary" />
+          }
+        </div>
+        @if (!store.singleSite() || !location.active) {
+          <div class="mt-3 flex flex-wrap gap-2">
+            <app-location-type-badge [type]="location.type" />
+            <app-active-badge [active]="location.active" />
+          </div>
+        }
+        <dl class="mt-4 mb-4 space-y-1.5 text-sm">
+          <div class="flex gap-2">
+            <dt class="sr-only">{{ 'locations.fields.address' | translate }}</dt>
+            <i class="pi pi-map-marker mt-0.5 text-fg-muted" aria-hidden="true"></i>
+            <dd class="text-fg-muted">
+              {{ address(location) || ('locations.noAddress' | translate) }}
+            </dd>
+          </div>
+          @if (location.phone) {
+            <div class="flex gap-2">
+              <dt class="sr-only">{{ 'locations.fields.phone' | translate }}</dt>
+              <i class="pi pi-phone mt-0.5 text-fg-muted" aria-hidden="true"></i>
+              <dd class="text-fg-muted">{{ location.phone }}</dd>
+            </div>
+          }
+        </dl>
+        @if (canUpdate()) {
+          <div class="mt-auto flex flex-wrap gap-2 border-t border-border pt-4">
+            <a
+              [routerLink]="routes.LOCATIONS.EDIT(location.id)"
+              class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium text-fg hover:bg-surface-muted"
+              [attr.aria-label]="('common.edit' | translate) + ' ' + location.name"
+            >
+              <i class="pi pi-pencil" aria-hidden="true"></i>{{ 'common.edit' | translate }}
+            </a>
+            @if (!location.primary && location.active) {
+              <button
+                type="button"
+                class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium text-fg hover:bg-surface-muted disabled:opacity-50"
+                [disabled]="busyId() === location.id"
+                (click)="setPrimary(location)"
+              >
+                <i class="pi pi-star" aria-hidden="true"></i
+                >{{ 'locations.actions.setPrimary' | translate }}
+              </button>
+            }
+            @if (!location.primary) {
+              <button
+                type="button"
+                class="inline-flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-medium hover:bg-surface-muted disabled:opacity-50"
+                [class.text-danger]="location.active"
+                [class.text-fg]="!location.active"
+                [disabled]="busyId() === location.id"
+                (click)="toggle(location)"
+              >
+                <i
+                  class="pi"
+                  [class.pi-ban]="location.active"
+                  [class.pi-check-circle]="!location.active"
+                  aria-hidden="true"
+                ></i
+                >{{
+                  (location.active ? 'locations.actions.deactivate' : 'locations.actions.activate')
+                    | translate
+                }}
+              </button>
+            }
+          </div>
+        }
+      </li>
+    }
+  </ul>
+}

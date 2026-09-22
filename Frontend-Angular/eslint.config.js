@@ -45,6 +45,24 @@ module.exports = defineConfig([
     },
   },
   {
+    // Clean Architecture: only data sources talk HTTP.
+    files: ['src/app/features/*/domain/**/*.ts', 'src/app/features/*/presentation/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@angular/common/http',
+              importNames: ['HttpClient'],
+              message: 'HTTP belongs in the data layer (data/datasources); use a use case instead.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['src/app/core/logging/logger.ts'],
     rules: { 'no-console': 'off' },
   },

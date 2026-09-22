@@ -1,0 +1,117 @@
+<app-page-header
+  [title]="(editing() ? 'locations.edit.title' : 'locations.create.title') | translate"
+  [subtitle]="(editing() ? 'locations.edit.subtitle' : 'locations.create.subtitle') | translate"
+>
+  <a
+    actions
+    [routerLink]="routes.LOCATIONS.ROOT"
+    class="inline-flex min-h-11 items-center text-sm font-medium text-fg-muted hover:text-fg"
+  >
+    <i class="pi pi-arrow-left mr-1" aria-hidden="true"></i>{{ 'common.back' | translate }}
+  </a>
+</app-page-header>
+
+@if (location.state(); as state) {
+  @if (state.status === 'error') {
+    <section class="sh-card"><app-error-state [error]="state.error" (retry)="retry()" /></section>
+  } @else if (state.status === 'loading') {
+    <div class="sh-card max-w-3xl space-y-4 p-6" aria-busy="true">
+      <p-skeleton height="2.5rem" /><p-skeleton height="2.5rem" /><p-skeleton height="2.5rem" />
+    </div>
+  } @else {
+    @let current = location.data();
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+      novalidate
+      class="sh-card max-w-3xl p-5 sm:p-6"
+      aria-labelledby="loc-form-title"
+    >
+      <h2 id="loc-form-title" class="sr-only">
+        {{ (editing() ? 'locations.edit.title' : 'locations.create.title') | translate }}
+      </h2>
+      <div class="grid gap-5 sm:grid-cols-2">
+        <app-form-field
+          [label]="'locations.fields.name' | translate"
+          forId="loc-name"
+          [control]="form.controls.name"
+          [required]="true"
+        >
+          <input pInputText id="loc-name" formControlName="name" class="w-full" />
+        </app-form-field>
+        <app-form-field
+          [label]="'locations.fields.code' | translate"
+          forId="loc-code"
+          [control]="form.controls.code"
+          [required]="true"
+          [hint]="'locations.hints.code' | translate"
+        >
+          <input
+            pInputText
+            id="loc-code"
+            formControlName="code"
+            class="w-full font-mono uppercase"
+            autocomplete="off"
+          />
+        </app-form-field>
+        <app-form-field
+          [label]="'locations.fields.type' | translate"
+          forId="loc-type"
+          [control]="form.controls.type"
+          [required]="true"
+        >
+          <p-select
+            inputId="loc-type"
+            ariaLabelledBy="loc-type-label"
+            formControlName="type"
+            [options]="typeOptions()"
+            optionLabel="label"
+            optionValue="value"
+            styleClass="w-full"
+          />
+        </app-form-field>
+        <app-form-field
+          [label]="'locations.fields.phone' | translate"
+          forId="loc-phone"
+          [control]="form.controls.phone"
+        >
+          <input pInputText id="loc-phone" type="tel" formControlName="phone" class="w-full" />
+        </app-form-field>
+        <app-form-field
+          class="sm:col-span-2"
+          [label]="'locations.fields.addressLine' | translate"
+          forId="loc-address"
+          [control]="form.controls.addressLine"
+        >
+          <input pInputText id="loc-address" formControlName="addressLine" class="w-full" />
+        </app-form-field>
+        <app-form-field
+          [label]="'locations.fields.city' | translate"
+          forId="loc-city"
+          [control]="form.controls.city"
+        >
+          <input pInputText id="loc-city" formControlName="city" class="w-full" />
+        </app-form-field>
+      </div>
+      @if (current?.primary) {
+        <p class="mt-5 text-xs text-fg-muted">
+          <i class="pi pi-star mr-1 text-primary" aria-hidden="true"></i
+          >{{ 'locations.hints.primary' | translate }}
+        </p>
+      }
+      <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <a
+          [routerLink]="routes.LOCATIONS.ROOT"
+          class="p-button p-button-text p-component justify-center no-underline"
+          >{{ 'common.cancel' | translate }}</a
+        >
+        <p-button
+          type="submit"
+          [label]="(editing() ? 'common.save' : 'locations.actions.create') | translate"
+          icon="pi pi-check"
+          [loading]="saving()"
+        />
+      </div>
+    </form>
+  }
+}

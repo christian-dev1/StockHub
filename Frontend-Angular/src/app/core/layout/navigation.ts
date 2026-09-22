@@ -37,9 +37,41 @@ export const NAVIGATION: readonly NavigationSection[] = [
     ],
   },
   {
+    labelKey: 'nav.section.catalogue',
+    audience: 'company',
+    items: [
+      {
+        labelKey: 'nav.products',
+        icon: 'pi-box',
+        route: APP_ROUTES.PRODUCTS.ROOT,
+        permissions: ['PRODUCT_VIEW'],
+      },
+      // Categories and suppliers are listed for the roles that maintain them;
+      // read-only roles see them through the products screens.
+      {
+        labelKey: 'nav.categories',
+        icon: 'pi-sitemap',
+        route: APP_ROUTES.CATEGORIES.ROOT,
+        permissions: ['CATEGORY_MANAGE'],
+      },
+      {
+        labelKey: 'nav.suppliers',
+        icon: 'pi-truck',
+        route: APP_ROUTES.SUPPLIERS.ROOT,
+        permissions: ['SUPPLIER_CREATE', 'SUPPLIER_UPDATE'],
+      },
+    ],
+  },
+  {
     labelKey: 'nav.section.administration',
     audience: 'company',
     items: [
+      {
+        labelKey: 'nav.locations',
+        icon: 'pi-map-marker',
+        route: APP_ROUTES.LOCATIONS.ROOT,
+        permissions: ['WAREHOUSE_CREATE', 'WAREHOUSE_UPDATE'],
+      },
       {
         labelKey: 'nav.users',
         icon: 'pi-users',

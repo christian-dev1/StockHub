@@ -1,0 +1,181 @@
+<app-page-header
+  [title]="'products.list.title' | translate"
+  [subtitle]="'products.list.subtitle' | translate"
+>
+  <div actions class="flex flex-wrap gap-2">
+    @if (auth.can('BARCODE_PRINT')) {
+      <a
+        pButton
+        [outlined]="true"
+        severity="secondary"
+        [routerLink]="routes.PRODUCTS.LABELS"
+        class="no-underline"
+      >
+        <i pButtonIcon class="pi pi-print" aria-hidden="true"></i>
+        <span pButtonLabel>{{ 'products.actions.labels' | translate }}</span>
+      </a>
+    }
+    @if (auth.can('PRODUCT_IMPORT')) {
+      <a
+        pButton
+        [outlined]="true"
+        severity="secondary"
+        [routerLink]="routes.PRODUCTS.IMPORT"
+        class="no-underline"
+      >
+        <i pButtonIcon class="pi pi-file-import" aria-hidden="true"></i>
+        <span pButtonLabel>{{ 'products.actions.import' | translate }}</span>
+      </a>
+    }
+    @if (auth.can('PRODUCT_CREATE')) {
+      <a pButton [routerLink]="routes.PRODUCTS.CREATE" class="no-underline">
+        <i pButtonIcon class="pi pi-plus" aria-hidden="true"></i>
+        <span pButtonLabel>{{ 'products.actions.new' | translate }}</span>
+      </a>
+    }
+  </div>
+</app-page-header>
+
+<div class="mb-4 flex flex-col gap-2 sm:flex-row lg:max-w-md">
+  <app-search-field
+    class="min-w-0 flex-1"
+    [label]="'products.list.search' | translate"
+    [value]="list.filters().text"
+    (searchChange)="filter({ text: $event })"
+  />
+  <button
+    type="button"
+    class="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg border border-border px-4 text-sm font-medium text-fg hover:bg-surface-muted lg:hidden"
+    [attr.aria-expanded]="filtersOpen()"
+    aria-controls="product-filters"
+    (click)="filtersOpen.set(!filtersOpen())"
+  >
+    <i class="pi pi-filter" aria-hidden="true"></i>{{ 'products.filters.toggle' | translate }}
+    @if (activeFilters() > 0) {
+      <span class="rounded-full bg-primary px-2 text-xs text-primary-fg">{{
+        activeFilters()
+      }}</span>
+    }
+  </button>
+</div>
+
+<div
+  id="product-filters"
+  class="mb-4 gap-3 sm:grid-cols-2 lg:grid lg:grid-cols-5"
+  [class.grid]="filtersOpen()"
+  [class.hidden]="!filtersOpen()"
+>
+  <p-select
+    [options]="references.categoryOptions()"
+    optionLabel="label"
+    optionValue="value"
+    [filter]="true"
+    [showClear]="true"
+    [placeholder]="'products.filters.allCategories' | translate"
+    [ariaLabel]="'products.fields.category' | translate"
+    [ngModel]="list.filters().categoryId"
+    (ngModelChange)="filter({ categoryId: $event ?? null })"
+    styleClass="w-full"
+  />
+  <p-select
+    [options]="supplierOptions()"
+    optionLabel="label"
+    optionValue="value"
+    [filter]="true"
+    [showClear]="true"
+    [placeholder]="'products.filters.allSuppliers' | translate"
+    [ariaLabel]="'products.fields.supplier' | translate"
+    [ngModel]="list.filters().supplierId"
+    (ngModelChange)="filter({ supplierId: $event ?? null })"
+    styleClass="w-full"
+  />
+  <p-select
+    [options]="yesNo().status"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    [placeholder]="'common.status.all' | translate"
+    [ariaLabel]="'products.fields.status' | translate"
+    [ngModel]="list.filters().active"
+    (ngModelChange)="filter({ active: $event ?? null })"
+    styleClass="w-full"
+  />
+  <p-select
+    [options]="yesNo().barcode"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    [placeholder]="'products.filters.anyBarcode' | translate"
+    [ariaLabel]="'products.fields.barcode' | translate"
+    [ngModel]="list.filters().hasBarcode"
+    (ngModelChange)="filter({ hasBarcode: $event ?? null })"
+    styleClass="w-full"
+  />
+  <p-select
+    [options]="yesNo().batch"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    [placeholder]="'products.filters.anyTracking' | translate"
+    [ariaLabel]="'products.fields.batchTracked' | translate"
+    [ngModel]="list.filters().batchTracked"
+    (ngModelChange)="filter({ batchTracked: $event ?? null })"
+    styleClass="w-full"
+  />
+</div>
+
+<app-data-table
+  [caption]="'products.list.title' | translate"
+  [columns]="columns()"
+  [rows]="list.rows()"
+  [rowKey]="rowKey"
+  [loading]="list.loading()"
+  [error]="list.error()"
+  [total]="list.total()"
+  [page]="list.page()"
+  [size]="list.size()"
+  [sort]="list.sort()"
+  [clickable]="true"
+  [emptyTitle]="'products.list.empty' | translate"
+  [emptyDescription]="'products.list.emptyHint' | translate"
+  [filtered]="list.filtered()"
+  (clearFilters)="list.clearFilters()"
+  (sortChange)="list.changeSort($event)"
+  (pageChange)="list.changePage($event)"
+  (rowSelect)="open($event)"
+  (retry)="list.load()"
+>
+  <ng-template appCell="name" let-row>
+    <div class="flex min-w-0 items-center gap-3">
+      <app-product-thumbnail [productId]="row.id" [hasImage]="row.hasImage" />
+      <div class="min-w-0">
+        <a
+          [routerLink]="routes.PRODUCTS.DETAIL(row.id)"
+          class="block truncate py-2.5 font-medium text-fg hover:text-primary md:py-0"
+          (click)="$event.stopPropagation()"
+          >{{ row.name }}</a
+        >
+        <span class="block truncate font-mono text-xs font-normal text-fg-muted xl:hidden">{{
+          row.sku
+        }}</span>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template appCell="sku" let-row
+    ><span class="font-mono text-xs">{{ row.sku }}</span></ng-template
+  >
+  <ng-template appCell="barcode" let-row>
+    <span class="font-mono text-xs">{{ row.barcode ?? '—' }}</span>
+  </ng-template>
+  <ng-template appCell="categoryName" let-row>{{ row.categoryName ?? '—' }}</ng-template>
+  <ng-template appCell="defaultSupplierName" let-row>{{
+    row.defaultSupplierName ?? '—'
+  }}</ng-template>
+  <ng-template appCell="purchasePrice" let-row
+    ><span class="tabular-nums">{{ row.purchasePrice | money }}</span></ng-template
+  >
+  <ng-template appCell="salePrice" let-row
+    ><span class="font-medium tabular-nums">{{ row.salePrice | money }}</span></ng-template
+  >
+  <ng-template appCell="active" let-row><app-active-badge [active]="row.active" /></ng-template>
+</app-data-table>

@@ -57,3 +57,29 @@ export async function rawTranslationKeys(page: Page): Promise<string[]> {
     .split(/\s+/)
     .filter((word) => RAW_I18N_KEY.test(word) && !word.includes('@') && !/^https?:/.test(word));
 }
+
+/** Short unique suffix so that repeated runs do not collide on unique names or codes. */
+export function uniqueSuffix(): string {
+  return `${Date.now().toString(36)}${Math.floor(Math.random() * 1296).toString(36)}`.toUpperCase();
+}
+
+/** Picks an option of a PrimeNG select identified by its accessible name. */
+export async function choose(page: Page, label: string | RegExp, option: string | RegExp): Promise<void> {
+  await page.getByRole('combobox', { name: label }).click();
+  await page.getByRole('option', { name: option }).first().click();
+}
+
+/** Creates a product through the API (as the given account) and returns its id. */
+export async function createProductViaApi(
+  request: APIRequestContext,
+  account: Account,
+  body: Record<string, unknown>,
+): Promise<string> {
+  const token = await apiToken(request, account);
+  const response = await request.post(`${ANGULAR_URL}/api/v1/products`, {
+    headers: { Authorization: `Bearer ${token}` },
+    data: { unit: 'UNIT', ...body },
+  });
+  expect(response.status()).toBe(201);
+  return ((await response.json()) as { id: string }).id;
+}

@@ -15,8 +15,24 @@ describe('applyServerErrors', () => {
       fieldErrors: [{ field: 'profile.name', code: 'X', message: 'Taken' }],
     });
     expect(applied).toBe(true);
-    expect(form.get('profile.name')?.errors).toEqual({ server: 'Taken' });
+    expect(form.get('profile.name')?.errors).toEqual({ server: { code: 'X', message: 'Taken' } });
     expect(form.get('profile.name')?.touched).toBe(true);
+  });
+
+  it('maps backend field names through aliases', () => {
+    const form = new FormGroup({ pricing: new FormGroup({ salePrice: new FormControl(0) }) });
+    applyServerErrors(
+      form,
+      {
+        kind: 'validation',
+        status: 400,
+        code: 'VALIDATION_FAILED',
+        message: '',
+        fieldErrors: [{ field: 'salePrice', code: 'DecimalMin', message: 'too low' }],
+      },
+      { salePrice: 'pricing.salePrice' },
+    );
+    expect(form.get('pricing.salePrice')?.hasError('server')).toBe(true);
   });
 
   it('returns false when no field matches', () => {

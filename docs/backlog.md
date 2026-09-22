@@ -42,10 +42,12 @@ Corrige les anomalies de `docs/audit/2026-09-22-audit.md` sans nouvelle fonction
 
 ## Phase 3 — Catalogue 🔄
 - ✅ Backend finalisé (22/09/2026, étape 2) : audit ciblé, erreurs 400/415 au lieu de 500 (paramètre, fichier ou type de contenu manquant), messages d'erreur formatés, champ fautif indiqué pour une valeur illisible, Swagger (codes 201/204, réponses `ApiError`, permission par opération, enums), tests d'isolation A/B, matrice des permissions exécutable — référence : `docs/05-catalogue-api.md`
-- ⏳ Emplacements (CRUD, principal, activation) — UX adaptative mono/multi-sites
-- ⏳ Catégories, fournisseurs
-- ⏳ Produits (recherche avancée, image, import CSV/Excel avec prévisualisation)
-- ⏳ Codes-barres (CODE128, EAN-13, étiquettes PDF) ; lookup par scan côté Next
+- ✅ Angular (22/09/2026, étape 3) : features `locations`, `categories`, `suppliers`, `products` (image, import), `barcodes` (génération, étiquettes) en data/domain/presentation ; navigation et boutons selon les permissions ; E2E admin complet (emplacement → étiquette PDF), manager, magasinier ; smoke 7 largeurs × clair/sombre × FR/EN × axe
+- ✅ Emplacements (CRUD, principal, activation) — UX adaptative mono/multi-sites
+- ✅ Catégories (arbre 2 niveaux), fournisseurs
+- ✅ Produits (recherche, filtres, image, import CSV/Excel avec prévisualisation)
+- ✅ Codes-barres (CODE128, EAN-13, PNG/SVG, étiquettes PDF)
+- ⏳ Next : catalogue et lookup par scan
 
 ## Phases 4 → 12 ⏳
 Voir `00-architecture-plan.md` §11 et §13.

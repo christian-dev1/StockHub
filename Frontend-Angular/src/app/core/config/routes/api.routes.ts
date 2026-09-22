@@ -43,6 +43,37 @@ export const API_ROUTES = {
   ROLES: `${API}/roles`,
   LOCATIONS: {
     ROOT: `${API}/locations`,
+    ONE: (id: string) => `${API}/locations/${encodeURIComponent(id)}`,
+    ACTIVATE: (id: string) => `${API}/locations/${encodeURIComponent(id)}/activate`,
+    DEACTIVATE: (id: string) => `${API}/locations/${encodeURIComponent(id)}/deactivate`,
+    SET_PRIMARY: (id: string) => `${API}/locations/${encodeURIComponent(id)}/set-primary`,
+  },
+  CATEGORIES: {
+    ROOT: `${API}/categories`,
+    ONE: (id: string) => `${API}/categories/${encodeURIComponent(id)}`,
+  },
+  SUPPLIERS: {
+    ROOT: `${API}/suppliers`,
+    ONE: (id: string) => `${API}/suppliers/${encodeURIComponent(id)}`,
+    ACTIVATE: (id: string) => `${API}/suppliers/${encodeURIComponent(id)}/activate`,
+    DEACTIVATE: (id: string) => `${API}/suppliers/${encodeURIComponent(id)}/deactivate`,
+  },
+  PRODUCTS: {
+    ROOT: `${API}/products`,
+    ONE: (id: string) => `${API}/products/${encodeURIComponent(id)}`,
+    LOOKUP: `${API}/products/lookup`,
+    ACTIVATE: (id: string) => `${API}/products/${encodeURIComponent(id)}/activate`,
+    DEACTIVATE: (id: string) => `${API}/products/${encodeURIComponent(id)}/deactivate`,
+    IMAGE: (id: string) => `${API}/products/${encodeURIComponent(id)}/image`,
+    IMPORT_TEMPLATE: `${API}/products/imports/template`,
+    IMPORT_PREVIEW: `${API}/products/imports/preview`,
+    IMPORT_COMMIT: (jobId: string) => `${API}/products/imports/${encodeURIComponent(jobId)}/commit`,
+  },
+  BARCODES: {
+    GENERATE: (productId: string) => `${API}/products/${encodeURIComponent(productId)}/barcode`,
+    PNG: (productId: string) => `${API}/products/${encodeURIComponent(productId)}/barcode.png`,
+    SVG: (productId: string) => `${API}/products/${encodeURIComponent(productId)}/barcode.svg`,
+    LABELS: `${API}/barcodes/labels`,
   },
 } as const;
 

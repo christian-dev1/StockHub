@@ -1,0 +1,102 @@
+<section class="sh-card p-5 sm:p-6" aria-labelledby="barcode-title">
+  <h2 id="barcode-title" class="mb-4 text-base font-semibold">
+    {{ 'barcodes.title' | translate }}
+  </h2>
+
+  @if (barcode(); as value) {
+    <div class="rounded-lg bg-white p-3 ring-1 ring-border">
+      @if (previewUrl(); as url) {
+        <img
+          [src]="url"
+          [alt]="'barcodes.previewAlt' | translate: { value: value }"
+          class="mx-auto h-20 max-w-full"
+        />
+      } @else if (previewFailed()) {
+        <p class="py-6 text-center text-sm text-danger">
+          {{ 'barcodes.previewFailed' | translate }}
+        </p>
+      } @else {
+        <div class="flex h-20 items-center justify-center text-slate-500">
+          <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+        </div>
+      }
+    </div>
+    <dl class="mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
+      <dt class="text-fg-muted">{{ 'barcodes.value' | translate }}</dt>
+      <dd class="font-mono break-all text-fg" data-testid="barcode-value">{{ value }}</dd>
+      <dt class="text-fg-muted">{{ 'barcodes.format' | translate }}</dt>
+      <dd class="text-fg">{{ 'products.barcodeFormats.' + barcodeFormat() | translate }}</dd>
+    </dl>
+    <div class="mt-4 flex flex-wrap gap-2">
+      <p-button
+        [outlined]="true"
+        icon="pi pi-download"
+        label="PNG"
+        [ariaLabel]="'barcodes.actions.downloadPng' | translate"
+        [loading]="busy() === 'png'"
+        (onClick)="save('png')"
+      />
+      <p-button
+        [outlined]="true"
+        icon="pi pi-download"
+        label="SVG"
+        [ariaLabel]="'barcodes.actions.downloadSvg' | translate"
+        [loading]="busy() === 'svg'"
+        (onClick)="save('svg')"
+      />
+      @if (canPrint()) {
+        <a
+          pButton
+          [outlined]="true"
+          [routerLink]="routes.PRODUCTS.LABELS"
+          [queryParams]="{ products: productId() }"
+          class="no-underline"
+        >
+          <i pButtonIcon class="pi pi-print" aria-hidden="true"></i>
+          <span pButtonLabel>{{ 'barcodes.actions.printLabel' | translate }}</span>
+        </a>
+      }
+    </div>
+    @if (canGenerate()) {
+      <details class="mt-4 text-sm">
+        <summary
+          class="inline-flex min-h-11 cursor-pointer items-center text-fg-muted hover:text-fg"
+        >
+          {{ 'barcodes.actions.replace' | translate }}
+        </summary>
+        <p class="mb-3 text-xs text-fg-muted">{{ 'barcodes.hints.replace' | translate }}</p>
+        <div class="flex flex-wrap gap-2">
+          @for (format of formats; track format) {
+            <p-button
+              [text]="true"
+              severity="danger"
+              icon="pi pi-refresh"
+              [label]="'barcodes.actions.generate.' + format | translate"
+              [loading]="busy() === format"
+              [disabled]="busy() !== null"
+              (onClick)="create(format)"
+            />
+          }
+        </div>
+      </details>
+    }
+  } @else {
+    <p class="text-sm text-fg-muted">{{ 'barcodes.none' | translate }}</p>
+    @if (canGenerate()) {
+      <p class="mt-2 text-xs text-fg-muted">{{ 'barcodes.hints.generate' | translate }}</p>
+      <div class="mt-4 grid gap-2">
+        @for (format of formats; track format) {
+          <p-button
+            [outlined]="format !== 'EAN13'"
+            icon="pi pi-qrcode"
+            [label]="'barcodes.actions.generate.' + format | translate"
+            [loading]="busy() === format"
+            [disabled]="busy() !== null"
+            styleClass="w-full"
+            (onClick)="create(format)"
+          />
+        }
+      </div>
+    }
+  }
+</section>

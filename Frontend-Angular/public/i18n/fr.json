@@ -12,7 +12,13 @@
     "confirm": "Confirmer",
     "create": "Créer",
     "back": "Retour",
-    "clear": "Effacer"
+    "clear": "Effacer",
+    "edit": "Modifier",
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif",
+      "all": "Tous les statuts"
+    }
   },
   "nav": {
     "main": "Navigation principale",
@@ -21,14 +27,19 @@
     "section": {
       "overview": "Vue d'ensemble",
       "platform": "Plateforme",
-      "administration": "Administration"
+      "administration": "Administration",
+      "catalogue": "Catalogue"
     },
     "dashboard": "Tableau de bord",
     "companies": "Entreprises",
     "users": "Utilisateurs",
     "companySettings": "Paramètres de l'entreprise",
     "userMenu": "Menu utilisateur",
-    "platformMode": "Administration plateforme"
+    "platformMode": "Administration plateforme",
+    "products": "Produits",
+    "categories": "Catégories",
+    "suppliers": "Fournisseurs",
+    "locations": "Emplacements"
   },
   "theme": {
     "label": "Thème",
@@ -94,7 +105,93 @@
       "USER_ROLE_NOT_ASSIGNABLE": "Vous ne pouvez pas attribuer ce rôle.",
       "COMPANY_NAME_ALREADY_EXISTS": "Une entreprise porte déjà ce nom.",
       "PASSWORD_CURRENT_INVALID": "Le mot de passe actuel est incorrect.",
-      "PASSWORD_UNCHANGED": "Le nouveau mot de passe doit être différent de l'actuel."
+      "PASSWORD_UNCHANGED": "Le nouveau mot de passe doit être différent de l'actuel.",
+      "NotBlank": "Ce champ est obligatoire.",
+      "NotNull": "Ce champ est obligatoire.",
+      "NotEmpty": "Ce champ est obligatoire.",
+      "Size": "Longueur invalide.",
+      "Email": "Adresse e-mail invalide.",
+      "Pattern": "Format invalide.",
+      "Min": "Valeur trop petite.",
+      "Max": "Valeur trop grande.",
+      "DecimalMin": "La valeur ne peut pas être négative.",
+      "Digits": "Trop de chiffres.",
+      "INVALID_VALUE": "Valeur invalide.",
+      "INVALID_PARAMETER": "Paramètre invalide.",
+      "MALFORMED_REQUEST": "La requête est invalide.",
+      "UNSUPPORTED_MEDIA_TYPE": "Type de fichier non pris en charge.",
+      "PAYLOAD_TOO_LARGE": "Le fichier est trop volumineux.",
+      "VALIDATION_FAILED": "Certaines informations sont invalides.",
+      "FIELD_TOO_LONG": "Texte trop long.",
+      "EMAIL_INVALID": "Adresse e-mail invalide.",
+      "COUNTRY_INVALID": "Code pays invalide (2 lettres, ex. CM).",
+      "FILE_REQUIRED": "Choisissez un fichier.",
+      "LOCATION_NOT_FOUND": "Emplacement introuvable.",
+      "LOCATION_CODE_ALREADY_EXISTS": "Un emplacement utilise déjà ce code.",
+      "LOCATION_CODE_INVALID": "Le code ne peut contenir que des lettres, chiffres, « - » et « _ ».",
+      "LOCATION_PRIMARY_CANNOT_BE_DISABLED": "L'emplacement principal ne peut pas être désactivé : désignez d'abord un autre emplacement principal.",
+      "LOCATION_INACTIVE": "Un emplacement inactif ne peut pas devenir principal.",
+      "LOCATION_ACCESS_DENIED": "Vous n'avez pas accès à cet emplacement.",
+      "LOCATION_NAME_REQUIRED": "Le nom est obligatoire.",
+      "LOCATION_CODE_REQUIRED": "Le code est obligatoire.",
+      "CATEGORY_NOT_FOUND": "Catégorie introuvable.",
+      "CATEGORY_NAME_ALREADY_EXISTS": "Une catégorie porte déjà ce nom.",
+      "CATEGORY_DEPTH_EXCEEDED": "Les catégories sont limitées à deux niveaux (catégorie et sous-catégorie).",
+      "CATEGORY_PARENT_INVALID": "Une catégorie ne peut pas être son propre parent.",
+      "CATEGORY_PARENT_UNKNOWN": "La catégorie parente n'existe pas.",
+      "CATEGORY_IN_USE": "Cette catégorie contient encore des produits ou des sous-catégories.",
+      "CATEGORY_NAME_REQUIRED": "Le nom est obligatoire.",
+      "SUPPLIER_NOT_FOUND": "Fournisseur introuvable.",
+      "SUPPLIER_CODE_ALREADY_EXISTS": "Un fournisseur utilise déjà ce code.",
+      "SUPPLIER_LEAD_TIME_INVALID": "Le délai doit être compris entre 0 et 365 jours.",
+      "SUPPLIER_NAME_REQUIRED": "Le nom est obligatoire.",
+      "SUPPLIER_CODE_REQUIRED": "Le code est obligatoire.",
+      "SUPPLIER_CODE_INVALID": "Le code ne peut contenir que des lettres, chiffres, « - » et « _ ».",
+      "PRODUCT_NOT_FOUND": "Produit introuvable.",
+      "PRODUCT_SKU_ALREADY_EXISTS": "Un produit utilise déjà ce SKU.",
+      "PRODUCT_SKU_INVALID": "Le SKU ne peut contenir que des lettres, chiffres, « . », « _ », « / » et « - ».",
+      "PRODUCT_NAME_REQUIRED": "Le nom est obligatoire.",
+      "PRODUCT_BARCODE_ALREADY_EXISTS": "Un autre produit utilise déjà ce code-barres.",
+      "PRODUCT_BARCODE_INVALID_CHECK_DIGIT": "La clé de contrôle du code-barres est fausse : vérifiez la saisie.",
+      "PRODUCT_BARCODE_INVALID_LENGTH": "Ce format de code-barres n'a pas le bon nombre de chiffres.",
+      "PRODUCT_BARCODE_INVALID_CHARACTERS": "Le code-barres contient des caractères non autorisés.",
+      "PRODUCT_BARCODE_TOO_LONG": "Le code-barres est trop long.",
+      "PRODUCT_BARCODE_REQUIRED": "Le code-barres est obligatoire pour ce format.",
+      "PRODUCT_CATEGORY_UNKNOWN": "Cette catégorie n'existe pas.",
+      "PRODUCT_SUPPLIER_UNKNOWN": "Ce fournisseur n'existe pas ou est inactif.",
+      "PRODUCT_PRICE_NEGATIVE": "Les prix ne peuvent pas être négatifs.",
+      "PRODUCT_PRICE_INVALID": "Prix invalide (trop de chiffres).",
+      "PRODUCT_MIN_STOCK_NEGATIVE": "Le stock minimum ne peut pas être négatif.",
+      "PRODUCT_REORDER_QUANTITY_INVALID": "La quantité de réapprovisionnement doit être positive.",
+      "QUANTITY_MUST_BE_WHOLE": "Cette unité n'accepte que des quantités entières.",
+      "QUANTITY_INVALID": "Quantité invalide.",
+      "PRODUCT_EXPIRY_REQUIRES_BATCH": "Le suivi des dates d'expiration nécessite le suivi par lots.",
+      "PRODUCT_TRACKING_LOCKED": "Le suivi par lots ne peut pas changer tant que le produit a du stock.",
+      "PRODUCT_HAS_STOCK": "Ce produit a du stock : désactivez-le au lieu de le supprimer.",
+      "PRODUCT_DELETED": "Ce produit a été supprimé.",
+      "PRODUCT_IMAGE_TOO_LARGE": "L'image ne doit pas dépasser 2 Mo.",
+      "PRODUCT_IMAGE_UNSUPPORTED": "Seules les images PNG, JPEG et WebP sont acceptées.",
+      "IMPORT_NOT_FOUND": "Cet import est introuvable.",
+      "IMPORT_FORMAT_UNSUPPORTED": "Format non pris en charge : utilisez un fichier CSV ou Excel (.xlsx).",
+      "IMPORT_FILE_TOO_LARGE": "Le fichier ne doit pas dépasser 5 Mo.",
+      "IMPORT_FILE_UNREADABLE": "Le fichier est illisible.",
+      "IMPORT_EMPTY": "Le fichier ne contient aucune ligne.",
+      "IMPORT_TOO_MANY_ROWS": "Le fichier contient trop de lignes.",
+      "IMPORT_HAS_ERRORS": "Certaines lignes sont invalides : corrigez le fichier puis analysez-le de nouveau.",
+      "IMPORT_EXPIRED": "Cet aperçu a expiré : analysez le fichier de nouveau.",
+      "IMPORT_ALREADY_COMMITTED": "Cet import a déjà été appliqué.",
+      "IMPORT_DUPLICATE_SKU": "Ce SKU apparaît plusieurs fois dans le fichier.",
+      "IMPORT_DUPLICATE_BARCODE": "Ce code-barres apparaît plusieurs fois dans le fichier.",
+      "IMPORT_CATEGORY_UNKNOWN": "Catégorie inconnue.",
+      "IMPORT_SUPPLIER_UNKNOWN": "Fournisseur inconnu ou inactif.",
+      "IMPORT_VALUE_INVALID": "Valeur invalide.",
+      "BARCODE_ALREADY_ASSIGNED": "Ce produit a déjà un code-barres.",
+      "BARCODE_FORMAT_NOT_GENERATABLE": "Seuls les codes EAN-13 et CODE128 peuvent être générés.",
+      "BARCODE_MISSING": "Ce produit n'a pas encore de code-barres.",
+      "BARCODE_NOT_ENCODABLE": "Ce code-barres ne peut pas être dessiné.",
+      "BARCODE_RANGE_EXHAUSTED": "Plus aucun numéro de code-barres disponible.",
+      "LABELS_COUNT_INVALID": "Entre 1 et 1000 étiquettes par impression.",
+      "LABELS_START_INVALID": "Position de départ invalide."
     }
   },
   "roles": {
@@ -303,6 +400,416 @@
       "allowNegativeStock": "Désactivé par défaut : une sortie supérieure au stock disponible est refusée.",
       "expiryWarningDays": "Nombre de jours avant expiration déclenchant une alerte.",
       "defaultLeadTimeDays": "Utilisé pour les prévisions si le fournisseur n'en définit pas."
+    }
+  },
+  "locations": {
+    "list": {
+      "title": "Emplacements",
+      "subtitle": "Magasins, entrepôts et dépôts de l'entreprise",
+      "empty": "Aucun emplacement",
+      "emptyHint": "Ajoutez votre premier magasin ou entrepôt.",
+      "singleSite": "Votre entreprise dispose d'un seul emplacement. Ajoutez-en un si vous avez un entrepôt, un dépôt ou un second magasin."
+    },
+    "types": {
+      "STORE": "Magasin",
+      "WAREHOUSE": "Entrepôt",
+      "DEPOT": "Dépôt"
+    },
+    "primary": "Principal",
+    "noAddress": "Adresse non renseignée",
+    "fields": {
+      "name": "Nom",
+      "code": "Code",
+      "type": "Type",
+      "address": "Adresse",
+      "addressLine": "Adresse",
+      "city": "Ville",
+      "phone": "Téléphone"
+    },
+    "hints": {
+      "code": "Lettres, chiffres, « - » et « _ » (ex. DEP-NORD).",
+      "primary": "Emplacement principal de l'entreprise : il reste toujours actif."
+    },
+    "actions": {
+      "new": "Nouvel emplacement",
+      "create": "Créer l'emplacement",
+      "setPrimary": "Définir comme principal",
+      "activate": "Activer",
+      "deactivate": "Désactiver"
+    },
+    "confirm": {
+      "setPrimary": "« {{name}} » deviendra l'emplacement principal de l'entreprise.",
+      "activate": "Réactiver « {{name}} » ?",
+      "deactivate": "Désactiver « {{name}} » ? Il ne pourra plus être utilisé tant qu'il sera inactif."
+    },
+    "saved": {
+      "primary": "« {{name}} » est maintenant l'emplacement principal.",
+      "created": "Emplacement « {{name}} » créé."
+    },
+    "create": {
+      "title": "Nouvel emplacement",
+      "subtitle": "Magasin, entrepôt ou dépôt"
+    },
+    "edit": {
+      "title": "Modifier l'emplacement",
+      "subtitle": "Nom, code, type et coordonnées"
+    }
+  },
+  "categories": {
+    "list": {
+      "title": "Catégories",
+      "subtitle": "Classement des produits sur deux niveaux",
+      "search": "Rechercher une catégorie",
+      "empty": "Aucune catégorie n'a encore été créée",
+      "emptyHint": "Créez des catégories pour classer vos produits."
+    },
+    "level": {
+      "root": "Catégorie",
+      "child": "Sous-catégorie"
+    },
+    "fields": {
+      "name": "Nom",
+      "parent": "Catégorie parente",
+      "description": "Description"
+    },
+    "productCount": "{{count}} produit(s)",
+    "noParent": "Aucune (catégorie principale)",
+    "actions": {
+      "new": "Nouvelle catégorie",
+      "create": "Créer la catégorie",
+      "delete": "Supprimer",
+      "addChild": "Ajouter une sous-catégorie à {{name}}",
+      "addChildShort": "Sous-catégorie"
+    },
+    "confirm": {
+      "delete": "Supprimer la catégorie « {{name}} » ? Cette action est définitive."
+    },
+    "saved": {
+      "created": "Catégorie « {{name}} » créée.",
+      "deleted": "Catégorie « {{name}} » supprimée."
+    },
+    "hints": {
+      "cannotDelete": "Impossible : la catégorie contient des produits ou des sous-catégories.",
+      "parent": "Laissez vide pour une catégorie principale.",
+      "parentLocked": "Cette catégorie a des sous-catégories : elle reste une catégorie principale."
+    },
+    "create": {
+      "title": "Nouvelle catégorie"
+    },
+    "edit": {
+      "title": "Modifier la catégorie"
+    }
+  },
+  "suppliers": {
+    "list": {
+      "title": "Fournisseurs",
+      "subtitle": "Entreprises qui vous livrent",
+      "search": "Rechercher (nom, code, contact, ville)",
+      "empty": "Aucun fournisseur n'a encore été créé",
+      "emptyHint": "Ajoutez vos fournisseurs pour les associer aux produits."
+    },
+    "fields": {
+      "name": "Nom",
+      "code": "Code",
+      "contactName": "Contact",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "leadTimeDays": "Délai de livraison",
+      "addressLine": "Adresse",
+      "city": "Ville",
+      "country": "Pays",
+      "taxId": "N° contribuable",
+      "notes": "Notes",
+      "status": "Statut"
+    },
+    "hints": {
+      "code": "Laissez vide pour un code généré automatiquement.",
+      "leadTimeDays": "En jours (0 à 365) ; utilisé plus tard pour les prévisions de réapprovisionnement.",
+      "country": "Code ISO à 2 lettres (ex. CM).",
+      "active": "Ce fournisseur peut être choisi pour les produits.",
+      "inactive": "Ce fournisseur ne peut plus être choisi pour de nouveaux produits."
+    },
+    "days": "{{count}} j",
+    "actions": {
+      "new": "Nouveau fournisseur",
+      "create": "Créer le fournisseur",
+      "activate": "Réactiver",
+      "deactivate": "Désactiver"
+    },
+    "confirm": {
+      "activate": "Réactiver le fournisseur « {{name}} » ?",
+      "deactivate": "Désactiver le fournisseur « {{name}} » ? Il ne pourra plus être choisi pour de nouveaux produits."
+    },
+    "saved": {
+      "created": "Fournisseur « {{name}} » créé."
+    },
+    "create": {
+      "title": "Nouveau fournisseur",
+      "subtitle": "Coordonnées et délai de livraison"
+    },
+    "sections": {
+      "details": "Informations",
+      "status": "Statut"
+    }
+  },
+  "products": {
+    "list": {
+      "title": "Produits",
+      "subtitle": "Catalogue de l'entreprise",
+      "search": "Rechercher (nom, SKU, code-barres)",
+      "empty": "Aucun produit n'a encore été créé",
+      "emptyHint": "Créez votre premier produit ou importez un fichier."
+    },
+    "fields": {
+      "name": "Nom",
+      "sku": "SKU",
+      "unit": "Unité",
+      "barcode": "Code-barres",
+      "barcodeFormat": "Format du code-barres",
+      "description": "Description",
+      "category": "Catégorie",
+      "supplier": "Fournisseur",
+      "purchasePrice": "Prix d'achat",
+      "salePrice": "Prix de vente",
+      "minStock": "Stock minimum",
+      "reorderQuantity": "Quantité de réapprovisionnement",
+      "batchTracked": "Suivi par lots",
+      "expiryTracked": "Suivi des dates d'expiration",
+      "active": "Produit actif",
+      "status": "Statut"
+    },
+    "hints": {
+      "skuGenerated": "Laissez vide pour un SKU généré (PRD-000001…).",
+      "skuKept": "Laissez vide pour garder le SKU actuel.",
+      "barcode": "Code du fabricant, ou laissez vide et générez-le ensuite.",
+      "sellsAtLoss": "Le prix de vente est inférieur au prix d'achat.",
+      "minStock": "Seuil d'alerte de stock bas.",
+      "reorderQuantity": "Quantité proposée lors d'une commande.",
+      "batchTracked": "Chaque entrée de stock porte un numéro de lot.",
+      "expiryTracked": "Chaque lot porte une date d'expiration (active aussi le suivi par lots).",
+      "active": "Un produit inactif ne peut être ni vendu ni commandé.",
+      "readOnly": "Consultation seule : vous ne pouvez pas modifier ce produit."
+    },
+    "units": {
+      "UNIT": "Unité",
+      "KG": "Kilogramme",
+      "G": "Gramme",
+      "L": "Litre",
+      "ML": "Millilitre",
+      "M": "Mètre",
+      "BOX": "Carton",
+      "PACK": "Paquet"
+    },
+    "barcodeFormats": {
+      "EAN13": "EAN-13",
+      "EAN8": "EAN-8",
+      "UPC_A": "UPC-A",
+      "CODE128": "CODE128",
+      "AUTO": "Détection automatique"
+    },
+    "noCategory": "Aucune catégorie",
+    "noSupplier": "Aucun fournisseur",
+    "sections": {
+      "identity": "Identification",
+      "classification": "Classement",
+      "prices": "Prix",
+      "stock": "Règles de stock",
+      "tracking": "Traçabilité",
+      "details": "Informations du produit"
+    },
+    "filters": {
+      "allCategories": "Toutes les catégories",
+      "allSuppliers": "Tous les fournisseurs",
+      "withBarcode": "Avec code-barres",
+      "withoutBarcode": "Sans code-barres",
+      "anyBarcode": "Code-barres : tous",
+      "batchTracked": "Suivis par lots",
+      "notBatchTracked": "Sans suivi par lots",
+      "anyTracking": "Suivi : tous",
+      "toggle": "Filtres"
+    },
+    "actions": {
+      "new": "Nouveau produit",
+      "create": "Créer le produit",
+      "import": "Importer",
+      "labels": "Étiquettes",
+      "activate": "Activer",
+      "deactivate": "Désactiver",
+      "delete": "Supprimer"
+    },
+    "confirm": {
+      "activate": "Réactiver le produit « {{name}} » ?",
+      "deactivate": "Désactiver le produit « {{name}} » ? Il ne pourra plus être vendu ni commandé.",
+      "delete": "Supprimer le produit « {{name}} » ? Son SKU et son code-barres redeviendront disponibles."
+    },
+    "saved": {
+      "created": "Produit « {{name}} » créé.",
+      "deleted": "Produit « {{name}} » supprimé."
+    },
+    "create": {
+      "title": "Nouveau produit",
+      "subtitle": "Identification, prix et règles de stock"
+    },
+    "image": {
+      "title": "Photo",
+      "preview": "Aperçu de la nouvelle photo",
+      "choose": "Choisir une photo",
+      "upload": "Enregistrer la photo",
+      "replace": "Remplacer",
+      "remove": "Supprimer la photo",
+      "rules": "PNG, JPEG ou WebP, {{max}} Mo maximum.",
+      "saved": "Photo enregistrée.",
+      "removed": "Photo supprimée.",
+      "confirmRemove": "Supprimer la photo de ce produit ?",
+      "problems": {
+        "type": "Format non accepté : choisissez une image PNG, JPEG ou WebP.",
+        "size": "Image trop lourde : {{max}} Mo maximum."
+      }
+    }
+  },
+  "barcodes": {
+    "title": "Code-barres",
+    "previewAlt": "Code-barres {{value}}",
+    "previewFailed": "Aperçu indisponible.",
+    "value": "Valeur",
+    "format": "Format",
+    "none": "Ce produit n'a pas encore de code-barres.",
+    "hints": {
+      "generate": "EAN-13 : code numérique interne (préfixe 20). CODE128 : code alphanumérique.",
+      "replace": "Les étiquettes déjà imprimées ne seront plus reconnues."
+    },
+    "actions": {
+      "replace": "Remplacer le code-barres",
+      "downloadPng": "Télécharger en PNG",
+      "downloadSvg": "Télécharger en SVG",
+      "printLabel": "Imprimer l'étiquette",
+      "generate": {
+        "EAN13": "Générer un EAN-13",
+        "CODE128": "Générer un CODE128"
+      }
+    },
+    "confirm": {
+      "replace": "Remplacer le code-barres actuel ({{current}}) par un nouveau code {{format}} ? Les étiquettes déjà imprimées ne seront plus reconnues."
+    },
+    "saved": {
+      "generated": "Code-barres {{barcode}} attribué."
+    }
+  },
+  "imports": {
+    "title": "Importer des produits",
+    "subtitle": "Fichier CSV ou Excel : aperçu, vérification, puis validation",
+    "steps": {
+      "label": "Étapes de l'import",
+      "file": "Fichier",
+      "preview": "Vérification",
+      "done": "Terminé"
+    },
+    "file": {
+      "title": "Choisir le fichier",
+      "help": "Téléchargez le modèle, remplissez une ligne par produit, puis choisissez le fichier. Rien n'est enregistré avant la validation finale.",
+      "choose": "Choisir un fichier CSV ou Excel",
+      "change": "Cliquez pour changer de fichier",
+      "rules": "CSV ou .xlsx, {{max}} Mo maximum",
+      "problems": {
+        "type": "Format non accepté : choisissez un fichier .csv ou .xlsx.",
+        "size": "Fichier trop lourd : {{max}} Mo maximum."
+      },
+      "createCategories": "Créer les catégories manquantes",
+      "createCategoriesHint": "Sinon, une catégorie inconnue rend la ligne invalide."
+    },
+    "actions": {
+      "template": "Télécharger le modèle",
+      "analyse": "Analyser le fichier",
+      "commit": "Importer les produits",
+      "otherFile": "Choisir un autre fichier",
+      "seeProducts": "Voir les produits",
+      "again": "Nouvel import",
+      "row": {
+        "CREATE": "Création",
+        "UPDATE": "Mise à jour",
+        "ERROR": "Erreur"
+      }
+    },
+    "summary": {
+      "title": "Résumé de « {{file}} »",
+      "total": "Lignes",
+      "valid": "Lignes valides",
+      "split": "{{create}} création(s), {{update}} mise(s) à jour",
+      "invalid": "Lignes invalides",
+      "categories": "Catégories à créer",
+      "blocked": "L'import est bloqué tant que des lignes sont invalides : corrigez le fichier puis analysez-le de nouveau.",
+      "nothing": "Aucune ligne à importer.",
+      "expires": "Cet aperçu reste valable jusqu'à {{time}}."
+    },
+    "rows": {
+      "title": "Détail des lignes",
+      "errorsOnly": "Lignes en erreur uniquement",
+      "line": "Ligne {{n}}",
+      "noName": "(sans nom)"
+    },
+    "confirm": {
+      "title": "Confirmer l'import",
+      "message": "{{create}} produit(s) seront créés et {{update}} mis à jour, en une seule fois."
+    },
+    "saved": "Import terminé.",
+    "done": {
+      "title": "Import terminé",
+      "summary": "{{created}} produit(s) créé(s), {{updated}} mis à jour, {{categories}} catégorie(s) créée(s)."
+    },
+    "columns": {
+      "sku": "SKU",
+      "name": "Nom",
+      "description": "Description",
+      "category": "Catégorie",
+      "supplierCode": "Fournisseur",
+      "unit": "Unité",
+      "purchasePrice": "Prix d'achat",
+      "salePrice": "Prix de vente",
+      "minStock": "Stock minimum",
+      "reorderQuantity": "Réapprovisionnement",
+      "barcode": "Code-barres",
+      "barcodeFormat": "Format",
+      "batchTracked": "Lots",
+      "expiryTracked": "Expiration",
+      "file": "Fichier"
+    }
+  },
+  "labels": {
+    "title": "Étiquettes",
+    "subtitle": "Choisissez les produits puis imprimez une planche A4 d'étiquettes",
+    "pick": {
+      "title": "Produits",
+      "hint": "Seuls les produits actifs qui ont un code-barres sont proposés.",
+      "search": "Rechercher un produit",
+      "add": "Ajouter {{name}}",
+      "none": "Aucun produit avec code-barres."
+    },
+    "selection": {
+      "title": "À imprimer",
+      "empty": "Aucun produit sélectionné",
+      "emptyHint": "Ajoutez des produits depuis la liste.",
+      "copies": "Copies",
+      "copiesFor": "Nombre de copies pour {{name}}",
+      "remove": "Retirer {{name}}"
+    },
+    "options": {
+      "layout": "Planche",
+      "start": "Première étiquette libre",
+      "startHint": "Pour réutiliser une planche entamée (1 = en haut à gauche).",
+      "showPrice": "Afficher le prix de vente"
+    },
+    "layouts": {
+      "option": "A4 — {{columns}} × {{rows}} ({{count}} étiquettes)"
+    },
+    "summary": "{{total}} étiquette(s) sur {{pages}} page(s)",
+    "problems": {
+      "tooMany": "{{max}} étiquettes maximum par impression.",
+      "copies": "Entre 1 et {{max}} copies par produit.",
+      "start": "Position de départ hors de la planche."
+    },
+    "actions": {
+      "print": "Imprimer",
+      "pdf": "Télécharger le PDF"
     }
   }
 }

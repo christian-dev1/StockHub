@@ -1,0 +1,191 @@
+<app-page-header [title]="'labels.title' | translate" [subtitle]="'labels.subtitle' | translate">
+  <a
+    actions
+    [routerLink]="routes.PRODUCTS.ROOT"
+    class="inline-flex min-h-11 items-center text-sm font-medium text-fg-muted hover:text-fg"
+  >
+    <i class="pi pi-arrow-left mr-1" aria-hidden="true"></i>{{ 'products.list.title' | translate }}
+  </a>
+</app-page-header>
+
+<div class="grid gap-6 lg:grid-cols-5">
+  <section class="sh-card min-w-0 p-5 sm:p-6 lg:col-span-2" aria-labelledby="lbl-pick">
+    <h2 id="lbl-pick" class="mb-1 text-base font-semibold">
+      {{ 'labels.pick.title' | translate }}
+    </h2>
+    <p class="mb-4 text-xs text-fg-muted">{{ 'labels.pick.hint' | translate }}</p>
+    <app-search-field
+      [label]="'labels.pick.search' | translate"
+      (searchChange)="store.search($event)"
+    />
+    <ul
+      class="mt-4 max-h-96 divide-y divide-border overflow-y-auto"
+      [attr.aria-busy]="store.searching()"
+    >
+      @for (product of store.results(); track product.id) {
+        <li class="flex items-center gap-3 py-2">
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-medium text-fg">{{ product.name }}</p>
+            <p class="truncate font-mono text-xs text-fg-muted">
+              {{ product.sku }} · {{ product.barcode }}
+            </p>
+          </div>
+          <button
+            type="button"
+            class="inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-lg border border-border px-3 text-sm font-medium text-fg hover:bg-surface-muted disabled:opacity-50"
+            [disabled]="store.isSelected(product.id)"
+            [attr.aria-label]="'labels.pick.add' | translate: { name: product.name }"
+            (click)="store.add(product)"
+          >
+            <i
+              class="pi"
+              [class.pi-plus]="!store.isSelected(product.id)"
+              [class.pi-check]="store.isSelected(product.id)"
+              aria-hidden="true"
+            ></i>
+          </button>
+        </li>
+      } @empty {
+        @if (!store.searching()) {
+          <li class="py-6 text-center text-sm text-fg-muted">
+            {{ 'labels.pick.none' | translate }}
+          </li>
+        }
+      }
+    </ul>
+  </section>
+
+  <section
+    class="sh-card flex min-w-0 flex-col p-5 sm:p-6 lg:col-span-3"
+    aria-labelledby="lbl-selection"
+  >
+    <h2 id="lbl-selection" class="mb-4 text-base font-semibold">
+      {{ 'labels.selection.title' | translate }}
+    </h2>
+    @if (store.selection().length === 0) {
+      <app-empty-state
+        icon="pi-tags"
+        [title]="'labels.selection.empty' | translate"
+        [description]="'labels.selection.emptyHint' | translate"
+      />
+    } @else {
+      <ul class="divide-y divide-border" data-testid="label-selection">
+        @for (item of store.selection(); track item.product.id) {
+          <li class="flex flex-wrap items-center gap-3 py-3">
+            <div class="min-w-0 flex-1 basis-48">
+              <p class="truncate text-sm font-medium text-fg">{{ item.product.name }}</p>
+              <p class="truncate font-mono text-xs text-fg-muted">
+                {{ item.product.barcode }} · {{ item.product.salePrice | money }}
+              </p>
+            </div>
+            <div class="flex items-center gap-2 text-sm">
+              <label class="text-fg-muted" [attr.for]="'copies-' + item.product.id">{{
+                'labels.selection.copies' | translate
+              }}</label>
+              <p-inputnumber
+                [inputId]="'copies-' + item.product.id"
+                [ngModel]="item.copies"
+                (ngModelChange)="store.setCopies(item.product.id, $event)"
+                [min]="1"
+                [max]="maxCopies"
+                [showButtons]="true"
+                buttonLayout="horizontal"
+                inputStyleClass="w-14 text-center"
+                [ariaLabel]="'labels.selection.copiesFor' | translate: { name: item.product.name }"
+              />
+            </div>
+            <button
+              type="button"
+              class="inline-flex size-11 items-center justify-center rounded-lg text-danger hover:bg-surface-muted"
+              [attr.aria-label]="'labels.selection.remove' | translate: { name: item.product.name }"
+              (click)="store.remove(item.product.id)"
+            >
+              <i class="pi pi-trash" aria-hidden="true"></i>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+
+    <div class="mt-6 grid gap-4 border-t border-border pt-5 sm:grid-cols-2">
+      <div class="flex min-w-0 flex-col gap-1.5">
+        <label id="lbl-layout-label" for="lbl-layout" class="text-sm font-medium">{{
+          'labels.options.layout' | translate
+        }}</label>
+        <p-select
+          inputId="lbl-layout"
+          ariaLabelledBy="lbl-layout-label"
+          [options]="layoutOptions()"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="store.layout()"
+          (ngModelChange)="store.layout.set($event)"
+          styleClass="w-full"
+        />
+      </div>
+      <div class="flex min-w-0 flex-col gap-1.5">
+        <label for="lbl-start" class="text-sm font-medium">{{
+          'labels.options.start' | translate
+        }}</label>
+        <p-inputnumber
+          inputId="lbl-start"
+          [ngModel]="store.startPosition()"
+          (ngModelChange)="store.startPosition.set($event ?? 1)"
+          [min]="1"
+          [max]="store.perPage()"
+          [showButtons]="true"
+          [fluid]="true"
+        />
+        <p class="text-xs text-fg-muted">{{ 'labels.options.startHint' | translate }}</p>
+      </div>
+      <div class="flex items-center gap-3 sm:col-span-2">
+        <p-checkbox
+          inputId="lbl-price"
+          [binary]="true"
+          [ngModel]="store.showPrice()"
+          (ngModelChange)="store.showPrice.set($event)"
+        />
+        <label for="lbl-price" class="text-sm">{{ 'labels.options.showPrice' | translate }}</label>
+      </div>
+    </div>
+
+    <div
+      class="mt-6 flex flex-col gap-4 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p class="text-sm text-fg-muted" aria-live="polite" data-testid="label-summary">
+        {{ 'labels.summary' | translate: { total: store.total(), pages: store.pages() } }}
+        @if (store.problem() === 'tooMany') {
+          <span class="block text-danger">{{
+            'labels.problems.tooMany' | translate: { max: maxLabels }
+          }}</span>
+        } @else if (store.problem() === 'copies') {
+          <span class="block text-danger">{{
+            'labels.problems.copies' | translate: { max: maxCopies }
+          }}</span>
+        } @else if (store.problem() === 'start') {
+          <span class="block text-danger">{{ 'labels.problems.start' | translate }}</span>
+        }
+      </p>
+      <div class="flex flex-col-reverse gap-2 sm:flex-row">
+        <p-button
+          [outlined]="true"
+          icon="pi pi-print"
+          [label]="'labels.actions.print' | translate"
+          [disabled]="!!store.problem()"
+          [loading]="store.busy()"
+          (onClick)="print()"
+        />
+        <p-button
+          icon="pi pi-file-pdf"
+          [label]="'labels.actions.pdf' | translate"
+          [disabled]="!!store.problem()"
+          [loading]="store.busy()"
+          (onClick)="download()"
+        />
+      </div>
+    </div>
+    @if (errorText(); as message) {
+      <p class="mt-3 text-sm text-danger" role="alert">{{ message }}</p>
+    }
+  </section>
+</div>
