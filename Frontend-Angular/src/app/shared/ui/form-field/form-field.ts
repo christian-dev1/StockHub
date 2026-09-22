@@ -9,6 +9,10 @@ let nextId = 0;
 /**
  * Accessible field wrapper: label, hint and validation message. The projected
  * control must use `[id]="forId"` and `[attr.aria-describedby]` of this field.
+ * PrimeNG selects render a combobox that a `<label for>` cannot name: give them
+ * `[ariaLabelledBy]="forId + '-label'"`.
+ * The host may shrink below its content (min-w-0) so that wide controls such as
+ * p-inputnumber never push a grid or flex parent wider than the screen.
  * Validation keys are translated from `validation.<errorName>`; server-side
  * errors (set by applyServerErrors) are shown as provided.
  */
@@ -16,9 +20,10 @@ let nextId = 0;
   selector: 'app-form-field',
   imports: [TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'block min-w-0' },
   template: `
-    <div class="flex flex-col gap-1.5">
-      <label [attr.for]="forId()" class="text-sm font-medium text-fg">
+    <div class="flex min-w-0 flex-col gap-1.5">
+      <label [id]="forId() + '-label'" [attr.for]="forId()" class="text-sm font-medium text-fg">
         {{ label() }}
         @if (required()) {
           <span class="text-danger" aria-hidden="true">*</span>

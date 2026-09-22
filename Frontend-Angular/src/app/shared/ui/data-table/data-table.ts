@@ -10,6 +10,7 @@ import {
   input,
   output,
 } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { SkeletonModule } from 'primeng/skeleton';
 import { AppError } from '../../../core/errors/app-error';
 import { EmptyState } from '../empty-state/empty-state';
@@ -26,6 +27,8 @@ export interface TableColumn {
   readonly align?: 'start' | 'end';
   /** Shown as the card title on mobile. */
   readonly primary?: boolean;
+  /** Left out of the mobile cards, e.g. when the primary cell already shows it. */
+  readonly hideInCards?: boolean;
 }
 
 export interface SortState {
@@ -48,12 +51,13 @@ const HIDE: Record<NonNullable<TableColumn['hideBelow']>, string> = {
 
 /**
  * Server-driven data table: sorting, pagination, loading skeleton, empty and
- * error states. Renders a semantic table from md upwards and stacked cards on
+ * error states. An empty result while `filtered` is set shows a "no results"
+ * state with a way to clear the filters, not the "nothing yet" invitation. Renders a semantic table from md upwards and stacked cards on
  * phones, so lists stay usable on every screen.
  */
 @Component({
   selector: 'app-data-table',
-  imports: [NgTemplateOutlet, SkeletonModule, EmptyState, ErrorState, Pagination],
+  imports: [NgTemplateOutlet, TranslatePipe, SkeletonModule, EmptyState, ErrorState, Pagination],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './data-table.html',
 })
@@ -70,12 +74,14 @@ export class DataTable<T> {
   readonly sort = input<SortState | null>(null);
   readonly emptyTitle = input.required<string>();
   readonly emptyDescription = input<string>();
+  readonly filtered = input(false);
   readonly clickable = input(false);
 
   readonly sortChange = output<SortState>();
   readonly pageChange = output<PageChange>();
   readonly rowSelect = output<T>();
   readonly retry = output<void>();
+  readonly clearFilters = output<void>();
 
   private readonly cellTemplates = contentChildren(CellTemplate);
   protected readonly templates = computed(
@@ -83,6 +89,7 @@ export class DataTable<T> {
   );
   protected readonly skeletonRows = Array.from({ length: 5 }, (_, i) => i);
   protected readonly hide = HIDE;
+  protected readonly cardColumns = computed(() => this.columns().filter((c) => !c.hideInCards));
 
   protected ariaSort(column: TableColumn): 'ascending' | 'descending' | 'none' | null {
     if (!column.sortable) return null;

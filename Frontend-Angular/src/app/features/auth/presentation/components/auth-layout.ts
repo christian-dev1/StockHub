@@ -31,7 +31,7 @@ import { ThemeSwitcher } from '../../../../core/layout/theme-switcher/theme-swit
             }
           </ul>
         </div>
-        <p class="text-xs text-primary-fg/60">© StockHub</p>
+        <p class="text-xs text-primary-fg/80">© StockHub</p>
       </aside>
       <main class="flex flex-col bg-bg">
         <div class="flex justify-end gap-2 p-4">

@@ -2,12 +2,9 @@
   [title]="'companies.list.title' | translate"
   [subtitle]="'companies.list.subtitle' | translate"
 >
-  <a
-    actions
-    [routerLink]="routes.PLATFORM.COMPANY_CREATE"
-    class="p-button p-component no-underline"
-  >
-    <i class="pi pi-plus mr-2" aria-hidden="true"></i>{{ 'companies.actions.create' | translate }}
+  <a actions pButton [routerLink]="routes.PLATFORM.COMPANY_CREATE" class="no-underline">
+    <i pButtonIcon class="pi pi-plus" aria-hidden="true"></i>
+    <span pButtonLabel>{{ 'companies.actions.new' | translate }}</span>
   </a>
 </app-page-header>
 
@@ -15,6 +12,7 @@
   <app-search-field
     class="sm:max-w-sm sm:flex-1"
     [label]="'companies.list.search' | translate"
+    [value]="list.filters().text"
     (searchChange)="onSearch($event)"
   />
   <p-select
@@ -44,6 +42,8 @@
   [clickable]="true"
   [emptyTitle]="'companies.list.empty' | translate"
   [emptyDescription]="'companies.list.emptyHint' | translate"
+  [filtered]="list.filtered()"
+  (clearFilters)="list.clearFilters()"
   (sortChange)="list.changeSort($event)"
   (pageChange)="list.changePage($event)"
   (rowSelect)="open($event)"
@@ -52,7 +52,7 @@
   <ng-template appCell="name" let-row>
     <a
       [routerLink]="routes.PLATFORM.COMPANY_DETAIL(row.id)"
-      class="font-medium text-fg hover:text-primary"
+      class="inline-flex min-h-11 items-center font-medium text-fg hover:text-primary md:min-h-6"
       (click)="$event.stopPropagation()"
     >
       {{ row.name }}

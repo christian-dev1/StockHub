@@ -9,6 +9,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { APP_ROUTES } from '../../../../../core/config/routes/app.routes';
 import { LanguageStore } from '../../../../../core/i18n/language-store';
@@ -30,6 +31,7 @@ import { CompanyStatusBadge } from '../../components/company-status-badge';
     FormsModule,
     RouterLink,
     TranslatePipe,
+    ButtonModule,
     SelectModule,
     PageHeader,
     DataTable,

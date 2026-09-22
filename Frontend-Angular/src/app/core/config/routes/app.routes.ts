@@ -22,6 +22,7 @@ export const APP_PATHS = {
     COMPANY: 'company',
   },
   FORBIDDEN: 'forbidden',
+  SALES_APP_ONLY: 'sales-app-only',
   SERVER_ERROR: 'error',
   NOT_FOUND: 'not-found',
 } as const;
@@ -46,6 +47,7 @@ export const APP_ROUTES = {
     COMPANY: `/${APP_PATHS.SETTINGS.ROOT}/${APP_PATHS.SETTINGS.COMPANY}`,
   },
   FORBIDDEN: `/${APP_PATHS.FORBIDDEN}`,
+  SALES_APP_ONLY: `/${APP_PATHS.SALES_APP_ONLY}`,
   SERVER_ERROR: `/${APP_PATHS.SERVER_ERROR}`,
   NOT_FOUND: `/${APP_PATHS.NOT_FOUND}`,
 } as const;

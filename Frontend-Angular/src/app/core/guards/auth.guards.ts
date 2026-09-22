@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { CanActivateChildFn, CanActivateFn, Router } from '@angular/router';
 import { map } from 'rxjs';
 import { AuthStore } from '../auth/auth-store';
 import { Permission } from '../config/permissions/permissions';
@@ -71,4 +71,30 @@ export const companyGuard: CanActivateFn = () => {
   const auth = inject(AuthStore);
   const router = inject(Router);
   return auth.company() ? true : router.createUrlTree([APP_ROUTES.PLATFORM.COMPANIES]);
+};
+
+/**
+ * The back-office is closed to sales-only roles (VENDEUR), who are sent to a
+ * page pointing them to the sales app. Anonymous users are left to authGuard,
+ * whose login redirect takes precedence.
+ */
+export const backOfficeGuard: CanActivateFn & CanActivateChildFn = () => {
+  const auth = inject(AuthStore);
+  const router = inject(Router);
+  return auth
+    .restore()
+    .pipe(
+      map((status) =>
+        status !== 'authenticated' || auth.canUseBackOffice()
+          ? true
+          : router.createUrlTree([APP_ROUTES.SALES_APP_ONLY]),
+      ),
+    );
+};
+
+/** The "sales app only" page only makes sense for users who cannot use the back-office. */
+export const salesAppOnlyGuard: CanActivateFn = () => {
+  const auth = inject(AuthStore);
+  const router = inject(Router);
+  return auth.canUseBackOffice() ? router.createUrlTree([APP_ROUTES.DASHBOARD]) : true;
 };

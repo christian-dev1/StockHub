@@ -42,6 +42,7 @@ export type AccessForm = FormGroup<{
         >
           <p-select
             inputId="user-role"
+            ariaLabelledBy="user-role-label"
             formControlName="role"
             [options]="roleOptions()"
             optionLabel="label"
@@ -66,6 +67,7 @@ export type AccessForm = FormGroup<{
           >
             <p-multiselect
               inputId="user-locations"
+              ariaLabelledBy="user-locations-label"
               formControlName="locationIds"
               [options]="locationOptions()"
               optionLabel="name"

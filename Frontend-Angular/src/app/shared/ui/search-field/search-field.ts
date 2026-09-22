@@ -3,6 +3,7 @@ import {
   Component,
   DestroyRef,
   OnInit,
+  effect,
   inject,
   input,
   output,
@@ -10,11 +11,14 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs';
+import { debounceTime, filter, map } from 'rxjs';
 
 let nextId = 0;
 
-/** Search box emitting trimmed terms after the user pauses typing. */
+/**
+ * Search box emitting trimmed terms after the user pauses typing. Bind `value`
+ * to the applied term so that clearing the filters elsewhere empties the box.
+ */
 @Component({
   selector: 'app-search-field',
   imports: [ReactiveFormsModule, TranslatePipe],
@@ -32,12 +36,12 @@ let nextId = 0;
         [formControl]="control"
         [placeholder]="label()"
         autocomplete="off"
-        class="w-full rounded-lg border border-border bg-surface py-2 pr-9 pl-9 text-sm text-fg placeholder:text-fg-muted focus:border-primary"
+        class="w-full rounded-lg border border-border bg-surface py-2 pr-11 pl-9 text-base text-fg placeholder:text-fg-muted focus:border-primary"
       />
       @if (control.value) {
         <button
           type="button"
-          class="absolute top-1/2 right-2 flex size-7 -translate-y-1/2 items-center justify-center rounded text-fg-muted hover:text-fg"
+          class="absolute top-1/2 right-1 flex size-9 -translate-y-1/2 items-center justify-center rounded text-fg-muted hover:text-fg"
           [attr.aria-label]="'common.clear' | translate"
           (click)="control.setValue('')"
         >
@@ -49,6 +53,7 @@ let nextId = 0;
 })
 export class SearchField implements OnInit {
   readonly label = input.required<string>();
+  readonly value = input('');
   readonly debounce = input(300);
   readonly searchChange = output<string>();
 
@@ -56,12 +61,21 @@ export class SearchField implements OnInit {
   protected readonly control = new FormControl('', { nonNullable: true });
   private readonly destroyRef = inject(DestroyRef);
 
+  constructor() {
+    effect(() => {
+      const value = this.value();
+      if (value !== this.control.value.trim()) {
+        this.control.setValue(value, { emitEvent: false });
+      }
+    });
+  }
+
   ngOnInit(): void {
     this.control.valueChanges
       .pipe(
         debounceTime(this.debounce()),
         map((v) => v.trim()),
-        distinctUntilChanged(),
+        filter((term) => term !== this.value()),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((term) => this.searchChange.emit(term));

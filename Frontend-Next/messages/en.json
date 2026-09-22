@@ -16,7 +16,8 @@
     "main": "Main navigation",
     "sidebar": "Sidebar",
     "home": "Home",
-    "userMenu": "User menu"
+    "userMenu": "User menu",
+    "preferences": "Preferences"
   },
   "theme": {
     "label": "Theme",

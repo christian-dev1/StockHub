@@ -31,7 +31,9 @@ describe('acceptLanguageInterceptor', () => {
 
   it('adds the current language to API calls', () => {
     http.get(`${API_ROUTES.BASE}/company`).subscribe();
-    expect(backend.expectOne(`${API_ROUTES.BASE}/company`).request.headers.get('Accept-Language')).toBe('en');
+    expect(
+      backend.expectOne(`${API_ROUTES.BASE}/company`).request.headers.get('Accept-Language'),
+    ).toBe('en');
   });
 
   it('leaves translation files alone without touching the language store', () => {

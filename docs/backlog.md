@@ -26,6 +26,20 @@ Statuts : ✅ fait · 🔄 en cours · ⏳ à faire
 - ✅ Next : login, changement de mot de passe, session en mémoire, AuthGate, client HTTP avec refresh, menu utilisateur, restriction aux rôles de vente
 - ⏳ Reporté en Phase 8 (audit) : sessions support SUPER_ADMIN (lecture seule, motivées, auditées) et écran du journal d'audit
 
+## Stabilisation post-audit (22/09/2026) ✅
+Corrige les anomalies de `docs/audit/2026-09-22-audit.md` sans nouvelle fonctionnalité métier.
+- ✅ Next : dates affichées dans le fuseau de l'entreprise (repli : fuseau du navigateur, puis UTC) — `core/i18n/time-zone*`
+- ✅ Angular : même règle via `DisplayTimeZone` + pipe `dateTime` (remplace `DatePipe`)
+- ✅ M-01 débordement `p-inputnumber` (paramètres) ; L-04 titres sur plusieurs lignes
+- ✅ M-02 connexion Next à 320 px (menu Préférences) ; M-03 langue/thème dans le menu utilisateur mobile
+- ✅ M-04 VENDEUR refusé par le back-office Angular (`backOfficeGuard`, page `/sales-app-only`)
+- ✅ M-08 403 avant 400 : `@PreAuthorize` évalué avant la liaison/validation du corps
+- ✅ M-05/M-06/L-01 contrastes, noms accessibles des `p-select`, cibles tactiles (liens, recherche, interrupteur 44×24)
+- ✅ M-07 « aucun résultat » + réinitialiser les filtres (entreprises, utilisateurs)
+- ✅ L-02/L-03/L-05 libellés d'actions (« Créer l'utilisateur »), e-mail en double sur mobile, police des filtres
+- ✅ Routes Next sans page retirées des constantes (POS, scan, produits, ventes, paramètres)
+- ✅ M-13 suite Playwright `e2e/` (rôles, session, thème, états vides, fuseau + smoke 7 largeurs × thèmes × FR/EN × axe), branchée en CI
+
 ## Phase 3 — Catalogue ⏳
 - ⏳ Emplacements (CRUD, principal, activation) — UX adaptative mono/multi-sites
 - ⏳ Catégories, fournisseurs

@@ -1,6 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Observable, catchError, finalize, map, of, shareReplay, tap, throwError } from 'rxjs';
-import { Permission } from '../config/permissions/permissions';
+import { BACK_OFFICE_ROLES, Permission } from '../config/permissions/permissions';
 import { AuthApi } from './auth-api';
 import { Session, TokenResponse } from './session.model';
 
@@ -25,6 +25,10 @@ export class AuthStore {
   readonly status = this._status.asReadonly();
   readonly isAuthenticated = computed(() => this._status() === 'authenticated');
   readonly isSuperAdmin = computed(() => this._session()?.role === 'SUPER_ADMIN');
+  readonly canUseBackOffice = computed(() => {
+    const role = this._session()?.role;
+    return role !== undefined && BACK_OFFICE_ROLES.includes(role);
+  });
   readonly mustChangePassword = computed(() => this._session()?.mustChangePassword ?? false);
   readonly company = computed(() => this._session()?.company ?? null);
   readonly locations = computed(() => this._session()?.locations ?? []);

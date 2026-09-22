@@ -20,9 +20,12 @@ export const StockHubPreset = definePreset(Aura, {
     colorScheme: {
       light: {
         primary: { color: '{indigo.700}', hoverColor: '{indigo.800}', activeColor: '{indigo.900}' },
+        // Placeholders follow the secondary text token (WCAG AA 4.5:1 in both themes).
+        formField: { placeholderColor: 'var(--sh-text-secondary)' },
       },
       dark: {
         primary: { color: '{indigo.300}', hoverColor: '{indigo.200}', activeColor: '{indigo.100}' },
+        formField: { placeholderColor: 'var(--sh-text-secondary)' },
         surface: {
           0: '#ffffff',
           50: '#eef2f8',
@@ -38,6 +41,13 @@ export const StockHubPreset = definePreset(Aura, {
           950: '#0b1020',
         },
       },
+    },
+  },
+  components: {
+    // Aura's 36x22 px switch is below the 24 px touch target of WCAG 2.2 AA (2.5.8).
+    toggleswitch: {
+      root: { width: '2.75rem', height: '1.5rem' },
+      handle: { size: '1rem' },
     },
   },
 });

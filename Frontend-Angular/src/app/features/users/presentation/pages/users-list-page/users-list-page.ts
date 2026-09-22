@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,6 +9,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { AuthStore } from '../../../../../core/auth/auth-store';
 import { RoleCode } from '../../../../../core/config/permissions/permissions';
@@ -26,14 +26,16 @@ import { PagedList } from '../../../../../shared/utils/paged-list';
 import { User, UserFilters, UserStatus } from '../../../domain/entities/user';
 import { SearchUsersUseCase } from '../../../domain/use-cases/user.use-cases';
 import { RoleBadge, UserStatusBadge } from '../../components/user-badges';
+import { DateTimePipe } from '../../../../../shared/pipes/date-time.pipe';
 
 @Component({
   selector: 'app-users-list-page',
   imports: [
-    DatePipe,
+    DateTimePipe,
     FormsModule,
     RouterLink,
     TranslatePipe,
+    ButtonModule,
     SelectModule,
     PageHeader,
     DataTable,
@@ -67,7 +69,14 @@ export class UsersListPage implements OnInit {
     this.language.language();
     return [
       { key: 'lastName', header: this.t('users.fields.name'), sortable: true, primary: true },
-      { key: 'email', header: this.t('users.fields.email'), sortable: true, hideBelow: 'lg' },
+      // Shown under the name in cards and below lg, so not repeated there.
+      {
+        key: 'email',
+        header: this.t('users.fields.email'),
+        sortable: true,
+        hideBelow: 'lg',
+        hideInCards: true,
+      },
       { key: 'role', header: this.t('users.fields.role'), sortable: true },
       { key: 'status', header: this.t('users.fields.status'), sortable: true },
       {

@@ -58,3 +58,14 @@ export const PERMISSIONS = [
 export type Permission = (typeof PERMISSIONS)[number];
 
 export type RoleCode = 'SUPER_ADMIN' | 'ADMIN' | 'MANAGER' | 'MAGASINIER' | 'VENDEUR';
+
+/**
+ * Roles allowed in this back-office. Sellers (VENDEUR) work in the sales app
+ * (Frontend-Next); the backend enforces permissions either way.
+ */
+export const BACK_OFFICE_ROLES: readonly RoleCode[] = [
+  'SUPER_ADMIN',
+  'ADMIN',
+  'MANAGER',
+  'MAGASINIER',
+];

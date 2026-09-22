@@ -8,7 +8,13 @@ import {
 } from '@angular/router';
 import { Observable, firstValueFrom, of } from 'rxjs';
 import { AuthStore } from '../auth/auth-store';
-import { authGuard, permissionGuard, platformGuard } from './auth.guards';
+import {
+  authGuard,
+  backOfficeGuard,
+  permissionGuard,
+  platformGuard,
+  salesAppOnlyGuard,
+} from './auth.guards';
 
 describe('auth guards', () => {
   let auth: Record<string, ReturnType<typeof vi.fn>>;
@@ -19,6 +25,7 @@ describe('auth guards', () => {
       mustChangePassword: vi.fn().mockReturnValue(false),
       canAny: vi.fn().mockReturnValue(true),
       isSuperAdmin: vi.fn().mockReturnValue(false),
+      canUseBackOffice: vi.fn().mockReturnValue(true),
     };
     TestBed.configureTestingModule({
       providers: [provideRouter([]), { provide: AuthStore, useValue: auth }],
@@ -64,5 +71,34 @@ describe('auth guards', () => {
   it('reserves the platform area to the super admin', () => {
     const result = TestBed.runInInjectionContext(() => platformGuard(route(), state));
     expect(serialize(result)).toBe('/forbidden');
+  });
+
+  it('opens the back-office to back-office roles', async () => {
+    const result = await firstValueFrom(
+      TestBed.runInInjectionContext(() => backOfficeGuard(route(), state)) as Observable<unknown>,
+    );
+    expect(result).toBe(true);
+  });
+
+  it('sends sellers to the sales-app-only page', async () => {
+    auth['canUseBackOffice'].mockReturnValue(false);
+    const result = await firstValueFrom(
+      TestBed.runInInjectionContext(() => backOfficeGuard(route(), state)) as Observable<unknown>,
+    );
+    expect(serialize(result)).toBe('/sales-app-only');
+  });
+
+  it('leaves anonymous users to the login redirect of authGuard', async () => {
+    auth['restore'].mockReturnValue(of('anonymous'));
+    auth['canUseBackOffice'].mockReturnValue(false);
+    const result = await firstValueFrom(
+      TestBed.runInInjectionContext(() => backOfficeGuard(route(), state)) as Observable<unknown>,
+    );
+    expect(result).toBe(true);
+  });
+
+  it('keeps back-office users away from the sales-app-only page', () => {
+    const result = TestBed.runInInjectionContext(() => salesAppOnlyGuard(route(), state));
+    expect(serialize(result)).toBe('/dashboard');
   });
 });

@@ -32,6 +32,27 @@ describe('PagedList', () => {
     expect(list.total()).toBe(42);
   });
 
+  it('knows when filters narrow the list and can clear them', () => {
+    const calls: { text: string; status: string | null }[] = [];
+    const list = new PagedList<string, { text: string; status: string | null }>(
+      (_, f) => (calls.push(f), of(page([]))),
+      { text: '', status: null },
+      destroyRef(),
+    );
+    expect(list.filtered()).toBe(false);
+
+    list.applyFilters({ text: '  ', status: null });
+    expect(list.filtered()).toBe(false);
+    list.applyFilters({ text: 'zzz', status: null });
+    expect(list.filtered()).toBe(true);
+    list.applyFilters({ text: '', status: 'ACTIVE' });
+    expect(list.filtered()).toBe(true);
+
+    list.clearFilters();
+    expect(list.filtered()).toBe(false);
+    expect(calls.at(-1)).toEqual({ text: '', status: null });
+  });
+
   it('ignores stale responses (switchMap)', () => {
     const first = new Subject<Page<string>>();
     const second = new Subject<Page<string>>();

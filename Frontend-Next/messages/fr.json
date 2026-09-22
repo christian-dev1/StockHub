@@ -16,7 +16,8 @@
     "main": "Navigation principale",
     "sidebar": "Barre latérale",
     "home": "Accueil",
-    "userMenu": "Menu utilisateur"
+    "userMenu": "Menu utilisateur",
+    "preferences": "Préférences"
   },
   "theme": {
     "label": "Thème",

@@ -96,7 +96,15 @@ cd Frontend-Angular && npm run lint && npm test && npm run build
 cd Frontend-Next && npm run lint && npm run typecheck && npm test && npm run build
 ```
 
-La CI GitHub Actions (`.github/workflows/`) exécute ces commandes, puis démarre la stack Docker complète et lance un smoke test.
+Tests de bout en bout (Playwright), contre la stack Docker démarrée avec le profil `demo` :
+
+```bash
+cd e2e && npm ci && npx playwright install chromium
+npm test        # parcours par rôle, session, thème, états vides, fuseau horaire
+npm run smoke   # pages existantes à 320 → 1440 px, clair/sombre, FR/EN, accessibilité (axe)
+```
+
+La CI GitHub Actions (`.github/workflows/`) exécute ces commandes, puis démarre la stack Docker complète, lance un smoke test HTTP et la suite Playwright.
 
 ## Rôles
 

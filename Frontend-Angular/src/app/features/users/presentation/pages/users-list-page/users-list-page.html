@@ -3,9 +3,9 @@
   [subtitle]="'users.list.subtitle' | translate"
 >
   @if (auth.can('USER_CREATE')) {
-    <a actions [routerLink]="routes.USERS.CREATE" class="p-button p-component no-underline">
-      <i class="pi pi-user-plus mr-2" aria-hidden="true"></i
-      >{{ 'users.actions.create' | translate }}
+    <a actions pButton [routerLink]="routes.USERS.CREATE" class="no-underline">
+      <i pButtonIcon class="pi pi-user-plus" aria-hidden="true"></i>
+      <span pButtonLabel>{{ 'users.actions.new' | translate }}</span>
     </a>
   }
 </app-page-header>
@@ -14,6 +14,7 @@
   <app-search-field
     class="md:max-w-sm md:flex-1"
     [label]="'users.list.search' | translate"
+    [value]="list.filters().text"
     (searchChange)="filter({ text: $event })"
   />
   <p-select
@@ -53,6 +54,9 @@
   [sort]="list.sort()"
   [clickable]="true"
   [emptyTitle]="'users.list.empty' | translate"
+  [emptyDescription]="'users.list.emptyHint' | translate"
+  [filtered]="list.filtered()"
+  (clearFilters)="list.clearFilters()"
   (sortChange)="list.changeSort($event)"
   (pageChange)="list.changePage($event)"
   (rowSelect)="open($event)"
@@ -69,7 +73,7 @@
       <div class="min-w-0">
         <a
           [routerLink]="routes.USERS.DETAIL(row.id)"
-          class="block truncate font-medium text-fg hover:text-primary"
+          class="block truncate py-2.5 font-medium text-fg hover:text-primary md:py-0"
           (click)="$event.stopPropagation()"
           >{{ row.fullName }}</a
         >
@@ -83,9 +87,7 @@
   /></ng-template>
   <ng-template appCell="lastLoginAt" let-row>
     <span class="text-fg-muted">{{
-      row.lastLoginAt
-        ? (row.lastLoginAt | date: 'short' : undefined : language.locale())
-        : ('users.neverLoggedIn' | translate)
+      row.lastLoginAt ? (row.lastLoginAt | dateTime: 'short') : ('users.neverLoggedIn' | translate)
     }}</span>
   </ng-template>
 </app-data-table>

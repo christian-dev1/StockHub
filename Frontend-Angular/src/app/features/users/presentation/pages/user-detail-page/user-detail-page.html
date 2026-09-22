@@ -146,7 +146,7 @@
                 <dd>
                   {{
                     user.lastLoginAt
-                      ? (user.lastLoginAt | date: 'medium' : undefined : language.locale())
+                      ? (user.lastLoginAt | dateTime: 'medium')
                       : ('users.neverLoggedIn' | translate)
                   }}
                 </dd>

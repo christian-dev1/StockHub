@@ -1,6 +1,20 @@
 <section class="sh-card overflow-hidden" [attr.aria-busy]="loading()">
   @if (error(); as err) {
     <app-error-state [error]="err" (retry)="retry.emit()" />
+  } @else if (!loading() && rows().length === 0 && filtered()) {
+    <app-empty-state
+      icon="pi-search"
+      [title]="'table.noResults' | translate"
+      [description]="'table.noResultsHint' | translate"
+    >
+      <button
+        type="button"
+        class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-4 text-sm font-medium text-fg hover:bg-surface-muted"
+        (click)="clearFilters.emit()"
+      >
+        <i class="pi pi-filter-slash" aria-hidden="true"></i>{{ 'table.clearFilters' | translate }}
+      </button>
+    </app-empty-state>
   } @else if (!loading() && rows().length === 0) {
     <app-empty-state [title]="emptyTitle()" [description]="emptyDescription()">
       <ng-content select="[empty-actions]" />
@@ -113,7 +127,7 @@
             (keydown.enter)="clickable() && rowSelect.emit(row)"
           >
             <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
-              @for (column of columns(); track column.key) {
+              @for (column of cardColumns(); track column.key) {
                 @if (column.primary) {
                   <dt class="sr-only">{{ column.header }}</dt>
                   <dd class="col-span-2 font-semibold text-fg">

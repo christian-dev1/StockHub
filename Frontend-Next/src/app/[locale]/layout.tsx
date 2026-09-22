@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { enableLocale } from '@/core/i18n/locale';
 import { routing } from '@/core/i18n/routing';
+import { TimeZoneProvider } from '@/core/i18n/time-zone-provider';
 import { ThemeProvider } from '@/core/layout/theme-provider';
 import { QueryProvider } from '@/core/query/query-provider';
 import '../globals.css';
@@ -38,9 +39,11 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
     <html lang={locale} className={inter.variable} suppressHydrationWarning>
       <body>
         <NextIntlClientProvider>
-          <ThemeProvider>
-            <QueryProvider>{children as ReactNode}</QueryProvider>
-          </ThemeProvider>
+          <TimeZoneProvider>
+            <ThemeProvider>
+              <QueryProvider>{children as ReactNode}</QueryProvider>
+            </ThemeProvider>
+          </TimeZoneProvider>
         </NextIntlClientProvider>
       </body>
     </html>

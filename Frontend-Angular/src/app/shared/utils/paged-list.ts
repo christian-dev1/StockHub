@@ -34,11 +34,17 @@ export class PagedList<T, F extends object> {
   readonly rows = computed(() => this.result()?.content ?? []);
   readonly total = computed(() => this.result()?.totalElements ?? 0);
 
+  /**
+   * True when a filter narrows the list: an empty result then means "no match"
+   * rather than "nothing exists yet", and deserves a different message.
+   */
+  readonly filtered = computed(() => hasActiveFilter(this.filters()));
+
   private readonly requests = new Subject<void>();
 
   constructor(
     fetch: (request: PageRequest, filters: F) => Observable<Page<T>>,
-    initialFilters: F,
+    private readonly initialFilters: F,
     destroyRef: DestroyRef,
     initialSort: SortState | null = null,
   ) {
@@ -92,4 +98,14 @@ export class PagedList<T, F extends object> {
     this.page.set(0);
     this.load();
   }
+
+  clearFilters(): void {
+    this.applyFilters(this.initialFilters);
+  }
+}
+
+function hasActiveFilter(filters: object): boolean {
+  return Object.values(filters).some((value: unknown) =>
+    typeof value === 'string' ? value.trim() !== '' : value !== null && value !== undefined,
+  );
 }

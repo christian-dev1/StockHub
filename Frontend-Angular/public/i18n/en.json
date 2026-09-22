@@ -110,7 +110,9 @@
     "noResults": "No results",
     "perPage": "Per page",
     "previous": "Previous page",
-    "next": "Next page"
+    "next": "Next page",
+    "noResultsHint": "Nothing matches your search or filters.",
+    "clearFilters": "Clear filters"
   },
   "validation": {
     "required": "This field is required.",
@@ -156,7 +158,11 @@
       "submit": "Update",
       "success": "Password updated."
     },
-    "logout": "Sign out"
+    "logout": "Sign out",
+    "salesAppOnly": {
+      "title": "Back-office access only",
+      "description": "{{name}}, your role gives access to the StockHub sales app, not to the back-office. Sign out, then open the sales app."
+    }
   },
   "companies": {
     "list": {
@@ -164,7 +170,7 @@
       "subtitle": "Companies using the StockHub platform",
       "search": "Search a company",
       "allStatuses": "All statuses",
-      "empty": "No companies",
+      "empty": "No company has been created yet",
       "emptyHint": "Create the first company to get started."
     },
     "create": {
@@ -216,7 +222,8 @@
       "create": "Create company",
       "disable": "Disable",
       "activate": "Reactivate",
-      "addAdmin": "Add an administrator"
+      "addAdmin": "Add an administrator",
+      "new": "New company"
     }
   },
   "users": {
@@ -226,7 +233,8 @@
       "search": "Search (name, email)",
       "allRoles": "All roles",
       "allStatuses": "All statuses",
-      "empty": "No users found"
+      "empty": "No user has been created yet",
+      "emptyHint": "Add your team members and choose their role."
     },
     "create": {
       "title": "New user",
@@ -271,11 +279,12 @@
     "allLocations": "All",
     "neverLoggedIn": "Never",
     "actions": {
-      "create": "New user",
+      "create": "Create user",
       "disable": "Disable",
       "activate": "Reactivate",
       "resetPassword": "Reset password",
-      "generatePassword": "Generate"
+      "generatePassword": "Generate",
+      "new": "New user"
     }
   },
   "settings": {

@@ -110,7 +110,9 @@
     "noResults": "Aucun résultat",
     "perPage": "Par page",
     "previous": "Page précédente",
-    "next": "Page suivante"
+    "next": "Page suivante",
+    "noResultsHint": "Aucun élément ne correspond à votre recherche ou à vos filtres.",
+    "clearFilters": "Réinitialiser les filtres"
   },
   "validation": {
     "required": "Ce champ est obligatoire.",
@@ -156,7 +158,11 @@
       "submit": "Mettre à jour",
       "success": "Mot de passe mis à jour."
     },
-    "logout": "Se déconnecter"
+    "logout": "Se déconnecter",
+    "salesAppOnly": {
+      "title": "Espace réservé au back-office",
+      "description": "{{name}}, votre rôle donne accès à l'application de caisse StockHub, pas au back-office. Déconnectez-vous puis ouvrez l'application de caisse."
+    }
   },
   "companies": {
     "list": {
@@ -164,7 +170,7 @@
       "subtitle": "Entreprises utilisant la plateforme StockHub",
       "search": "Rechercher une entreprise",
       "allStatuses": "Tous les statuts",
-      "empty": "Aucune entreprise",
+      "empty": "Aucune entreprise n'a encore été créée",
       "emptyHint": "Créez la première entreprise pour commencer."
     },
     "create": {
@@ -216,7 +222,8 @@
       "create": "Créer l'entreprise",
       "disable": "Désactiver",
       "activate": "Réactiver",
-      "addAdmin": "Ajouter un administrateur"
+      "addAdmin": "Ajouter un administrateur",
+      "new": "Nouvelle entreprise"
     }
   },
   "users": {
@@ -226,7 +233,8 @@
       "search": "Rechercher (nom, e-mail)",
       "allRoles": "Tous les rôles",
       "allStatuses": "Tous les statuts",
-      "empty": "Aucun utilisateur trouvé"
+      "empty": "Aucun utilisateur n'a encore été créé",
+      "emptyHint": "Ajoutez les membres de votre équipe et choisissez leur rôle."
     },
     "create": {
       "title": "Nouvel utilisateur",
@@ -271,11 +279,12 @@
     "allLocations": "Tous",
     "neverLoggedIn": "Jamais",
     "actions": {
-      "create": "Nouvel utilisateur",
+      "create": "Créer l'utilisateur",
       "disable": "Désactiver",
       "activate": "Réactiver",
       "resetPassword": "Réinitialiser le mot de passe",
-      "generatePassword": "Générer"
+      "generatePassword": "Générer",
+      "new": "Nouvel utilisateur"
     }
   },
   "settings": {

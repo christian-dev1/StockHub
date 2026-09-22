@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,7 +19,6 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { AuthStore } from '../../../../../core/auth/auth-store';
 import { APP_ROUTES } from '../../../../../core/config/routes/app.routes';
 import { AppError } from '../../../../../core/errors/app-error';
-import { LanguageStore } from '../../../../../core/i18n/language-store';
 import { Confirmation } from '../../../../../shared/ui/confirm/confirmation';
 import { ErrorState } from '../../../../../shared/ui/error-state/error-state';
 import { FormField } from '../../../../../shared/ui/form-field/form-field';
@@ -34,11 +32,12 @@ import { UserAccessFields } from '../../forms/user-access-fields';
 import { accessForm, profileForm } from '../../forms/user-forms';
 import { UserDetailStore } from '../../state/user-detail.store';
 import { UserReferenceStore } from '../../state/user-reference.store';
+import { DateTimePipe } from '../../../../../shared/pipes/date-time.pipe';
 
 @Component({
   selector: 'app-user-detail-page',
   imports: [
-    DatePipe,
+    DateTimePipe,
     ReactiveFormsModule,
     RouterLink,
     TranslatePipe,
@@ -63,7 +62,6 @@ export class UserDetailPage implements OnInit {
   protected readonly store = inject(UserDetailStore);
   protected readonly reference = inject(UserReferenceStore);
   protected readonly auth = inject(AuthStore);
-  protected readonly language = inject(LanguageStore);
   private readonly notifier = inject(Notifier);
   private readonly confirmation = inject(Confirmation);
   private readonly fb = inject(NonNullableFormBuilder);

@@ -114,6 +114,7 @@
           >
             <p-select
               inputId="s-currency"
+              ariaLabelledBy="s-currency-label"
               formControlName="currency"
               [options]="currencies"
               optionLabel="label"
@@ -130,6 +131,7 @@
           >
             <p-select
               inputId="s-tz"
+              ariaLabelledBy="s-tz-label"
               formControlName="timezone"
               [options]="timeZones"
               [filter]="true"
@@ -144,6 +146,7 @@
           >
             <p-select
               inputId="s-locale"
+              ariaLabelledBy="s-locale-label"
               formControlName="locale"
               [options]="locales"
               optionLabel="label"
@@ -163,7 +166,7 @@
               [min]="1"
               [max]="365"
               [showButtons]="true"
-              styleClass="w-full"
+              [fluid]="true"
             />
           </app-form-field>
           <app-form-field
@@ -178,12 +181,16 @@
               [min]="0"
               [max]="365"
               [showButtons]="true"
-              styleClass="w-full"
+              [fluid]="true"
             />
           </app-form-field>
         </div>
         <div class="mt-5 flex items-start gap-3 rounded-lg border border-border p-4">
-          <p-toggleswitch inputId="s-negative" formControlName="allowNegativeStock" />
+          <p-toggleswitch
+            class="shrink-0"
+            inputId="s-negative"
+            formControlName="allowNegativeStock"
+          />
           <div>
             <label for="s-negative" class="text-sm font-medium">{{
               'settings.fields.allowNegativeStock' | translate
