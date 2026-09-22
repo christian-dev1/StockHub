@@ -21,6 +21,7 @@ import { NAVIGATION } from '../navigation';
                 <a
                   [routerLink]="item.route"
                   routerLinkActive="bg-surface-muted text-primary"
+                  [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
                   ariaCurrentWhenActive="page"
                   (click)="navigate.emit()"
                   class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-fg hover:bg-surface-muted"

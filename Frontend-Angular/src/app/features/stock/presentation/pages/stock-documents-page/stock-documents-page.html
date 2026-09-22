@@ -1,0 +1,123 @@
+<app-page-header
+  [title]="'stock.documents.title' | translate"
+  [subtitle]="'stock.documents.subtitle' | translate"
+/>
+
+<div class="mb-4 flex flex-col gap-2 sm:flex-row lg:max-w-xl">
+  <app-search-field
+    class="min-w-0 flex-1"
+    [label]="'stock.documents.search' | translate"
+    [value]="list.filters().reference"
+    (searchChange)="filter({ reference: $event })"
+  />
+  <button
+    type="button"
+    class="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg border border-border px-4 text-sm font-medium text-fg hover:bg-surface-muted lg:hidden"
+    [attr.aria-expanded]="filtersOpen()"
+    aria-controls="document-filters"
+    (click)="filtersOpen.set(!filtersOpen())"
+  >
+    <i class="pi pi-filter" aria-hidden="true"></i>{{ 'stock.filters.toggle' | translate }}
+  </button>
+</div>
+
+<div
+  id="document-filters"
+  class="mb-4 gap-3 sm:grid-cols-2 lg:grid lg:grid-cols-4"
+  [class.grid]="filtersOpen()"
+  [class.hidden]="!filtersOpen()"
+>
+  <p-select
+    [options]="typeOptions()"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    [placeholder]="'stock.filters.allTypes' | translate"
+    [ariaLabel]="'stock.fields.type' | translate"
+    [ngModel]="list.filters().type"
+    (ngModelChange)="filter({ type: $event ?? null })"
+    styleClass="w-full"
+  />
+  @if (context.multiLocation()) {
+    <p-select
+      [options]="locationOptions()"
+      optionLabel="label"
+      optionValue="value"
+      [showClear]="true"
+      [placeholder]="'stock.filters.allLocations' | translate"
+      [ariaLabel]="'stock.fields.location' | translate"
+      [ngModel]="list.filters().locationId"
+      (ngModelChange)="filter({ locationId: $event ?? null })"
+      styleClass="w-full"
+    />
+  }
+  <label class="flex min-w-0 flex-col gap-1 text-xs text-fg-muted">
+    {{ 'stock.filters.dateFrom' | translate }}
+    <input
+      pInputText
+      type="date"
+      class="w-full"
+      [ngModel]="list.filters().dateFrom ?? ''"
+      (ngModelChange)="filter({ dateFrom: $event || null })"
+      [max]="list.filters().dateTo ?? ''"
+    />
+  </label>
+  <label class="flex min-w-0 flex-col gap-1 text-xs text-fg-muted">
+    {{ 'stock.filters.dateTo' | translate }}
+    <input
+      pInputText
+      type="date"
+      class="w-full"
+      [ngModel]="list.filters().dateTo ?? ''"
+      (ngModelChange)="filter({ dateTo: $event || null })"
+      [min]="list.filters().dateFrom ?? ''"
+    />
+  </label>
+</div>
+
+<app-data-table
+  [caption]="'stock.documents.title' | translate"
+  [columns]="columns()"
+  [rows]="list.rows()"
+  [rowKey]="rowKey"
+  [loading]="list.loading()"
+  [error]="list.error()"
+  [total]="list.total()"
+  [page]="list.page()"
+  [size]="list.size()"
+  [sort]="list.sort()"
+  [clickable]="true"
+  [emptyTitle]="'stock.documents.empty' | translate"
+  [emptyDescription]="'stock.documents.emptyHint' | translate"
+  [filtered]="list.filtered()"
+  (clearFilters)="list.clearFilters()"
+  (sortChange)="list.changeSort($event)"
+  (pageChange)="list.changePage($event)"
+  (rowSelect)="open($event)"
+  (retry)="list.load()"
+>
+  <ng-template appCell="number" let-row>
+    <a
+      [routerLink]="routes.STOCK.DOCUMENT(row.id)"
+      class="inline-block py-2.5 font-mono font-semibold text-primary md:py-0"
+      (click)="$event.stopPropagation()"
+      >{{ row.number }}</a
+    >
+  </ng-template>
+  <ng-template appCell="type" let-row>
+    <app-status-badge [label]="'stock.documentTypes.' + row.type | translate" [tone]="tone(row)" />
+  </ng-template>
+  <ng-template appCell="createdAt" let-row>
+    <span class="whitespace-nowrap">{{ row.createdAt | dateTime: 'short' }}</span>
+  </ng-template>
+  <ng-template appCell="locationId" let-row>
+    {{ lookups.locationName(row.locationId) ?? '—' }}
+    @if (row.destinationLocationId) {
+      → {{ lookups.locationName(row.destinationLocationId) ?? '—' }}
+    }
+  </ng-template>
+  <ng-template appCell="reason" let-row>
+    <span class="line-clamp-2 text-fg-muted">{{ row.reason ?? '—' }}</span>
+  </ng-template>
+  <ng-template appCell="reference" let-row>{{ row.reference ?? '—' }}</ng-template>
+</app-data-table>

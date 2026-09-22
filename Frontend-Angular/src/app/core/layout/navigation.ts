@@ -9,6 +9,8 @@ export interface NavigationItem {
   readonly route: string;
   /** Shown when the user holds any of these permissions (UI hint only). */
   readonly permissions?: readonly Permission[];
+  /** Highlighted only on its own URL, not on the child pages that have their own entry. */
+  readonly exact?: boolean;
 }
 
 export interface NavigationSection {
@@ -59,6 +61,37 @@ export const NAVIGATION: readonly NavigationSection[] = [
         icon: 'pi-truck',
         route: APP_ROUTES.SUPPLIERS.ROOT,
         permissions: ['SUPPLIER_CREATE', 'SUPPLIER_UPDATE'],
+      },
+    ],
+  },
+  {
+    labelKey: 'nav.section.stock',
+    audience: 'company',
+    items: [
+      {
+        labelKey: 'nav.stock',
+        icon: 'pi-warehouse',
+        route: APP_ROUTES.STOCK.ROOT,
+        permissions: ['STOCK_VIEW'],
+        exact: true,
+      },
+      {
+        labelKey: 'nav.stockMovements',
+        icon: 'pi-history',
+        route: APP_ROUTES.STOCK.MOVEMENTS,
+        permissions: ['STOCK_VIEW'],
+      },
+      {
+        labelKey: 'nav.batches',
+        icon: 'pi-calendar-clock',
+        route: APP_ROUTES.STOCK.BATCHES,
+        permissions: ['BATCH_MANAGE'],
+      },
+      {
+        labelKey: 'nav.stockDocuments',
+        icon: 'pi-file',
+        route: APP_ROUTES.STOCK.DOCUMENTS,
+        permissions: ['STOCK_VIEW'],
       },
     ],
   },

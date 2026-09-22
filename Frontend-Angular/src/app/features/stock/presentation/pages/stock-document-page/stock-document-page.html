@@ -1,0 +1,103 @@
+@let state = resource.state();
+
+@if (document(); as doc) {
+  <app-page-header [title]="'stock.documentTypes.' + doc.type | translate" [subtitle]="doc.number">
+    <a
+      actions
+      [routerLink]="routes.STOCK.DOCUMENTS"
+      class="inline-flex min-h-11 items-center text-sm font-medium text-fg-muted hover:text-fg"
+    >
+      <i class="pi pi-arrow-left mr-1" aria-hidden="true"></i
+      >{{ 'stock.documents.back' | translate }}
+    </a>
+  </app-page-header>
+
+  <section
+    class="sh-card mb-6 p-5 sm:p-6"
+    [attr.aria-label]="'stock.documents.details' | translate"
+  >
+    <dl class="grid gap-x-6 gap-y-4 text-sm sm:grid-cols-2 lg:grid-cols-3">
+      <div>
+        <dt class="text-fg-muted">{{ 'stock.fields.number' | translate }}</dt>
+        <dd class="mt-0.5 flex flex-wrap items-center gap-2">
+          <span class="font-mono font-semibold text-fg" data-testid="document-number">{{
+            doc.number
+          }}</span>
+          <app-status-badge
+            [label]="'stock.documentTypes.' + doc.type | translate"
+            [tone]="tones[doc.type]"
+          />
+        </dd>
+      </div>
+      <div>
+        <dt class="text-fg-muted">{{ 'stock.fields.date' | translate }}</dt>
+        <dd class="mt-0.5 text-fg">{{ doc.createdAt | dateTime }}</dd>
+      </div>
+      <div>
+        <dt class="text-fg-muted">{{ 'stock.fields.user' | translate }}</dt>
+        <dd class="mt-0.5 text-fg">{{ doc.performedByName }}</dd>
+      </div>
+      <div>
+        <dt class="text-fg-muted">
+          {{
+            (doc.destinationLocationId ? 'stock.transfer.source' : 'stock.fields.location')
+              | translate
+          }}
+        </dt>
+        <dd class="mt-0.5 text-fg">{{ lookups.locationName(doc.locationId) ?? '—' }}</dd>
+      </div>
+      @if (doc.destinationLocationId) {
+        <div>
+          <dt class="text-fg-muted">{{ 'stock.transfer.destination' | translate }}</dt>
+          <dd class="mt-0.5 text-fg">
+            {{ lookups.locationName(doc.destinationLocationId) ?? '—' }}
+          </dd>
+        </div>
+      }
+      <div>
+        <dt class="text-fg-muted">{{ 'stock.fields.externalReference' | translate }}</dt>
+        <dd class="mt-0.5 text-fg">{{ doc.reference ?? '—' }}</dd>
+      </div>
+      <div class="sm:col-span-2 lg:col-span-3">
+        <dt class="text-fg-muted">{{ 'stock.fields.reason' | translate }}</dt>
+        <dd class="mt-0.5 whitespace-pre-line text-fg">{{ doc.reason ?? '—' }}</dd>
+      </div>
+    </dl>
+
+    @if (doc.destinationLocationId && balances().length === 2) {
+      <div class="mt-5 grid gap-3 sm:grid-cols-2">
+        @for (balance of balances(); track balance.locationId) {
+          <p class="rounded-lg border border-border p-3 text-sm text-fg-muted">
+            <span class="block font-medium text-fg">{{
+              lookups.locationName(balance.locationId) ?? '—'
+            }}</span>
+            {{ 'stock.fields.before' | translate }} {{ balance.before | quantity }} →
+            <span class="font-semibold text-fg">{{ balance.after | quantity }}</span>
+          </p>
+        }
+      </div>
+    }
+  </section>
+
+  <section class="sh-card p-5 sm:p-6" aria-labelledby="lines-title">
+    <h2 id="lines-title" class="mb-3 text-base font-semibold text-fg">
+      {{ 'stock.documents.lines' | translate: { count: doc.lines.length } }}
+    </h2>
+    <app-document-lines
+      [lines]="doc.lines"
+      [caption]="'stock.documents.lines' | translate: { count: doc.lines.length }"
+      [showLocation]="!!doc.destinationLocationId"
+    />
+  </section>
+} @else if (state.status === 'error') {
+  <app-page-header [title]="'stock.documents.title' | translate" />
+  <section class="sh-card">
+    <app-error-state [error]="state.error" (retry)="load()" />
+  </section>
+} @else {
+  <div class="space-y-4" aria-busy="true">
+    <p-skeleton width="16rem" height="2rem" />
+    <p-skeleton height="8rem" />
+    <p-skeleton height="12rem" />
+  </div>
+}

@@ -1,0 +1,531 @@
+<app-page-header [title]="titleKey | translate" [subtitle]="subtitleKey | translate">
+  <a
+    actions
+    [routerLink]="routes.STOCK.ROOT"
+    class="inline-flex min-h-11 items-center text-sm font-medium text-fg-muted hover:text-fg"
+  >
+    <i class="pi pi-arrow-left mr-1" aria-hidden="true"></i>{{ 'stock.backToStock' | translate }}
+  </a>
+</app-page-header>
+
+<app-operation-links [current]="operation" />
+
+@if (operation === 'transfer' && !context.multiLocation()) {
+  <section class="sh-card max-w-3xl p-6" role="status">
+    <p class="font-medium text-fg">{{ 'stock.transfer.singleLocation' | translate }}</p>
+    <p class="mt-1 text-sm text-fg-muted">{{ 'stock.transfer.singleLocationHint' | translate }}</p>
+  </section>
+} @else if (!context.hasLocation()) {
+  <section class="sh-card max-w-3xl p-6" role="status">
+    <p class="font-medium text-fg">{{ 'stock.noLocation.title' | translate }}</p>
+    <p class="mt-1 text-sm text-fg-muted">{{ 'stock.noLocation.description' | translate }}</p>
+  </section>
+} @else if (store.result(); as result) {
+  <!-- Success: the stock note created by the backend -->
+  <section
+    class="sh-card max-w-4xl p-5 sm:p-6"
+    aria-labelledby="result-title"
+    data-testid="operation-result"
+  >
+    <div class="flex items-start gap-3">
+      <span
+        class="flex size-10 shrink-0 items-center justify-center rounded-full bg-success/10 text-success"
+      >
+        <i class="pi pi-check" aria-hidden="true"></i>
+      </span>
+      <div class="min-w-0">
+        <h2 id="result-title" class="text-lg font-semibold text-fg" tabindex="-1">
+          {{ 'stock.result.' + operation | translate }}
+        </h2>
+        <p class="mt-1 text-sm text-fg-muted">
+          {{ 'stock.result.number' | translate }}
+          <a
+            [routerLink]="routes.STOCK.DOCUMENT(result.id)"
+            class="font-mono font-semibold text-primary"
+            data-testid="document-number"
+            >{{ result.number }}</a
+          >
+          @if (result.reference) {
+            · {{ 'stock.fields.externalReference' | translate }} : {{ result.reference }}
+          }
+        </p>
+      </div>
+    </div>
+
+    @if (operation === 'transfer' && balances().length === 2) {
+      <div class="mt-5 grid gap-3 sm:grid-cols-2" data-testid="transfer-balances">
+        @for (balance of balances(); track balance.locationId; let isSource = $first) {
+          <div class="rounded-lg border border-border p-4">
+            <p class="text-xs font-semibold uppercase tracking-wide text-fg-muted">
+              {{ (isSource ? 'stock.transfer.source' : 'stock.transfer.destination') | translate }}
+            </p>
+            <p class="mt-1 font-medium text-fg">{{ locationName(balance.locationId) }}</p>
+            <p class="mt-2 text-sm text-fg-muted">
+              {{ 'stock.fields.before' | translate }}
+              <span class="tabular-nums">{{ balance.before | quantity }}</span>
+              →
+              <span class="text-base font-semibold tabular-nums text-fg">{{
+                balance.after | quantity
+              }}</span>
+            </p>
+          </div>
+        }
+      </div>
+    }
+
+    @if (result.lines.length > 0) {
+      <div class="mt-5">
+        <h3 class="mb-2 text-sm font-semibold text-fg">{{ 'stock.result.lines' | translate }}</h3>
+        <app-document-lines
+          [lines]="result.lines"
+          [caption]="'stock.result.lines' | translate"
+          [showLocation]="operation === 'transfer'"
+        />
+      </div>
+      @if (showFefo()) {
+        <p class="mt-3 flex items-start gap-2 text-sm text-fg-muted">
+          <i class="pi pi-info-circle mt-0.5 text-info" aria-hidden="true"></i>
+          {{ 'stock.fefo.used' | translate }}
+        </p>
+      }
+    }
+
+    <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+      <a
+        [routerLink]="routes.STOCK.ROOT"
+        class="p-button p-button-text p-component justify-center no-underline"
+        >{{ 'stock.backToStock' | translate }}</a
+      >
+      <p-button
+        icon="pi pi-plus"
+        [label]="'stock.result.another' | translate"
+        (onClick)="another()"
+      />
+    </div>
+  </section>
+} @else {
+  <form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    novalidate
+    class="sh-card max-w-4xl p-5 sm:p-6"
+    [attr.aria-busy]="store.submitting()"
+  >
+    <div class="grid gap-5 sm:grid-cols-2">
+      <!-- Where -->
+      @if (context.multiLocation()) {
+        <app-form-field
+          [label]="
+            (operation === 'transfer' ? 'stock.transfer.source' : 'stock.fields.location')
+              | translate
+          "
+          forId="op-location"
+          [control]="form.controls.locationId"
+          [required]="true"
+        >
+          <p-select
+            inputId="op-location"
+            ariaLabelledBy="op-location-label"
+            formControlName="locationId"
+            [options]="context.locationOptions()"
+            optionLabel="label"
+            optionValue="value"
+            styleClass="w-full"
+          />
+        </app-form-field>
+        @if (operation === 'transfer') {
+          <app-form-field
+            [label]="'stock.transfer.destination' | translate"
+            forId="op-destination"
+            [control]="form.controls.destinationLocationId"
+            [required]="true"
+          >
+            <p-select
+              inputId="op-destination"
+              ariaLabelledBy="op-destination-label"
+              formControlName="destinationLocationId"
+              [options]="destinationOptions()"
+              optionLabel="label"
+              optionValue="value"
+              styleClass="w-full"
+            />
+            @if (form.hasError('sameLocation')) {
+              <p class="text-xs text-danger" role="alert">
+                {{ 'validation.sameLocation' | translate }}
+              </p>
+            }
+          </app-form-field>
+        } @else {
+          <div class="hidden sm:block"></div>
+        }
+      } @else {
+        <p class="flex items-center gap-2 text-sm text-fg-muted sm:col-span-2">
+          <i class="pi pi-map-marker" aria-hidden="true"></i>
+          {{ 'stock.fields.location' | translate }} :
+          <span class="font-medium text-fg">{{
+            locationName(form.controls.locationId.value)
+          }}</span>
+        </p>
+      }
+
+      <!-- What -->
+      <app-form-field
+        class="sm:col-span-2"
+        [label]="'stock.fields.product' | translate"
+        forId="op-product"
+        [control]="form.controls.product"
+        [required]="true"
+        [hint]="'stock.hints.product' | translate"
+      >
+        <app-product-picker
+          inputId="op-product"
+          labelledBy="op-product-label"
+          describedBy="op-product-message"
+          formControlName="product"
+        />
+      </app-form-field>
+
+      @if (product(); as selected) {
+        <div
+          class="flex flex-col gap-3 rounded-lg border border-border bg-surface-muted/40 p-4 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between"
+          aria-live="polite"
+        >
+          <div class="min-w-0">
+            <p class="truncate font-medium text-fg">{{ selected.name }}</p>
+            <p class="flex flex-wrap gap-x-3 text-xs text-fg-muted">
+              <span class="font-mono">{{ selected.sku }}</span>
+              <span>{{ unitLabel() }}</span>
+              @if (selected.batchTracked) {
+                <span
+                  ><i class="pi pi-tags text-[0.65rem]" aria-hidden="true"></i>
+                  {{ 'stock.picker.batchTracked' | translate }}</span
+                >
+              }
+              @if (selected.expiryTracked) {
+                <span
+                  ><i class="pi pi-calendar-clock text-[0.65rem]" aria-hidden="true"></i>
+                  {{ 'stock.picker.expiryTracked' | translate }}</span
+                >
+              }
+            </p>
+          </div>
+          <div class="shrink-0 sm:text-right" data-testid="available-stock">
+            <p class="text-xs text-fg-muted">
+              {{
+                (operation === 'entry' || operation === 'adjustment'
+                  ? 'stock.available.current'
+                  : 'stock.available.label'
+                ) | translate
+              }}
+              @if (context.multiLocation()) {
+                · {{ locationName(form.controls.locationId.value) }}
+              }
+            </p>
+            @if (store.availableLoading()) {
+              <p-skeleton width="4rem" height="1.5rem" styleClass="sm:ml-auto" />
+            } @else {
+              <p
+                class="text-xl font-semibold tabular-nums text-fg"
+                data-testid="available-quantity"
+              >
+                {{ store.available() === null ? '—' : (store.available() | quantity) }}
+              </p>
+            }
+            @if (operation === 'transfer' && store.destinationQuantity() !== null) {
+              <p class="text-xs text-fg-muted">
+                {{ 'stock.transfer.atDestination' | translate }} :
+                <span class="font-medium tabular-nums text-fg">{{
+                  store.destinationQuantity() | quantity
+                }}</span>
+              </p>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Adjustment: batch and direction -->
+      @if (operation === 'adjustment' && tracked()) {
+        <app-form-field
+          class="sm:col-span-2"
+          [label]="'stock.fields.batch' | translate"
+          forId="op-batch"
+          [control]="form.controls.batchId"
+          [required]="true"
+          [hint]="'stock.hints.adjustBatch' | translate"
+        >
+          <p-select
+            inputId="op-batch"
+            ariaLabelledBy="op-batch-label"
+            formControlName="batchId"
+            [options]="batchOptions()"
+            optionValue="value"
+            optionLabel="batch.batchNumber"
+            [loading]="store.batchesLoading()"
+            [placeholder]="'stock.hints.chooseBatch' | translate"
+            [emptyMessage]="'stock.batches.noneAvailable' | translate"
+            styleClass="w-full"
+          >
+            <ng-template #item let-option>
+              <div class="flex w-full items-center justify-between gap-3">
+                <span class="font-mono">{{ option.batch.batchNumber }}</span>
+                <span class="text-xs text-fg-muted">
+                  {{ option.batch.quantity | quantity }}
+                  @if (option.batch.expirationDate) {
+                    · {{ option.batch.expirationDate | calendarDate }}
+                  }
+                </span>
+              </div>
+            </ng-template>
+          </p-select>
+        </app-form-field>
+      }
+
+      @if (operation === 'adjustment') {
+        <fieldset class="flex min-w-0 flex-col gap-1.5">
+          <legend class="mb-1.5 text-sm font-medium text-fg">
+            {{ 'stock.adjustment.direction' | translate }}
+          </legend>
+          <div class="grid grid-cols-2 gap-1 rounded-lg border border-border bg-surface p-1">
+            @for (option of directionOptions(); track option.value) {
+              <label
+                class="flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-md px-3 text-sm font-medium has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary"
+                [class]="
+                  form.controls.direction.value === option.value
+                    ? 'bg-primary text-primary-fg'
+                    : 'text-fg hover:bg-surface-muted'
+                "
+              >
+                <input
+                  type="radio"
+                  class="sr-only"
+                  formControlName="direction"
+                  [value]="option.value"
+                />
+                <i
+                  class="pi"
+                  [class.pi-plus]="option.value === 'INCREASE'"
+                  [class.pi-minus]="option.value === 'DECREASE'"
+                  aria-hidden="true"
+                ></i>
+                {{ option.label }}
+              </label>
+            }
+          </div>
+        </fieldset>
+      }
+
+      <app-form-field
+        [label]="
+          (operation === 'adjustment' ? 'stock.adjustment.quantity' : 'stock.fields.quantity')
+            | translate
+        "
+        forId="op-quantity"
+        [control]="form.controls.quantity"
+        [required]="true"
+      >
+        <p-inputnumber
+          inputId="op-quantity"
+          formControlName="quantity"
+          [min]="0"
+          [minFractionDigits]="0"
+          [maxFractionDigits]="fractionDigits()"
+          [locale]="language.locale()"
+          [suffix]="unitLabel() ? ' ' + unitLabel() : ''"
+          [ariaDescribedBy]="'op-quantity-message'"
+          inputStyleClass="w-full text-lg tabular-nums"
+          styleClass="w-full"
+        />
+      </app-form-field>
+
+      @if (exceedsStock()) {
+        <p
+          class="flex items-start gap-2 self-end rounded-lg bg-warning/10 p-3 text-sm text-warning"
+          role="status"
+        >
+          <i class="pi pi-exclamation-triangle mt-0.5" aria-hidden="true"></i>
+          {{
+            'stock.available.exceeded' | translate: { available: (store.available() | quantity) }
+          }}
+        </p>
+      } @else if (operation !== 'adjustment') {
+        <div class="hidden sm:block"></div>
+      }
+
+      @if (operation === 'adjustment' && adjustment(); as preview) {
+        <dl
+          class="grid grid-cols-3 gap-3 rounded-lg border border-border p-4 text-center sm:col-span-2"
+          aria-live="polite"
+          data-testid="adjustment-preview"
+        >
+          <div>
+            <dt class="text-xs text-fg-muted">{{ 'stock.adjustment.current' | translate }}</dt>
+            <dd class="text-lg font-semibold tabular-nums">{{ preview.current | quantity }}</dd>
+          </div>
+          <div>
+            <dt class="text-xs text-fg-muted">{{ 'stock.adjustment.change' | translate }}</dt>
+            <dd
+              class="text-lg font-semibold tabular-nums"
+              [class.text-success]="preview.change > 0"
+              [class.text-danger]="preview.change < 0"
+            >
+              {{ preview.change | quantity: true }}
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs text-fg-muted">{{ 'stock.adjustment.after' | translate }}</dt>
+            <dd class="text-lg font-semibold tabular-nums" [class.text-danger]="preview.after < 0">
+              {{ preview.after | quantity }}
+            </dd>
+          </div>
+        </dl>
+      }
+
+      <!-- Entry of a batch-tracked product -->
+      @if (operation === 'entry' && tracked()) {
+        <fieldset class="grid gap-5 sm:col-span-2 sm:grid-cols-3">
+          <legend class="mb-3 text-sm font-semibold text-fg">
+            {{ 'stock.batches.section' | translate }}
+          </legend>
+          <app-form-field
+            [label]="'stock.fields.batchNumber' | translate"
+            forId="op-batch-number"
+            [control]="form.controls.batchNumber"
+            [required]="true"
+          >
+            <input
+              pInputText
+              id="op-batch-number"
+              formControlName="batchNumber"
+              class="w-full font-mono uppercase"
+              autocomplete="off"
+              aria-describedby="op-batch-number-message"
+            />
+          </app-form-field>
+          <app-form-field
+            [label]="'stock.fields.manufacturingDate' | translate"
+            forId="op-manufactured"
+            [control]="form.controls.manufacturingDate"
+          >
+            <input
+              pInputText
+              id="op-manufactured"
+              type="date"
+              formControlName="manufacturingDate"
+              class="w-full"
+            />
+          </app-form-field>
+          @if (product()?.expiryTracked) {
+            <app-form-field
+              [label]="'stock.fields.expirationDate' | translate"
+              forId="op-expiration"
+              [control]="form.controls.expirationDate"
+              [required]="true"
+            >
+              <input
+                pInputText
+                id="op-expiration"
+                type="date"
+                formControlName="expirationDate"
+                class="w-full"
+                aria-describedby="op-expiration-message"
+              />
+              @if (form.hasError('dateOrder')) {
+                <p class="text-xs text-danger" role="alert">
+                  {{ 'validation.dateOrder' | translate }}
+                </p>
+              }
+            </app-form-field>
+          }
+        </fieldset>
+      }
+
+      @if (showFefo()) {
+        <p
+          class="flex items-start gap-2 rounded-lg bg-info/10 p-3 text-sm text-fg sm:col-span-2"
+          data-testid="fefo-hint"
+        >
+          <i class="pi pi-info-circle mt-0.5 text-info" aria-hidden="true"></i>
+          {{ 'stock.fefo.hint' | translate }}
+        </p>
+      }
+
+      <!-- Why -->
+      <app-form-field
+        [class]="operation === 'adjustment' ? 'sm:col-span-2' : ''"
+        [label]="
+          (operation === 'adjustment' ? 'stock.fields.reasonRequired' : 'stock.fields.reason')
+            | translate
+        "
+        forId="op-reason"
+        [control]="form.controls.reason"
+        [required]="operation === 'adjustment'"
+        [hint]="operation === 'adjustment' ? ('stock.hints.adjustReason' | translate) : undefined"
+      >
+        <textarea
+          pTextarea
+          id="op-reason"
+          formControlName="reason"
+          rows="2"
+          class="w-full"
+          aria-describedby="op-reason-message"
+        ></textarea>
+      </app-form-field>
+      @if (operation !== 'adjustment') {
+        <app-form-field
+          [label]="'stock.fields.externalReference' | translate"
+          forId="op-reference"
+          [control]="form.controls.reference"
+          [hint]="'stock.hints.reference' | translate"
+        >
+          <input
+            pInputText
+            id="op-reference"
+            formControlName="reference"
+            class="w-full"
+            autocomplete="off"
+            aria-describedby="op-reference-message"
+          />
+        </app-form-field>
+      }
+    </div>
+
+    @if (errorMessage(); as message) {
+      <div
+        class="mt-5 flex items-start gap-3 rounded-lg border border-danger/30 bg-danger/10 p-4 text-sm"
+        role="alert"
+        data-testid="operation-error"
+      >
+        <i class="pi pi-times-circle mt-0.5 text-danger" aria-hidden="true"></i>
+        <div>
+          <p class="font-medium text-fg">{{ message }}</p>
+          @if (store.error()?.code === 'INSUFFICIENT_STOCK' && store.available() !== null) {
+            <p class="mt-1 text-fg-muted">
+              {{
+                'stock.available.detail'
+                  | translate
+                    : {
+                        available: (store.available() | quantity),
+                        requested: (form.controls.quantity.value | quantity),
+                      }
+              }}
+            </p>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+      <a
+        [routerLink]="routes.STOCK.ROOT"
+        class="p-button p-button-text p-component justify-center no-underline"
+        >{{ 'common.cancel' | translate }}</a
+      >
+      <p-button
+        type="submit"
+        [icon]="'pi ' + (operation === 'adjustment' ? 'pi-sliders-h' : 'pi-check')"
+        [label]="'stock.operations.' + operation + 'Submit' | translate"
+        [loading]="store.submitting()"
+      />
+    </div>
+  </form>
+}

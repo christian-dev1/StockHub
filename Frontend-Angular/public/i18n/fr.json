@@ -28,7 +28,8 @@
       "overview": "Vue d'ensemble",
       "platform": "Plateforme",
       "administration": "Administration",
-      "catalogue": "Catalogue"
+      "catalogue": "Catalogue",
+      "stock": "Stock"
     },
     "dashboard": "Tableau de bord",
     "companies": "Entreprises",
@@ -39,7 +40,11 @@
     "products": "Produits",
     "categories": "Catégories",
     "suppliers": "Fournisseurs",
-    "locations": "Emplacements"
+    "locations": "Emplacements",
+    "stock": "Stock",
+    "stockMovements": "Mouvements",
+    "batches": "Lots",
+    "stockDocuments": "Bons de stock"
   },
   "theme": {
     "label": "Thème",
@@ -131,7 +136,7 @@
       "LOCATION_CODE_INVALID": "Le code ne peut contenir que des lettres, chiffres, « - » et « _ ».",
       "LOCATION_PRIMARY_CANNOT_BE_DISABLED": "L'emplacement principal ne peut pas être désactivé : désignez d'abord un autre emplacement principal.",
       "LOCATION_INACTIVE": "Un emplacement inactif ne peut pas devenir principal.",
-      "LOCATION_ACCESS_DENIED": "Vous n'avez pas accès à cet emplacement.",
+      "LOCATION_ACCESS_DENIED": "Vous n’avez pas accès à cet emplacement.",
       "LOCATION_NAME_REQUIRED": "Le nom est obligatoire.",
       "LOCATION_CODE_REQUIRED": "Le code est obligatoire.",
       "CATEGORY_NOT_FOUND": "Catégorie introuvable.",
@@ -163,8 +168,8 @@
       "PRODUCT_PRICE_INVALID": "Prix invalide (trop de chiffres).",
       "PRODUCT_MIN_STOCK_NEGATIVE": "Le stock minimum ne peut pas être négatif.",
       "PRODUCT_REORDER_QUANTITY_INVALID": "La quantité de réapprovisionnement doit être positive.",
-      "QUANTITY_MUST_BE_WHOLE": "Cette unité n'accepte que des quantités entières.",
-      "QUANTITY_INVALID": "Quantité invalide.",
+      "QUANTITY_MUST_BE_WHOLE": "Cette unité nécessite une quantité entière.",
+      "QUANTITY_INVALID": "Saisissez une quantité strictement positive avec trois décimales maximum.",
       "PRODUCT_EXPIRY_REQUIRES_BATCH": "Le suivi des dates d'expiration nécessite le suivi par lots.",
       "PRODUCT_TRACKING_LOCKED": "Le suivi par lots ne peut pas changer tant que le produit a du stock.",
       "PRODUCT_HAS_STOCK": "Ce produit a du stock : désactivez-le au lieu de le supprimer.",
@@ -191,7 +196,29 @@
       "BARCODE_NOT_ENCODABLE": "Ce code-barres ne peut pas être dessiné.",
       "BARCODE_RANGE_EXHAUSTED": "Plus aucun numéro de code-barres disponible.",
       "LABELS_COUNT_INVALID": "Entre 1 et 1000 étiquettes par impression.",
-      "LABELS_START_INVALID": "Position de départ invalide."
+      "LABELS_START_INVALID": "Position de départ invalide.",
+      "INSUFFICIENT_STOCK": "Stock insuffisant pour cette opération. Réduisez la quantité demandée.",
+      "INVALID_QUANTITY": "Saisissez une quantité strictement positive avec trois décimales maximum.",
+      "INVALID_TRANSFER": "Choisissez deux emplacements différents pour le transfert.",
+      "BATCH_REQUIRED": "Renseignez le lot pour ce produit.",
+      "BATCH_NOT_FOUND": "Ce lot est introuvable ou inaccessible.",
+      "BATCH_EXPIRED": "Ce lot est expiré et ne peut pas être utilisé pour cette sortie.",
+      "LOCATION_NOT_ALLOWED": "Vous n’avez pas accès à cet emplacement.",
+      "STOCK_CONFLICT": "Le stock a été modifié simultanément. Actualisez les quantités avant de réessayer.",
+      "BATCH_EXPIRATION_REQUIRED": "La date d’expiration est obligatoire pour ce produit.",
+      "BATCH_DATES_INVALID": "La fabrication doit précéder l’expiration.",
+      "BATCH_DATES_MISMATCH": "Les dates ne correspondent pas à celles du lot existant.",
+      "REASON_REQUIRED": "Renseignez un motif pour cet ajustement.",
+      "STOCK_UNCHANGED": "La quantité cible est identique au stock actuel.",
+      "BATCH_NOT_ALLOWED": "Ce produit n’est pas suivi par lots.",
+      "INVALID_LINES": "Ajoutez au moins une ligne valide à l’opération.",
+      "INVALID_FILTER": "Vérifiez les filtres et les dates saisis.",
+      "BATCH_NUMBER_REQUIRED": "Saisissez le numéro du lot.",
+      "BATCH_NUMBER_TOO_LONG": "Numéro de lot trop long (100 caractères maximum).",
+      "INVALID_MOVEMENT_TYPE": "Type de mouvement non valide pour cette opération.",
+      "LOCATION_REQUIRED": "Choisissez un emplacement.",
+      "PRODUCT_REQUIRED": "Choisissez un produit.",
+      "LOCATION_HAS_STOCK": "Cet emplacement contient encore du stock."
     }
   },
   "roles": {
@@ -222,7 +249,12 @@
     "passwordLength": "Entre {{min}} et {{max}} caractères.",
     "passwordWeak": "Doit contenir des lettres et des chiffres.",
     "mismatch": "Les mots de passe ne correspondent pas.",
-    "locationsRequired": "Sélectionnez au moins un emplacement."
+    "locationsRequired": "Sélectionnez au moins un emplacement.",
+    "positive": "La quantité doit être supérieure à zéro.",
+    "wholeNumber": "Cette unité n'accepte que des quantités entières.",
+    "maxDecimals": "{{max}} décimales maximum.",
+    "sameLocation": "Choisissez un emplacement de destination différent de la source.",
+    "dateOrder": "La date d'expiration doit suivre la date de fabrication."
   },
   "auth": {
     "brand": {
@@ -810,6 +842,201 @@
     "actions": {
       "print": "Imprimer",
       "pdf": "Télécharger le PDF"
+    }
+  },
+  "stock": {
+    "backToStock": "Retour au stock",
+    "levels": {
+      "title": "Stock",
+      "subtitle": "Quantités disponibles dans votre emplacement.",
+      "subtitleMulti": "Quantités disponibles par emplacement.",
+      "search": "Rechercher un produit (nom ou SKU)",
+      "empty": "Aucun stock enregistré",
+      "emptyHint": "Les produits apparaissent ici après leur première entrée de stock.",
+      "firstEntry": "Faire une première entrée"
+    },
+    "noLocation": {
+      "title": "Aucun emplacement disponible",
+      "description": "Aucun emplacement actif ne vous est attribué. Demandez à un administrateur de vous en attribuer un."
+    },
+    "fields": {
+      "product": "Produit",
+      "productSearch": "Nom, SKU ou code-barres",
+      "sku": "SKU",
+      "location": "Emplacement",
+      "quantity": "Quantité",
+      "minStock": "Stock minimum",
+      "state": "État",
+      "updatedAt": "Mis à jour",
+      "actions": "Actions",
+      "date": "Date",
+      "reference": "Référence",
+      "type": "Type",
+      "before": "Avant",
+      "after": "Après",
+      "user": "Utilisateur",
+      "batch": "Lot",
+      "batchNumber": "Numéro de lot",
+      "manufacturingDate": "Date de fabrication",
+      "expirationDate": "Date d'expiration",
+      "expiresOn": "Expire le {{date}}",
+      "status": "Statut",
+      "reason": "Motif",
+      "reasonRequired": "Motif (obligatoire)",
+      "externalReference": "Référence externe",
+      "number": "Numéro"
+    },
+    "hints": {
+      "product": "Tapez au moins une lettre, ou scannez le code-barres.",
+      "reference": "Bon de livraison, facture… (facultatif)",
+      "adjustReason": "Expliquez pourquoi le stock est corrigé (casse, erreur de comptage…).",
+      "adjustBatch": "L'ajustement corrige la quantité de ce lot.",
+      "chooseBatch": "Choisir un lot"
+    },
+    "picker": {
+      "empty": "Aucun produit actif trouvé",
+      "batchTracked": "Suivi par lots",
+      "expiryTracked": "Date d'expiration",
+      "showAll": "Afficher les produits"
+    },
+    "states": {
+      "IN_STOCK": "En stock",
+      "LOW": "Stock faible",
+      "OUT": "Rupture",
+      "NEGATIVE": "Stock négatif"
+    },
+    "expiry": {
+      "VALID": "Valide",
+      "EXPIRING_SOON": "Expire bientôt",
+      "EXPIRED": "Expiré"
+    },
+    "batchStatus": {
+      "ACTIVE": "Actif",
+      "DEPLETED": "Épuisé"
+    },
+    "movementTypes": {
+      "ENTRY": "Entrée",
+      "EXIT": "Sortie",
+      "TRANSFER_OUT": "Transfert sortant",
+      "TRANSFER_IN": "Transfert entrant",
+      "ADJUSTMENT_POSITIVE": "Ajustement +",
+      "ADJUSTMENT_NEGATIVE": "Ajustement −",
+      "RETURN_CUSTOMER": "Retour client",
+      "RETURN_SUPPLIER": "Retour fournisseur",
+      "SALE": "Vente"
+    },
+    "documentTypes": {
+      "ENTRY": "Bon d'entrée",
+      "EXIT": "Bon de sortie",
+      "ADJUSTMENT": "Ajustement",
+      "TRANSFER": "Transfert"
+    },
+    "filters": {
+      "toggle": "Filtres",
+      "state": "Filtrer par état",
+      "lowStock": "Stock faible",
+      "outOfStock": "Rupture",
+      "allLocations": "Tous les emplacements",
+      "allProducts": "Tous les produits",
+      "allTypes": "Tous les types",
+      "allUsers": "Tous les utilisateurs",
+      "allStatuses": "Tous les statuts",
+      "dateFrom": "Du",
+      "dateTo": "Au",
+      "expiry": "Filtrer par expiration",
+      "EXPIRING_SOON": "Expire bientôt",
+      "EXPIRED": "Expirés",
+      "expiresAfter": "Expire après le",
+      "expiresBefore": "Expire avant le"
+    },
+    "operations": {
+      "label": "Opérations de stock",
+      "entry": "Entrée",
+      "exit": "Sortie",
+      "adjustment": "Ajustement",
+      "transfer": "Transfert",
+      "entryTitle": "Entrée de stock",
+      "entrySubtitle": "Enregistrez des marchandises reçues.",
+      "entrySubmit": "Enregistrer l'entrée",
+      "exitTitle": "Sortie de stock",
+      "exitSubtitle": "Enregistrez des marchandises qui quittent le stock.",
+      "exitSubmit": "Enregistrer la sortie",
+      "adjustmentTitle": "Ajustement de stock",
+      "adjustmentSubtitle": "Corrigez le stock après un comptage, une casse ou une erreur.",
+      "adjustmentSubmit": "Ajuster le stock",
+      "transferTitle": "Transfert entre emplacements",
+      "transferSubtitle": "Déplacez des marchandises d'un emplacement à un autre.",
+      "transferSubmit": "Transférer"
+    },
+    "available": {
+      "label": "Stock disponible",
+      "current": "Stock actuel",
+      "exceeded": "La quantité demandée dépasse le stock disponible ({{available}}).",
+      "detail": "Disponible : {{available}} — demandé : {{requested}}."
+    },
+    "adjustment": {
+      "direction": "Type d'ajustement",
+      "increase": "Ajouter",
+      "decrease": "Retirer",
+      "quantity": "Quantité à ajouter ou retirer",
+      "current": "Stock actuel",
+      "change": "Ajustement",
+      "after": "Stock après",
+      "confirmTitle": "Confirmer l'ajustement",
+      "confirmMessage": "{{product}} : stock actuel {{current}}, ajustement {{change}}, stock après opération {{after}}.",
+      "confirm": "Ajuster"
+    },
+    "transfer": {
+      "source": "Emplacement source",
+      "destination": "Emplacement de destination",
+      "atDestination": "Stock à destination",
+      "singleLocation": "Le transfert nécessite au moins deux emplacements.",
+      "singleLocationHint": "Vous n'avez accès qu'à un seul emplacement actif."
+    },
+    "fefo": {
+      "hint": "StockHub utilise en priorité les lots dont la date d'expiration est la plus proche. Les lots expirés ne sont jamais utilisés.",
+      "used": "Lots choisis automatiquement : la date d'expiration la plus proche d'abord."
+    },
+    "result": {
+      "entry": "Entrée enregistrée",
+      "exit": "Sortie enregistrée",
+      "adjustment": "Ajustement enregistré",
+      "transfer": "Transfert effectué",
+      "number": "Bon n°",
+      "lines": "Détail de l'opération",
+      "another": "Nouvelle opération"
+    },
+    "done": {
+      "entry": "Entrée enregistrée ({{number}}).",
+      "exit": "Sortie enregistrée ({{number}}).",
+      "adjustment": "Ajustement enregistré ({{number}}).",
+      "transfer": "Transfert effectué ({{number}})."
+    },
+    "movements": {
+      "title": "Mouvements de stock",
+      "subtitle": "Historique de toutes les entrées, sorties, transferts et ajustements. Lecture seule.",
+      "searchReference": "Rechercher un n° de bon (ex. BE-2026-000001)",
+      "empty": "Aucun mouvement",
+      "emptyHint": "Les mouvements apparaissent après une entrée, une sortie, un transfert ou un ajustement."
+    },
+    "batches": {
+      "title": "Lots",
+      "subtitle": "Lots en stock et dates d'expiration (alerte {{days}} jours avant).",
+      "search": "Numéro de lot exact",
+      "section": "Lot",
+      "noneAvailable": "Aucun lot en stock à cet emplacement",
+      "empty": "Aucun lot",
+      "emptyHint": "Les lots sont créés lors des entrées de produits suivis par lots."
+    },
+    "documents": {
+      "title": "Bons de stock",
+      "subtitle": "Bons d'entrée (BE), de sortie (BS), ajustements (AJ) et transferts (TR).",
+      "search": "N° de bon ou référence externe",
+      "empty": "Aucun bon",
+      "emptyHint": "Chaque opération de stock produit un bon.",
+      "back": "Retour aux bons",
+      "details": "Informations du bon",
+      "lines": "Lignes ({{count}})"
     }
   }
 }

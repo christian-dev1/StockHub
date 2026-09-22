@@ -69,6 +69,22 @@ export const API_ROUTES = {
     IMPORT_PREVIEW: `${API}/products/imports/preview`,
     IMPORT_COMMIT: (jobId: string) => `${API}/products/imports/${encodeURIComponent(jobId)}/commit`,
   },
+  STOCK: {
+    LEVELS: `${API}/stocks`,
+    PRODUCT_LEVELS: (productId: string) => `${API}/stocks/${encodeURIComponent(productId)}`,
+    MOVEMENTS: `${API}/stock-movements`,
+    MOVEMENT: (id: string) => `${API}/stock-movements/${encodeURIComponent(id)}`,
+    ENTRIES: `${API}/stock/entries`,
+    EXITS: `${API}/stock/exits`,
+    ADJUSTMENTS: `${API}/stock/adjustments`,
+    TRANSFERS: `${API}/stock/transfers`,
+    DOCUMENTS: `${API}/stock-documents`,
+    DOCUMENT: (id: string) => `${API}/stock-documents/${encodeURIComponent(id)}`,
+  },
+  BATCHES: {
+    ROOT: `${API}/batches`,
+    ONE: (id: string) => `${API}/batches/${encodeURIComponent(id)}`,
+  },
   BARCODES: {
     GENERATE: (productId: string) => `${API}/products/${encodeURIComponent(productId)}/barcode`,
     PNG: (productId: string) => `${API}/products/${encodeURIComponent(productId)}/barcode.png`,

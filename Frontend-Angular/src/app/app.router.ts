@@ -16,6 +16,7 @@ import { COMPANIES_PROVIDERS } from './features/companies/companies.providers';
 import { DASHBOARD_PROVIDERS } from './features/dashboard/dashboard.providers';
 import { LOCATIONS_PROVIDERS } from './features/locations/locations.providers';
 import { PRODUCTS_PROVIDERS } from './features/products/products.providers';
+import { STOCK_PROVIDERS } from './features/stock/stock.providers';
 import { SETTINGS_PROVIDERS } from './features/settings/settings.providers';
 import { SUPPLIERS_PROVIDERS } from './features/suppliers/suppliers.providers';
 import { USERS_PROVIDERS } from './features/users/users.providers';
@@ -163,6 +164,88 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./features/products/presentation/pages/product-detail-page/product-detail-page').then(
                 (m) => m.ProductDetailPage,
+              ),
+          },
+        ],
+      },
+      {
+        path: APP_PATHS.STOCK.ROOT,
+        canActivate: [companyGuard, permissionGuard],
+        data: { permissions: ['STOCK_VIEW'] },
+        providers: STOCK_PROVIDERS,
+        children: [
+          {
+            path: '',
+            title: 'StockHub',
+            loadComponent: () =>
+              import('./features/stock/presentation/pages/stock-levels-page/stock-levels-page').then(
+                (m) => m.StockLevelsPage,
+              ),
+          },
+          {
+            path: APP_PATHS.STOCK.ENTRY,
+            canActivate: [permissionGuard],
+            data: { permissions: ['STOCK_ENTRY'], operation: 'entry' },
+            loadComponent: () =>
+              import('./features/stock/presentation/pages/stock-operation-page/stock-operation-page').then(
+                (m) => m.StockOperationPage,
+              ),
+          },
+          {
+            path: APP_PATHS.STOCK.EXIT,
+            canActivate: [permissionGuard],
+            data: { permissions: ['STOCK_EXIT'], operation: 'exit' },
+            loadComponent: () =>
+              import('./features/stock/presentation/pages/stock-operation-page/stock-operation-page').then(
+                (m) => m.StockOperationPage,
+              ),
+          },
+          {
+            path: APP_PATHS.STOCK.ADJUSTMENT,
+            canActivate: [permissionGuard],
+            data: { permissions: ['STOCK_ADJUST'], operation: 'adjustment' },
+            loadComponent: () =>
+              import('./features/stock/presentation/pages/stock-operation-page/stock-operation-page').then(
+                (m) => m.StockOperationPage,
+              ),
+          },
+          {
+            path: APP_PATHS.STOCK.TRANSFER,
+            canActivate: [permissionGuard],
+            data: { permissions: ['STOCK_TRANSFER'], operation: 'transfer' },
+            loadComponent: () =>
+              import('./features/stock/presentation/pages/stock-operation-page/stock-operation-page').then(
+                (m) => m.StockOperationPage,
+              ),
+          },
+          {
+            path: APP_PATHS.STOCK.MOVEMENTS,
+            loadComponent: () =>
+              import('./features/stock/presentation/pages/stock-movements-page/stock-movements-page').then(
+                (m) => m.StockMovementsPage,
+              ),
+          },
+          {
+            path: APP_PATHS.STOCK.BATCHES,
+            canActivate: [permissionGuard],
+            data: { permissions: ['BATCH_MANAGE'] },
+            loadComponent: () =>
+              import('./features/stock/presentation/pages/batches-page/batches-page').then(
+                (m) => m.BatchesPage,
+              ),
+          },
+          {
+            path: APP_PATHS.STOCK.DOCUMENTS,
+            loadComponent: () =>
+              import('./features/stock/presentation/pages/stock-documents-page/stock-documents-page').then(
+                (m) => m.StockDocumentsPage,
+              ),
+          },
+          {
+            path: APP_PATHS.STOCK.DOCUMENT,
+            loadComponent: () =>
+              import('./features/stock/presentation/pages/stock-document-page/stock-document-page').then(
+                (m) => m.StockDocumentPage,
               ),
           },
         ],

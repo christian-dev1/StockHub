@@ -1,0 +1,146 @@
+<app-page-header
+  [title]="'stock.levels.title' | translate"
+  [subtitle]="
+    (context.multiLocation() ? 'stock.levels.subtitleMulti' : 'stock.levels.subtitle') | translate
+  "
+>
+  <app-operation-links actions />
+</app-page-header>
+
+@if (!context.hasLocation()) {
+  <section class="sh-card">
+    <app-empty-state
+      icon="pi-map-marker"
+      [title]="'stock.noLocation.title' | translate"
+      [description]="'stock.noLocation.description' | translate"
+    />
+  </section>
+} @else {
+  <div class="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center">
+    <app-search-field
+      class="min-w-0 lg:w-80"
+      [label]="'stock.levels.search' | translate"
+      [value]="list.filters().search"
+      (searchChange)="filter({ search: $event })"
+    />
+    @if (context.multiLocation()) {
+      <p-select
+        class="min-w-0 lg:w-64"
+        [options]="locationOptions()"
+        optionLabel="label"
+        optionValue="value"
+        [showClear]="true"
+        [placeholder]="'stock.filters.allLocations' | translate"
+        [ariaLabel]="'stock.fields.location' | translate"
+        [ngModel]="list.filters().locationId"
+        (ngModelChange)="filter({ locationId: $event ?? null })"
+        styleClass="w-full"
+      />
+    }
+    <div
+      class="flex flex-wrap gap-2"
+      role="group"
+      [attr.aria-label]="'stock.filters.state' | translate"
+    >
+      @for (option of stateOptions(); track option.value) {
+        <button
+          type="button"
+          class="inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium"
+          [class]="
+            list.filters().state === option.value
+              ? 'border-primary bg-primary/10 text-primary'
+              : 'border-border bg-surface text-fg hover:bg-surface-muted'
+          "
+          [attr.aria-pressed]="list.filters().state === option.value"
+          (click)="setState($any(option.value))"
+        >
+          <i
+            class="pi"
+            [class.pi-exclamation-triangle]="option.value === 'LOW'"
+            [class.pi-ban]="option.value === 'OUT'"
+            aria-hidden="true"
+          ></i>
+          {{ option.label }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <app-data-table
+    [caption]="'stock.levels.title' | translate"
+    [columns]="columns()"
+    [rows]="list.rows()"
+    [rowKey]="rowKey"
+    [loading]="list.loading()"
+    [error]="list.error()"
+    [total]="list.total()"
+    [page]="list.page()"
+    [size]="list.size()"
+    [sort]="list.sort()"
+    [emptyTitle]="'stock.levels.empty' | translate"
+    [emptyDescription]="'stock.levels.emptyHint' | translate"
+    [filtered]="list.filtered()"
+    (clearFilters)="list.clearFilters()"
+    (sortChange)="list.changeSort($event)"
+    (pageChange)="list.changePage($event)"
+    (retry)="list.load()"
+  >
+    @if (firstOperation()) {
+      <a empty-actions pButton [routerLink]="routes.STOCK.ENTRY" class="no-underline">
+        <i pButtonIcon class="pi pi-arrow-down-left" aria-hidden="true"></i>
+        <span pButtonLabel>{{ 'stock.levels.firstEntry' | translate }}</span>
+      </a>
+    }
+    <ng-template appCell="productName" let-row>
+      <span class="block truncate font-medium text-fg">{{ row.productName }}</span>
+      <span class="block truncate font-mono text-xs font-normal text-fg-muted lg:hidden">{{
+        row.sku
+      }}</span>
+    </ng-template>
+    <ng-template appCell="sku" let-row
+      ><span class="whitespace-nowrap font-mono text-xs">{{ row.sku }}</span></ng-template
+    >
+    <ng-template appCell="locationId" let-row>{{ locationName(row.locationId) }}</ng-template>
+    <ng-template appCell="quantity" let-row>
+      <span
+        class="text-base font-semibold tabular-nums"
+        [class.text-danger]="row.quantity <= 0"
+        data-testid="stock-quantity"
+        >{{ row.quantity | quantity }}</span
+      >
+    </ng-template>
+    <ng-template appCell="minStock" let-row>
+      <span class="tabular-nums text-fg-muted">{{
+        row.minStock > 0 ? (row.minStock | quantity) : '—'
+      }}</span>
+    </ng-template>
+    <ng-template appCell="state" let-row>
+      <app-level-state-badge [state]="state(row)" />
+    </ng-template>
+    <ng-template appCell="updatedAt" let-row>
+      <span class="text-fg-muted">{{ row.updatedAt | dateTime: 'short' }}</span>
+    </ng-template>
+    <ng-template appCell="actions" let-row>
+      <div class="flex justify-end gap-1">
+        @for (operation of rowOperations(); track operation) {
+          <a
+            [routerLink]="operationRoute(operation)"
+            [queryParams]="{ productId: row.productId, locationId: row.locationId }"
+            class="inline-flex size-11 items-center justify-center rounded-lg text-fg-muted hover:bg-surface-muted hover:text-fg"
+            [attr.aria-label]="
+              ('stock.operations.' + operation | translate) + ' — ' + row.productName
+            "
+            [title]="'stock.operations.' + operation | translate"
+          >
+            <i
+              class="pi"
+              [class.pi-arrow-down-left]="operation === 'entry'"
+              [class.pi-arrow-up-right]="operation === 'exit'"
+              aria-hidden="true"
+            ></i>
+          </a>
+        }
+      </div>
+    </ng-template>
+  </app-data-table>
+}

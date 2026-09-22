@@ -1,0 +1,172 @@
+<app-page-header
+  [title]="'stock.movements.title' | translate"
+  [subtitle]="'stock.movements.subtitle' | translate"
+/>
+
+<div class="mb-4 flex flex-col gap-2 sm:flex-row lg:max-w-xl">
+  <app-search-field
+    class="min-w-0 flex-1"
+    [label]="'stock.movements.searchReference' | translate"
+    [value]="list.filters().reference"
+    (searchChange)="filter({ reference: $event })"
+  />
+  <button
+    type="button"
+    class="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg border border-border px-4 text-sm font-medium text-fg hover:bg-surface-muted lg:hidden"
+    [attr.aria-expanded]="filtersOpen()"
+    aria-controls="movement-filters"
+    (click)="filtersOpen.set(!filtersOpen())"
+  >
+    <i class="pi pi-filter" aria-hidden="true"></i>{{ 'stock.filters.toggle' | translate }}
+    @if (activeFilters() > 0) {
+      <span class="rounded-full bg-primary px-2 text-xs text-primary-fg">{{
+        activeFilters()
+      }}</span>
+    }
+  </button>
+</div>
+
+<div
+  id="movement-filters"
+  class="mb-4 gap-3 sm:grid-cols-2 lg:grid lg:grid-cols-3 xl:grid-cols-6"
+  [class.grid]="filtersOpen()"
+  [class.hidden]="!filtersOpen()"
+>
+  <app-product-picker
+    class="xl:col-span-2"
+    inputId="mv-product"
+    [ariaLabel]="'stock.fields.product' | translate"
+    [placeholder]="'stock.filters.allProducts' | translate"
+    [ngModel]="product()"
+    (ngModelChange)="chooseProduct($event)"
+  />
+  @if (context.multiLocation()) {
+    <p-select
+      [options]="locationOptions()"
+      optionLabel="label"
+      optionValue="value"
+      [showClear]="true"
+      [placeholder]="'stock.filters.allLocations' | translate"
+      [ariaLabel]="'stock.fields.location' | translate"
+      [ngModel]="list.filters().locationId"
+      (ngModelChange)="filter({ locationId: $event ?? null })"
+      styleClass="w-full"
+    />
+  }
+  <p-select
+    [options]="typeOptions()"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    [placeholder]="'stock.filters.allTypes' | translate"
+    [ariaLabel]="'stock.fields.type' | translate"
+    [ngModel]="list.filters().type"
+    (ngModelChange)="filter({ type: $event ?? null })"
+    styleClass="w-full"
+  />
+  <p-select
+    [options]="lookups.userOptions()"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    [filter]="lookups.userOptions().length > 8"
+    [placeholder]="'stock.filters.allUsers' | translate"
+    [ariaLabel]="'stock.fields.user' | translate"
+    [ngModel]="list.filters().performedBy"
+    (ngModelChange)="filter({ performedBy: $event ?? null })"
+    styleClass="w-full"
+  />
+  <label class="flex min-w-0 flex-col gap-1 text-xs text-fg-muted">
+    {{ 'stock.filters.dateFrom' | translate }}
+    <input
+      pInputText
+      type="date"
+      class="w-full"
+      [ngModel]="list.filters().dateFrom ?? ''"
+      (ngModelChange)="filter({ dateFrom: $event || null })"
+      [max]="list.filters().dateTo ?? ''"
+    />
+  </label>
+  <label class="flex min-w-0 flex-col gap-1 text-xs text-fg-muted">
+    {{ 'stock.filters.dateTo' | translate }}
+    <input
+      pInputText
+      type="date"
+      class="w-full"
+      [ngModel]="list.filters().dateTo ?? ''"
+      (ngModelChange)="filter({ dateTo: $event || null })"
+      [min]="list.filters().dateFrom ?? ''"
+    />
+  </label>
+</div>
+
+<app-data-table
+  [caption]="'stock.movements.title' | translate"
+  [columns]="columns()"
+  [rows]="list.rows()"
+  [rowKey]="rowKey"
+  [loading]="list.loading()"
+  [error]="list.error()"
+  [total]="list.total()"
+  [page]="list.page()"
+  [size]="list.size()"
+  [sort]="list.sort()"
+  [clickable]="true"
+  [emptyTitle]="'stock.movements.empty' | translate"
+  [emptyDescription]="'stock.movements.emptyHint' | translate"
+  [filtered]="list.filtered()"
+  (clearFilters)="clearFilters()"
+  (sortChange)="list.changeSort($event)"
+  (pageChange)="list.changePage($event)"
+  (rowSelect)="openDocument($event)"
+  (retry)="list.load()"
+>
+  <ng-template appCell="productId" let-row>
+    <span class="block truncate font-medium text-fg">{{ productName(row.productId) }}</span>
+    @if (lookups.product(row.productId); as product) {
+      <span class="block truncate font-mono text-xs font-normal text-fg-muted">{{
+        product.sku
+      }}</span>
+    }
+  </ng-template>
+  <ng-template appCell="createdAt" let-row>
+    <span class="whitespace-nowrap">{{ row.createdAt | dateTime: 'short' }}</span>
+  </ng-template>
+  <ng-template appCell="reference" let-row>
+    <a
+      [routerLink]="routes.STOCK.DOCUMENT(row.documentId)"
+      class="inline-block py-2.5 font-mono text-xs text-primary md:py-0"
+      (click)="$event.stopPropagation()"
+      >{{ row.reference }}</a
+    >
+  </ng-template>
+  <ng-template appCell="locationId" let-row>{{
+    lookups.locationName(row.locationId) ?? '—'
+  }}</ng-template>
+  <ng-template appCell="type" let-row><app-movement-type-badge [type]="row.type" /></ng-template>
+  <ng-template appCell="quantity" let-row>
+    <span
+      class="font-semibold tabular-nums"
+      [class.text-success]="up(row)"
+      [class.text-danger]="!up(row)"
+      >{{ signed(row) | quantity: true }}</span
+    >
+  </ng-template>
+  <ng-template appCell="previousQuantity" let-row>
+    <span class="tabular-nums text-fg-muted">{{ row.previousQuantity | quantity }}</span>
+  </ng-template>
+  <ng-template appCell="newQuantity" let-row>
+    <span class="font-medium tabular-nums">{{ row.newQuantity | quantity }}</span>
+  </ng-template>
+  <ng-template appCell="performedBy" let-row>{{
+    lookups.userName(row.performedBy) ?? '—'
+  }}</ng-template>
+  <ng-template appCell="batchId" let-row>
+    <span class="font-mono text-xs">{{
+      row.batchId ? (lookups.batch(row.batchId)?.batchNumber ?? '…') : '—'
+    }}</span>
+  </ng-template>
+  <ng-template appCell="reason" let-row>
+    <span class="line-clamp-2 text-fg-muted">{{ row.reason ?? '—' }}</span>
+  </ng-template>
+</app-data-table>

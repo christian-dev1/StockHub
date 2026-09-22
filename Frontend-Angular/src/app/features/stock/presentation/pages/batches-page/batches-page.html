@@ -1,0 +1,167 @@
+<app-page-header
+  [title]="'stock.batches.title' | translate"
+  [subtitle]="'stock.batches.subtitle' | translate: { days: context.expiryWarningDays() }"
+/>
+
+<div class="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center">
+  <div class="flex gap-2 sm:flex-row lg:w-80">
+    <app-search-field
+      class="min-w-0 flex-1"
+      [label]="'stock.batches.search' | translate"
+      [value]="list.filters().batchNumber"
+      (searchChange)="filter({ batchNumber: $event })"
+    />
+    <button
+      type="button"
+      class="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg border border-border px-4 text-sm font-medium text-fg hover:bg-surface-muted lg:hidden"
+      [attr.aria-expanded]="filtersOpen()"
+      aria-controls="batch-filters"
+      [attr.aria-label]="'stock.filters.toggle' | translate"
+      (click)="filtersOpen.set(!filtersOpen())"
+    >
+      <i class="pi pi-filter" aria-hidden="true"></i>
+      @if (activeFilters() > 0) {
+        <span class="rounded-full bg-primary px-2 text-xs text-primary-fg">{{
+          activeFilters()
+        }}</span>
+      }
+    </button>
+  </div>
+  <div
+    class="flex flex-wrap gap-2"
+    role="group"
+    [attr.aria-label]="'stock.filters.expiry' | translate"
+  >
+    @for (status of quickFilters; track status) {
+      <button
+        type="button"
+        class="inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium"
+        [class]="
+          list.filters().status === status
+            ? status === 'EXPIRED'
+              ? 'border-danger bg-danger/10 text-danger'
+              : 'border-warning bg-warning/10 text-warning'
+            : 'border-border bg-surface text-fg hover:bg-surface-muted'
+        "
+        [attr.aria-pressed]="list.filters().status === status"
+        (click)="toggleStatus(status)"
+      >
+        <i
+          class="pi"
+          [class.pi-clock]="status === 'EXPIRING_SOON'"
+          [class.pi-times-circle]="status === 'EXPIRED'"
+          aria-hidden="true"
+        ></i>
+        {{ 'stock.filters.' + status | translate }}
+      </button>
+    }
+  </div>
+</div>
+
+<div
+  id="batch-filters"
+  class="mb-4 gap-3 sm:grid-cols-2 lg:grid lg:grid-cols-5"
+  [class.grid]="filtersOpen()"
+  [class.hidden]="!filtersOpen()"
+>
+  <app-product-picker
+    inputId="batch-product"
+    [ariaLabel]="'stock.fields.product' | translate"
+    [placeholder]="'stock.filters.allProducts' | translate"
+    [ngModel]="product()"
+    (ngModelChange)="chooseProduct($event)"
+  />
+  @if (context.multiLocation()) {
+    <p-select
+      [options]="locationOptions()"
+      optionLabel="label"
+      optionValue="value"
+      [showClear]="true"
+      [placeholder]="'stock.filters.allLocations' | translate"
+      [ariaLabel]="'stock.fields.location' | translate"
+      [ngModel]="list.filters().locationId"
+      (ngModelChange)="filter({ locationId: $event ?? null })"
+      styleClass="w-full"
+    />
+  }
+  <p-select
+    [options]="statusOptions()"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    [placeholder]="'stock.filters.allStatuses' | translate"
+    [ariaLabel]="'stock.fields.status' | translate"
+    [ngModel]="list.filters().status"
+    (ngModelChange)="filter({ status: $event ?? null })"
+    styleClass="w-full"
+  />
+  <label class="flex min-w-0 flex-col gap-1 text-xs text-fg-muted">
+    {{ 'stock.filters.expiresAfter' | translate }}
+    <input
+      pInputText
+      type="date"
+      class="w-full"
+      [ngModel]="list.filters().expirationFrom ?? ''"
+      (ngModelChange)="filter({ expirationFrom: $event || null })"
+      [max]="list.filters().expirationTo ?? ''"
+    />
+  </label>
+  <label class="flex min-w-0 flex-col gap-1 text-xs text-fg-muted">
+    {{ 'stock.filters.expiresBefore' | translate }}
+    <input
+      pInputText
+      type="date"
+      class="w-full"
+      [ngModel]="list.filters().expirationTo ?? ''"
+      (ngModelChange)="filter({ expirationTo: $event || null })"
+      [min]="list.filters().expirationFrom ?? ''"
+    />
+  </label>
+</div>
+
+<app-data-table
+  [caption]="'stock.batches.title' | translate"
+  [columns]="columns()"
+  [rows]="list.rows()"
+  [rowKey]="rowKey"
+  [loading]="list.loading()"
+  [error]="list.error()"
+  [total]="list.total()"
+  [page]="list.page()"
+  [size]="list.size()"
+  [sort]="list.sort()"
+  [emptyTitle]="'stock.batches.empty' | translate"
+  [emptyDescription]="'stock.batches.emptyHint' | translate"
+  [filtered]="list.filtered()"
+  (clearFilters)="clearFilters()"
+  (sortChange)="list.changeSort($event)"
+  (pageChange)="list.changePage($event)"
+  (retry)="list.load()"
+>
+  <ng-template appCell="batchNumber" let-row>
+    <span class="font-mono font-semibold">{{ row.batchNumber }}</span>
+  </ng-template>
+  <ng-template appCell="productId" let-row>
+    <a
+      [routerLink]="routes.STOCK.MOVEMENTS"
+      [queryParams]="{ productId: row.productId }"
+      class="inline-block py-2.5 text-fg hover:text-primary md:py-0"
+      >{{ productName(row.productId) }}</a
+    >
+  </ng-template>
+  <ng-template appCell="locationId" let-row>{{
+    lookups.locationName(row.locationId) ?? '—'
+  }}</ng-template>
+  <ng-template appCell="quantity" let-row>
+    <span class="font-semibold tabular-nums" [class.text-fg-muted]="row.quantity === 0">{{
+      row.quantity | quantity
+    }}</span>
+  </ng-template>
+  <ng-template appCell="manufacturingDate" let-row>
+    <span class="text-fg-muted">{{ (row.manufacturingDate | calendarDate) || '—' }}</span>
+  </ng-template>
+  <ng-template appCell="expirationDate" let-row>
+    <span class="whitespace-nowrap">{{ (row.expirationDate | calendarDate) || '—' }}</span>
+  </ng-template>
+  <ng-template appCell="expiryStatus" let-row><app-expiry-badge [batch]="row" /></ng-template>
+</app-data-table>

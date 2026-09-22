@@ -31,7 +31,7 @@ export interface PageChange {
             (change)="changeSize($any($event.target).value)"
           >
             @for (option of sizes(); track option) {
-              <option [value]="option">{{ option }}</option>
+              <option [value]="option" [selected]="option === size()">{{ option }}</option>
             }
           </select>
         </label>

@@ -28,7 +28,8 @@
       "overview": "Overview",
       "platform": "Platform",
       "administration": "Administration",
-      "catalogue": "Catalogue"
+      "catalogue": "Catalogue",
+      "stock": "Stock"
     },
     "dashboard": "Dashboard",
     "companies": "Companies",
@@ -39,7 +40,11 @@
     "products": "Products",
     "categories": "Categories",
     "suppliers": "Suppliers",
-    "locations": "Locations"
+    "locations": "Locations",
+    "stock": "Stock",
+    "stockMovements": "Movements",
+    "batches": "Batches",
+    "stockDocuments": "Stock notes"
   },
   "theme": {
     "label": "Theme",
@@ -163,8 +168,8 @@
       "PRODUCT_PRICE_INVALID": "Invalid price (too many digits).",
       "PRODUCT_MIN_STOCK_NEGATIVE": "The minimum stock cannot be negative.",
       "PRODUCT_REORDER_QUANTITY_INVALID": "The reorder quantity must be positive.",
-      "QUANTITY_MUST_BE_WHOLE": "This unit only accepts whole quantities.",
-      "QUANTITY_INVALID": "Invalid quantity.",
+      "QUANTITY_MUST_BE_WHOLE": "This unit requires a whole quantity.",
+      "QUANTITY_INVALID": "Enter a positive quantity with no more than three decimal places.",
       "PRODUCT_EXPIRY_REQUIRES_BATCH": "Expiry tracking requires batch tracking.",
       "PRODUCT_TRACKING_LOCKED": "Batch tracking cannot change while the product holds stock.",
       "PRODUCT_HAS_STOCK": "This product holds stock: deactivate it instead of deleting it.",
@@ -191,7 +196,29 @@
       "BARCODE_NOT_ENCODABLE": "This barcode cannot be drawn.",
       "BARCODE_RANGE_EXHAUSTED": "No more barcode numbers are available.",
       "LABELS_COUNT_INVALID": "Between 1 and 1000 labels per print run.",
-      "LABELS_START_INVALID": "Invalid start position."
+      "LABELS_START_INVALID": "Invalid start position.",
+      "INSUFFICIENT_STOCK": "Not enough stock for this operation. Reduce the requested quantity.",
+      "INVALID_QUANTITY": "Enter a positive quantity with no more than three decimal places.",
+      "INVALID_TRANSFER": "Choose two different locations for the transfer.",
+      "BATCH_REQUIRED": "Provide the batch for this product.",
+      "BATCH_NOT_FOUND": "This batch could not be found or is not accessible.",
+      "BATCH_EXPIRED": "This batch has expired and cannot be used for this exit.",
+      "LOCATION_NOT_ALLOWED": "You do not have access to this location.",
+      "STOCK_CONFLICT": "Stock changed at the same time. Refresh quantities before trying again.",
+      "BATCH_EXPIRATION_REQUIRED": "An expiry date is required for this product.",
+      "BATCH_DATES_INVALID": "The manufacturing date must not be after the expiry date.",
+      "BATCH_DATES_MISMATCH": "These dates do not match the existing batch.",
+      "REASON_REQUIRED": "Provide a reason for this adjustment.",
+      "STOCK_UNCHANGED": "The target quantity is the same as the current stock.",
+      "BATCH_NOT_ALLOWED": "This product is not batch-tracked.",
+      "INVALID_LINES": "Add at least one valid line to the operation.",
+      "INVALID_FILTER": "Check the filters and dates you entered.",
+      "BATCH_NUMBER_REQUIRED": "Enter the batch number.",
+      "BATCH_NUMBER_TOO_LONG": "Batch number too long (100 characters maximum).",
+      "INVALID_MOVEMENT_TYPE": "Invalid movement type for this operation.",
+      "LOCATION_REQUIRED": "Choose a location.",
+      "PRODUCT_REQUIRED": "Choose a product.",
+      "LOCATION_HAS_STOCK": "This location still holds stock."
     }
   },
   "roles": {
@@ -222,7 +249,12 @@
     "passwordLength": "Between {{min}} and {{max}} characters.",
     "passwordWeak": "Must contain letters and digits.",
     "mismatch": "Passwords do not match.",
-    "locationsRequired": "Select at least one location."
+    "locationsRequired": "Select at least one location.",
+    "positive": "The quantity must be greater than zero.",
+    "wholeNumber": "This unit only accepts whole quantities.",
+    "maxDecimals": "At most {{max}} decimals.",
+    "sameLocation": "Choose a destination different from the source.",
+    "dateOrder": "The expiry date must come after the manufacturing date."
   },
   "auth": {
     "brand": {
@@ -810,6 +842,201 @@
     "actions": {
       "print": "Print",
       "pdf": "Download PDF"
+    }
+  },
+  "stock": {
+    "backToStock": "Back to stock",
+    "levels": {
+      "title": "Stock",
+      "subtitle": "Quantities available in your location.",
+      "subtitleMulti": "Quantities available per location.",
+      "search": "Search a product (name or SKU)",
+      "empty": "No stock yet",
+      "emptyHint": "Products appear here after their first stock entry.",
+      "firstEntry": "Record a first entry"
+    },
+    "noLocation": {
+      "title": "No location available",
+      "description": "No active location is assigned to you. Ask an administrator to assign one."
+    },
+    "fields": {
+      "product": "Product",
+      "productSearch": "Name, SKU or barcode",
+      "sku": "SKU",
+      "location": "Location",
+      "quantity": "Quantity",
+      "minStock": "Minimum stock",
+      "state": "State",
+      "updatedAt": "Updated",
+      "actions": "Actions",
+      "date": "Date",
+      "reference": "Reference",
+      "type": "Type",
+      "before": "Before",
+      "after": "After",
+      "user": "User",
+      "batch": "Batch",
+      "batchNumber": "Batch number",
+      "manufacturingDate": "Manufacturing date",
+      "expirationDate": "Expiry date",
+      "expiresOn": "Expires {{date}}",
+      "status": "Status",
+      "reason": "Reason",
+      "reasonRequired": "Reason (required)",
+      "externalReference": "External reference",
+      "number": "Number"
+    },
+    "hints": {
+      "product": "Type at least one letter, or scan the barcode.",
+      "reference": "Delivery note, invoice… (optional)",
+      "adjustReason": "Explain why the stock is corrected (breakage, counting error…).",
+      "adjustBatch": "The adjustment corrects the quantity of this batch.",
+      "chooseBatch": "Choose a batch"
+    },
+    "picker": {
+      "empty": "No active product found",
+      "batchTracked": "Batch tracked",
+      "expiryTracked": "Expiry date",
+      "showAll": "Show products"
+    },
+    "states": {
+      "IN_STOCK": "In stock",
+      "LOW": "Low stock",
+      "OUT": "Out of stock",
+      "NEGATIVE": "Negative stock"
+    },
+    "expiry": {
+      "VALID": "Valid",
+      "EXPIRING_SOON": "Expiring soon",
+      "EXPIRED": "Expired"
+    },
+    "batchStatus": {
+      "ACTIVE": "Active",
+      "DEPLETED": "Depleted"
+    },
+    "movementTypes": {
+      "ENTRY": "Entry",
+      "EXIT": "Exit",
+      "TRANSFER_OUT": "Transfer out",
+      "TRANSFER_IN": "Transfer in",
+      "ADJUSTMENT_POSITIVE": "Adjustment +",
+      "ADJUSTMENT_NEGATIVE": "Adjustment −",
+      "RETURN_CUSTOMER": "Customer return",
+      "RETURN_SUPPLIER": "Supplier return",
+      "SALE": "Sale"
+    },
+    "documentTypes": {
+      "ENTRY": "Goods received note",
+      "EXIT": "Goods issued note",
+      "ADJUSTMENT": "Adjustment",
+      "TRANSFER": "Transfer"
+    },
+    "filters": {
+      "toggle": "Filters",
+      "state": "Filter by state",
+      "lowStock": "Low stock",
+      "outOfStock": "Out of stock",
+      "allLocations": "All locations",
+      "allProducts": "All products",
+      "allTypes": "All types",
+      "allUsers": "All users",
+      "allStatuses": "All statuses",
+      "dateFrom": "From",
+      "dateTo": "To",
+      "expiry": "Filter by expiry",
+      "EXPIRING_SOON": "Expiring soon",
+      "EXPIRED": "Expired",
+      "expiresAfter": "Expires after",
+      "expiresBefore": "Expires before"
+    },
+    "operations": {
+      "label": "Stock operations",
+      "entry": "Entry",
+      "exit": "Exit",
+      "adjustment": "Adjustment",
+      "transfer": "Transfer",
+      "entryTitle": "Stock entry",
+      "entrySubtitle": "Record goods received.",
+      "entrySubmit": "Record the entry",
+      "exitTitle": "Stock exit",
+      "exitSubtitle": "Record goods leaving the stock.",
+      "exitSubmit": "Record the exit",
+      "adjustmentTitle": "Stock adjustment",
+      "adjustmentSubtitle": "Correct the stock after a count, a breakage or a mistake.",
+      "adjustmentSubmit": "Adjust the stock",
+      "transferTitle": "Transfer between locations",
+      "transferSubtitle": "Move goods from one location to another.",
+      "transferSubmit": "Transfer"
+    },
+    "available": {
+      "label": "Available stock",
+      "current": "Current stock",
+      "exceeded": "The requested quantity exceeds the available stock ({{available}}).",
+      "detail": "Available: {{available}} — requested: {{requested}}."
+    },
+    "adjustment": {
+      "direction": "Adjustment type",
+      "increase": "Add",
+      "decrease": "Remove",
+      "quantity": "Quantity to add or remove",
+      "current": "Current stock",
+      "change": "Adjustment",
+      "after": "Stock after",
+      "confirmTitle": "Confirm the adjustment",
+      "confirmMessage": "{{product}}: current stock {{current}}, adjustment {{change}}, stock after the operation {{after}}.",
+      "confirm": "Adjust"
+    },
+    "transfer": {
+      "source": "Source location",
+      "destination": "Destination location",
+      "atDestination": "Stock at destination",
+      "singleLocation": "A transfer needs at least two locations.",
+      "singleLocationHint": "You only have access to one active location."
+    },
+    "fefo": {
+      "hint": "StockHub uses the batches with the nearest expiry date first. Expired batches are never used.",
+      "used": "Batches chosen automatically: nearest expiry date first."
+    },
+    "result": {
+      "entry": "Entry recorded",
+      "exit": "Exit recorded",
+      "adjustment": "Adjustment recorded",
+      "transfer": "Transfer done",
+      "number": "Note no.",
+      "lines": "Operation details",
+      "another": "New operation"
+    },
+    "done": {
+      "entry": "Entry recorded ({{number}}).",
+      "exit": "Exit recorded ({{number}}).",
+      "adjustment": "Adjustment recorded ({{number}}).",
+      "transfer": "Transfer done ({{number}})."
+    },
+    "movements": {
+      "title": "Stock movements",
+      "subtitle": "History of every entry, exit, transfer and adjustment. Read only.",
+      "searchReference": "Search a note number (e.g. BE-2026-000001)",
+      "empty": "No movements",
+      "emptyHint": "Movements appear after an entry, exit, transfer or adjustment."
+    },
+    "batches": {
+      "title": "Batches",
+      "subtitle": "Batches in stock and expiry dates (warning {{days}} days before).",
+      "search": "Exact batch number",
+      "section": "Batch",
+      "noneAvailable": "No batch in stock at this location",
+      "empty": "No batches",
+      "emptyHint": "Batches are created by entries of batch-tracked products."
+    },
+    "documents": {
+      "title": "Stock notes",
+      "subtitle": "Goods received (BE), goods issued (BS), adjustments (AJ) and transfers (TR).",
+      "search": "Note number or external reference",
+      "empty": "No notes",
+      "emptyHint": "Every stock operation produces a note.",
+      "back": "Back to notes",
+      "details": "Note details",
+      "lines": "Lines ({{count}})"
     }
   }
 }

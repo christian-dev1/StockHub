@@ -49,5 +49,10 @@ Corrige les anomalies de `docs/audit/2026-09-22-audit.md` sans nouvelle fonction
 - ✅ Codes-barres (CODE128, EAN-13, PNG/SVG, étiquettes PDF)
 - ⏳ Next : catalogue et lookup par scan
 
-## Phases 4 → 12 ⏳
+## Phase 4 — Stock 🔄
+- ✅ Backend (étape 4) : entrées, sorties, ajustements, transferts, lots, FEFO, bons — `docs/06-stock-api.md`
+- ✅ Angular (22/09/2026, étape 5) : stock par emplacement, opérations, mouvements, lots/expiration, bons ; UX mono/multi-sites ; E2E admin/transfert/FEFO/magasinier — `docs/08-etape5-validation.md`
+- ⏳ Next : consultation du stock
+
+## Phases 5 → 12 ⏳
 Voir `00-architecture-plan.md` §11 et §13.

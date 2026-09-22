@@ -11,6 +11,7 @@ import {
   rawTranslationKeys,
   type Account,
 } from '../support/stack';
+import { Api, inDays } from '../support/stock';
 
 /**
  * Responsive, theme, language and accessibility smoke test of every existing
@@ -54,13 +55,24 @@ interface PageSpec {
   readonly account?: Account;
 }
 
-/** A product created once per worker for the detail page. */
+/** A product created once per worker for the detail page, with a stock note for the stock pages. */
 let productId = '';
+let documentId = '';
 test.beforeAll(async ({ request }) => {
   productId = await createProductViaApi(request, ACCOUNTS.ADMIN, {
     name: `Smoke ${Date.now()}`,
     salePrice: 500,
+    batchTracked: true,
+    expiryTracked: true,
   });
+  const api = await Api.as(request, ACCOUNTS.ADMIN);
+  const primary = await api.primaryLocation();
+  const entry = await api.post<{ id: string }>('/stock/entries', {
+    locationId: primary.id,
+    reason: 'Smoke',
+    lines: [{ productId, quantity: 12, batchNumber: `SMOKE-${Date.now()}`, expirationDate: inDays(10) }],
+  });
+  documentId = entry.id;
 });
 
 const PAGES: readonly PageSpec[] = [
@@ -80,6 +92,16 @@ const PAGES: readonly PageSpec[] = [
   { name: 'New supplier', app: 'angular', path: () => '/suppliers/new', account: ACCOUNTS.ADMIN },
   { name: 'Locations', app: 'angular', path: () => '/locations', account: ACCOUNTS.ADMIN },
   { name: 'New location', app: 'angular', path: () => '/locations/new', account: ACCOUNTS.ADMIN },
+  { name: 'Stock', app: 'angular', path: () => '/stock', account: ACCOUNTS.ADMIN },
+  { name: 'Stock (storekeeper)', app: 'angular', path: () => '/stock', account: ACCOUNTS.MAGASINIER },
+  { name: 'Stock entry', app: 'angular', path: () => `/stock/entry?productId=${productId}`, account: ACCOUNTS.ADMIN },
+  { name: 'Stock exit', app: 'angular', path: () => `/stock/exit?productId=${productId}`, account: ACCOUNTS.ADMIN },
+  { name: 'Stock adjustment', app: 'angular', path: () => `/stock/adjustment?productId=${productId}`, account: ACCOUNTS.ADMIN },
+  { name: 'Stock transfer', app: 'angular', path: () => `/stock/transfer?productId=${productId}`, account: ACCOUNTS.ADMIN },
+  { name: 'Stock movements', app: 'angular', path: () => '/stock/movements', account: ACCOUNTS.ADMIN },
+  { name: 'Batches', app: 'angular', path: () => '/stock/batches', account: ACCOUNTS.ADMIN },
+  { name: 'Stock notes', app: 'angular', path: () => '/stock/documents', account: ACCOUNTS.ADMIN },
+  { name: 'Stock note', app: 'angular', path: () => `/stock/documents/${documentId}`, account: ACCOUNTS.ADMIN },
   { name: 'Next login', app: 'next', path: (lang) => `/${lang}/login` },
   { name: 'Next home', app: 'next', path: (lang) => `/${lang}`, account: ACCOUNTS.VENDEUR },
   { name: 'Change password', app: 'next', path: (lang) => `/${lang}/change-password`, account: ACCOUNTS.VENDEUR },
