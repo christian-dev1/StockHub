@@ -6,6 +6,7 @@ import {
   apiToken,
   loginAngular,
 } from '../support/stack';
+import { Api } from '../support/stock';
 
 test.describe('Back-office session', () => {
   test('a protected route without session goes to the login page', async ({ page }) => {
@@ -33,12 +34,19 @@ test.describe('Back-office session', () => {
     await expect(page).toHaveURL(/\/login/);
   });
 
-  test('dates are shown in the company time zone', async ({ page }) => {
+  test('dates are shown in the company time zone', async ({ page, request }) => {
     // The browser runs in Europe/Paris; the demo company is in Africa/Douala.
+    // Stamp a note now and read it back in the recent activity, which formats
+    // instants in the company time zone (the system card is platform-only).
+    const admin = await Api.as(request, ACCOUNTS.ADMIN);
+    const primary = await admin.primaryLocation();
+    const product = await admin.product(`Timezone ${Date.now()}`);
+    await admin.enter(primary.id, product, 1);
+
     await loginAngular(page, ACCOUNTS.ADMIN);
-    const checked = page.getByText(/Vérifié à/);
-    await expect(checked).toBeVisible();
-    const shown = (await checked.innerText()).match(/(\d{2}):(\d{2})/);
+    const first = page.getByTestId('recent-activity').locator('li').first();
+    await expect(first).toContainText('Entrée');
+    const shown = (await first.innerText()).match(/(\d{2}):(\d{2})/);
     expect(shown).not.toBeNull();
     const expected = new Intl.DateTimeFormat('fr-FR', {
       hour: '2-digit',

@@ -85,6 +85,13 @@ export const API_ROUTES = {
     ROOT: `${API}/batches`,
     ONE: (id: string) => `${API}/batches/${encodeURIComponent(id)}`,
   },
+  DASHBOARD: {
+    SUMMARY: `${API}/dashboard/summary`,
+    STOCK_FLOW: `${API}/dashboard/stock-flow`,
+    RECENT_ACTIVITY: `${API}/dashboard/recent-activity`,
+    TOP_MOVEMENTS: `${API}/dashboard/top-movements`,
+    PLATFORM: `${API}/platform/dashboard`,
+  },
   BARCODES: {
     GENERATE: (productId: string) => `${API}/products/${encodeURIComponent(productId)}/barcode`,
     PNG: (productId: string) => `${API}/products/${encodeURIComponent(productId)}/barcode.png`,

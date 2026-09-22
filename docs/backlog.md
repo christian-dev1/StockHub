@@ -54,5 +54,12 @@ Corrige les anomalies de `docs/audit/2026-09-22-audit.md` sans nouvelle fonction
 - ✅ Angular (22/09/2026, étape 5) : stock par emplacement, opérations, mouvements, lots/expiration, bons ; UX mono/multi-sites ; E2E admin/transfert/FEFO/magasinier — `docs/08-etape5-validation.md`
 - ⏳ Next : consultation du stock
 
+## Dashboards (étape 6) ✅
+- ✅ Backend read-model `dashboard/` : endpoints summary / stock-flow / recent-activity / top-movements + platform/dashboard, agrégats SQL, permission `STOCK_VALUE_VIEW` (V5) — `docs/09-dashboards.md`
+- ✅ Angular : 4 dashboards par rôle (SUPER_ADMIN plateforme, ADMIN/MANAGER métier, MAGASINIER opérationnel), graphiques SVG (entrées/sorties, état du stock, stock par emplacement), filtres période + emplacement, 4 états par widget, i18n FR/EN — `docs/10-etape6-validation.md`
+- ✅ Aucune donnée fictive : KPI ventes/revenus absents tant que le module `sale` n'existe pas
+- ✅ Tests : backend 243/243, Angular 217/217, Playwright 153/153
+- ⏳ Étape suivante (ventes/POS/achats…) : voir `00-architecture-plan.md` §11 et §13
+
 ## Phases 5 → 12 ⏳
 Voir `00-architecture-plan.md` §11 et §13.

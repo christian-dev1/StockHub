@@ -37,7 +37,7 @@ test.describe('Stock — MAGASINIER', () => {
     await first.post('/auth/change-password', { currentPassword: temporary, newPassword: password }, 204);
     await loginAngular(page, { email, password });
 
-    const nav = page.getByRole('navigation');
+    const nav = page.getByRole('navigation', { name: 'Navigation principale' });
     await expect(nav.getByRole('link', { name: 'Stock', exact: true })).toBeVisible();
     await expect(nav.getByRole('link', { name: 'Mouvements' })).toBeVisible();
     await expect(nav.getByRole('link', { name: 'Lots' })).toBeVisible();

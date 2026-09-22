@@ -69,6 +69,173 @@
       },
       "checkedAt": "Checked at",
       "unreachable": "The server cannot be reached"
+    },
+    "greeting": "Hello {{name}}",
+    "subtitles": {
+      "platform": "Overall health of StockHub.",
+      "business": "Your stock and its activity at a glance.",
+      "operations": "What needs doing today in your locations."
+    },
+    "sections": {
+      "kpis": "Key figures",
+      "activity": "Entries and exits"
+    },
+    "periods": {
+      "TODAY": "Today",
+      "7D": "7 days",
+      "30D": "30 days",
+      "3M": "3 months",
+      "1Y": "1 year",
+      "CUSTOM": "Custom"
+    },
+    "filters": {
+      "period": "Period",
+      "from": "From",
+      "to": "To",
+      "location": "Location",
+      "allLocations": "All locations"
+    },
+    "widget": {
+      "refreshFailed": "Could not refresh; showing the previous data."
+    },
+    "kpi": {
+      "stockValue": "Stock value",
+      "stockValueHint": "Quantities × purchase price",
+      "products": "Active products",
+      "productsHint": "{{count}} in stock",
+      "quantity": "Total quantity in stock",
+      "quantityHint": "All units combined",
+      "low": "Low stock",
+      "out": "Out of stock",
+      "expiring": "Batches expiring soon",
+      "expiredHint": "{{count}} expired batch(es)",
+      "entriesToday": "Entries today",
+      "exitsToday": "Exits today",
+      "entriesPeriod": "Entries over the period",
+      "exitsPeriod": "Exits over the period",
+      "units": "{{quantity}} unit(s) moved",
+      "operationsToday": "Movements today",
+      "operationsTodayHint": "{{entries}} entr(y/ies) · {{exits}} exit(s)"
+    },
+    "chart": {
+      "showTable": "Show data",
+      "showChart": "Show chart",
+      "bucket": "Period",
+      "units": "unit(s)"
+    },
+    "flow": {
+      "title": "Entries vs exits",
+      "subtitle": "Number of operations over the period",
+      "entries": "Entries",
+      "exits": "Exits",
+      "summary": "{{entries}} entr(y/ies) and {{exits}} exit(s) over the period",
+      "explanation": "One operation = one note (BE or BS). Transfers and adjustments are excluded.",
+      "empty": "No entries or exits over this period",
+      "emptyHint": "Pick another period or record a stock operation."
+    },
+    "status": {
+      "title": "Stock status",
+      "normal": "Normal stock",
+      "low": "Low stock",
+      "out": "Out of stock",
+      "aria": "{{normal}} normal, {{low}} low, {{out}} out of stock",
+      "explanation": "A product is counted once per location.",
+      "empty": "No stock recorded yet"
+    },
+    "locations": {
+      "title": "Stock per location",
+      "byValue": "Stock value (quantities × purchase price)",
+      "byReferences": "Number of products in stock",
+      "references": "{{count}} product(s)"
+    },
+    "batches": {
+      "title": "Batches to watch",
+      "expired": "Expired",
+      "week": "< 7 days",
+      "soon": "< {{days}} days",
+      "expiredOn": "Expired {{date}}",
+      "expiresOn": "Expires {{date}}",
+      "all": "See all batches"
+    },
+    "top": {
+      "title": "Most moved products",
+      "subtitle": "Based on stock operations (not sales)",
+      "operations": "{{count}} operation(s)",
+      "in": "In",
+      "out": "Out",
+      "empty": "No movement over this period"
+    },
+    "attention": {
+      "title": "To handle",
+      "subtitle": "Out of stock, low stock and expired batches",
+      "empty": "Nothing to handle right now",
+      "enter": "Record an entry",
+      "seeBatches": "See batches"
+    },
+    "activity": {
+      "title": "Recent stock activity",
+      "empty": "No recent activity",
+      "emptyHint": "Entries, exits and transfers will appear here.",
+      "by": "by {{name}}",
+      "others": "+ {{count}} more",
+      "filter": "Operation type",
+      "types": {
+        "ENTRY": "Entry",
+        "EXIT": "Exit",
+        "TRANSFER": "Transfer",
+        "ADJUSTMENT": "Adjustment"
+      },
+      "tabs": {
+        "all": "All",
+        "entries": "Entries",
+        "exits": "Exits",
+        "transfers": "Transfers"
+      }
+    },
+    "actions": {
+      "title": "Quick actions",
+      "entry": "New entry",
+      "exit": "New exit",
+      "transfer": "New transfer",
+      "product": "New product",
+      "labels": "Barcodes and labels",
+      "batches": "See batches",
+      "stock": "See stock"
+    },
+    "platform": {
+      "companies": "Companies",
+      "companiesHint": "{{active}} active · {{disabled}} disabled",
+      "users": "Users",
+      "usersHint": "{{active}} active",
+      "products": "Products",
+      "locationsHint": "{{count}} active location(s)",
+      "operationsToday": "Stock operations today",
+      "utc": "Days in universal time (UTC)",
+      "activityTitle": "Platform activity",
+      "metric": "Displayed measure",
+      "newCompanies": "New companies",
+      "operations": "Stock operations",
+      "eventsTitle": "Recent administrative activity",
+      "eventsEmpty": "No events",
+      "platformScope": "Platform",
+      "system": "System",
+      "actions": {
+        "COMPANY_CREATED": "Company created",
+        "COMPANY_UPDATED": "Company updated",
+        "COMPANY_DISABLED": "Company disabled",
+        "COMPANY_ENABLED": "Company re-enabled",
+        "COMPANY_SETTINGS_UPDATED": "Company settings updated",
+        "USER_CREATED": "User created",
+        "USER_DISABLED": "User disabled",
+        "USER_ENABLED": "User re-enabled",
+        "USER_ROLE_CHANGED": "Role changed",
+        "USER_LOCATIONS_CHANGED": "User locations changed",
+        "USER_PASSWORD_RESET": "Password reset",
+        "LOCATION_CREATED": "Location created",
+        "LOCATION_PRIMARY_CHANGED": "Primary location changed",
+        "REFRESH_TOKEN_REUSE_DETECTED": "Session reuse detected",
+        "SUPER_ADMIN_BOOTSTRAPPED": "Super admin initialised"
+      }
     }
   },
   "errors": {
@@ -218,7 +385,8 @@
       "INVALID_MOVEMENT_TYPE": "Invalid movement type for this operation.",
       "LOCATION_REQUIRED": "Choose a location.",
       "PRODUCT_REQUIRED": "Choose a product.",
-      "LOCATION_HAS_STOCK": "This location still holds stock."
+      "LOCATION_HAS_STOCK": "This location still holds stock.",
+      "INVALID_PERIOD": "Invalid period."
     }
   },
   "roles": {

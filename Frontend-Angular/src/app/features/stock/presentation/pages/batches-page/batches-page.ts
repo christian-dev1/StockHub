@@ -10,7 +10,7 @@ import {
   untracked,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
@@ -69,6 +69,7 @@ export class BatchesPage implements OnInit {
   private readonly language = inject(LanguageStore);
   protected readonly context = inject(StockContext);
   protected readonly lookups = inject(StockLookups);
+  private readonly route = inject(ActivatedRoute);
 
   protected readonly routes = APP_ROUTES;
   protected readonly list = new PagedList<Batch, BatchFilters>(
@@ -138,6 +139,11 @@ export class BatchesPage implements OnInit {
   }
 
   ngOnInit(): void {
+    // Dashboard links open the list on an expiry status: ?status=EXPIRING_SOON.
+    const status = this.route.snapshot.queryParamMap.get('status');
+    if (status === 'VALID' || status === 'EXPIRING_SOON' || status === 'EXPIRED') {
+      this.list.filters.set({ ...EMPTY_BATCH_FILTERS, status });
+    }
     this.list.load();
   }
 

@@ -69,6 +69,173 @@
       },
       "checkedAt": "Vérifié à",
       "unreachable": "Le serveur est injoignable"
+    },
+    "greeting": "Bonjour {{name}}",
+    "subtitles": {
+      "platform": "Santé globale de StockHub.",
+      "business": "Votre stock et son activité, en un coup d'œil.",
+      "operations": "Ce qu'il y a à faire aujourd'hui dans vos emplacements."
+    },
+    "sections": {
+      "kpis": "Indicateurs clés",
+      "activity": "Entrées et sorties"
+    },
+    "periods": {
+      "TODAY": "Aujourd'hui",
+      "7D": "7 jours",
+      "30D": "30 jours",
+      "3M": "3 mois",
+      "1Y": "1 an",
+      "CUSTOM": "Personnalisé"
+    },
+    "filters": {
+      "period": "Période",
+      "from": "Du",
+      "to": "Au",
+      "location": "Emplacement",
+      "allLocations": "Tous les emplacements"
+    },
+    "widget": {
+      "refreshFailed": "Actualisation impossible, données précédentes affichées."
+    },
+    "kpi": {
+      "stockValue": "Valeur du stock",
+      "stockValueHint": "Quantités × prix d'achat",
+      "products": "Produits actifs",
+      "productsHint": "{{count}} en stock",
+      "quantity": "Quantité totale en stock",
+      "quantityHint": "Toutes unités confondues",
+      "low": "Stock faible",
+      "out": "Ruptures",
+      "expiring": "Lots expirant bientôt",
+      "expiredHint": "{{count}} lot(s) expiré(s)",
+      "entriesToday": "Entrées aujourd'hui",
+      "exitsToday": "Sorties aujourd'hui",
+      "entriesPeriod": "Entrées sur la période",
+      "exitsPeriod": "Sorties sur la période",
+      "units": "{{quantity}} unité(s) mouvementée(s)",
+      "operationsToday": "Mouvements aujourd'hui",
+      "operationsTodayHint": "{{entries}} entrée(s) · {{exits}} sortie(s)"
+    },
+    "chart": {
+      "showTable": "Voir les données",
+      "showChart": "Voir le graphique",
+      "bucket": "Période",
+      "units": "unité(s)"
+    },
+    "flow": {
+      "title": "Entrées vs sorties",
+      "subtitle": "Nombre d'opérations sur la période",
+      "entries": "Entrées",
+      "exits": "Sorties",
+      "summary": "{{entries}} entrée(s) et {{exits}} sortie(s) sur la période",
+      "explanation": "Une opération = un bon (BE ou BS). Les transferts et ajustements sont exclus.",
+      "empty": "Aucune entrée ni sortie sur cette période",
+      "emptyHint": "Changez de période ou enregistrez une opération de stock."
+    },
+    "status": {
+      "title": "État du stock",
+      "normal": "Stock normal",
+      "low": "Stock faible",
+      "out": "Rupture",
+      "aria": "{{normal}} normal, {{low}} faible, {{out}} en rupture",
+      "explanation": "Un produit compté par emplacement.",
+      "empty": "Aucun stock enregistré"
+    },
+    "locations": {
+      "title": "Stock par emplacement",
+      "byValue": "Valeur du stock (quantités × prix d'achat)",
+      "byReferences": "Nombre de produits en stock",
+      "references": "{{count}} produit(s)"
+    },
+    "batches": {
+      "title": "Lots à surveiller",
+      "expired": "Expirés",
+      "week": "< 7 jours",
+      "soon": "< {{days}} jours",
+      "expiredOn": "Expiré le {{date}}",
+      "expiresOn": "Expire le {{date}}",
+      "all": "Voir tous les lots"
+    },
+    "top": {
+      "title": "Produits les plus mouvementés",
+      "subtitle": "Selon les opérations de stock (pas les ventes)",
+      "operations": "{{count}} opération(s)",
+      "in": "Entré",
+      "out": "Sorti",
+      "empty": "Aucun mouvement sur cette période"
+    },
+    "attention": {
+      "title": "À traiter",
+      "subtitle": "Ruptures, stocks faibles et lots expirés",
+      "empty": "Rien à traiter pour le moment",
+      "enter": "Faire une entrée",
+      "seeBatches": "Voir les lots"
+    },
+    "activity": {
+      "title": "Activités de stock récentes",
+      "empty": "Aucune activité récente",
+      "emptyHint": "Les entrées, sorties et transferts apparaîtront ici.",
+      "by": "par {{name}}",
+      "others": "+ {{count}} autre(s)",
+      "filter": "Type d'opération",
+      "types": {
+        "ENTRY": "Entrée",
+        "EXIT": "Sortie",
+        "TRANSFER": "Transfert",
+        "ADJUSTMENT": "Ajustement"
+      },
+      "tabs": {
+        "all": "Tout",
+        "entries": "Entrées",
+        "exits": "Sorties",
+        "transfers": "Transferts"
+      }
+    },
+    "actions": {
+      "title": "Actions rapides",
+      "entry": "Nouvelle entrée",
+      "exit": "Nouvelle sortie",
+      "transfer": "Nouveau transfert",
+      "product": "Nouveau produit",
+      "labels": "Codes-barres et étiquettes",
+      "batches": "Voir les lots",
+      "stock": "Voir le stock"
+    },
+    "platform": {
+      "companies": "Entreprises",
+      "companiesHint": "{{active}} active(s) · {{disabled}} désactivée(s)",
+      "users": "Utilisateurs",
+      "usersHint": "{{active}} actif(s)",
+      "products": "Produits",
+      "locationsHint": "{{count}} emplacement(s) actif(s)",
+      "operationsToday": "Opérations de stock aujourd'hui",
+      "utc": "Jours en temps universel (UTC)",
+      "activityTitle": "Activité de la plateforme",
+      "metric": "Mesure affichée",
+      "newCompanies": "Nouvelles entreprises",
+      "operations": "Opérations de stock",
+      "eventsTitle": "Activité administrative récente",
+      "eventsEmpty": "Aucun événement",
+      "platformScope": "Plateforme",
+      "system": "Système",
+      "actions": {
+        "COMPANY_CREATED": "Entreprise créée",
+        "COMPANY_UPDATED": "Entreprise modifiée",
+        "COMPANY_DISABLED": "Entreprise désactivée",
+        "COMPANY_ENABLED": "Entreprise réactivée",
+        "COMPANY_SETTINGS_UPDATED": "Paramètres d'entreprise modifiés",
+        "USER_CREATED": "Utilisateur créé",
+        "USER_DISABLED": "Utilisateur désactivé",
+        "USER_ENABLED": "Utilisateur réactivé",
+        "USER_ROLE_CHANGED": "Rôle modifié",
+        "USER_LOCATIONS_CHANGED": "Emplacements d'un utilisateur modifiés",
+        "USER_PASSWORD_RESET": "Mot de passe réinitialisé",
+        "LOCATION_CREATED": "Emplacement créé",
+        "LOCATION_PRIMARY_CHANGED": "Emplacement principal changé",
+        "REFRESH_TOKEN_REUSE_DETECTED": "Réutilisation de session détectée",
+        "SUPER_ADMIN_BOOTSTRAPPED": "Super administrateur initialisé"
+      }
     }
   },
   "errors": {
@@ -218,7 +385,8 @@
       "INVALID_MOVEMENT_TYPE": "Type de mouvement non valide pour cette opération.",
       "LOCATION_REQUIRED": "Choisissez un emplacement.",
       "PRODUCT_REQUIRED": "Choisissez un produit.",
-      "LOCATION_HAS_STOCK": "Cet emplacement contient encore du stock."
+      "LOCATION_HAS_STOCK": "Cet emplacement contient encore du stock.",
+      "INVALID_PERIOD": "Période invalide."
     }
   },
   "roles": {

@@ -7,7 +7,7 @@ import {
   inject,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
@@ -63,6 +63,7 @@ export class StockLevelsPage implements OnInit {
   private readonly translate = inject(TranslateService);
   private readonly language = inject(LanguageStore);
   protected readonly context = inject(StockContext);
+  private readonly route = inject(ActivatedRoute);
 
   protected readonly routes = APP_ROUTES;
   protected readonly list = new PagedList<StockLevel, LevelFilters>(
@@ -130,6 +131,11 @@ export class StockLevelsPage implements OnInit {
   );
 
   ngOnInit(): void {
+    // Dashboard links open the list on a state: ?state=LOW or ?state=OUT.
+    const state = this.route.snapshot.queryParamMap.get('state');
+    if (state === 'LOW' || state === 'OUT') {
+      this.list.filters.set({ ...EMPTY_LEVEL_FILTERS, state });
+    }
     this.list.load();
   }
 
