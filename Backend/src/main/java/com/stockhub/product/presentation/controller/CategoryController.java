@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -58,6 +60,7 @@ class CategoryController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('CATEGORY_MANAGE')")
+    @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<CategoryResponse> create(@Valid @RequestBody CategoryRequest request) {
         var view = create.execute(request.toCommand());
         return ResponseEntity.created(URI.create("/api/v1/categories/" + view.id())).body(CategoryResponse.from(view));
@@ -72,6 +75,7 @@ class CategoryController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('CATEGORY_MANAGE')")
     @Operation(summary = "Delete an empty category (no products, no sub-categories)")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     ResponseEntity<Void> delete(@PathVariable UUID id) {
         delete.execute(id);
         return ResponseEntity.noContent().build();

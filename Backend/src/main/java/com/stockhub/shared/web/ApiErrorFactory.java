@@ -27,7 +27,9 @@ public class ApiErrorFactory {
 
     public ApiError create(HttpStatus status, String code, String fallbackMessage, Object[] args,
                            HttpServletRequest request, List<ApiError.FieldError> fieldErrors) {
-        String message = messages.getMessage("error." + code, args, fallbackMessage, LocaleContextHolder.getLocale());
+        // The fallback is already formatted: passing it as MessageSource default would run MessageFormat on it again.
+        String localized = messages.getMessage("error." + code, args, null, LocaleContextHolder.getLocale());
+        String message = localized == null ? fallbackMessage : localized;
         return new ApiError(
                 Instant.now(clock),
                 status.value(),

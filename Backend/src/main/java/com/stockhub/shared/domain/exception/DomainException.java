@@ -13,8 +13,12 @@ public class DomainException extends RuntimeException {
     private final ErrorKind kind;
     private final transient List<Object> arguments;
 
+    /**
+     * @param message   English fallback with {@code String.format} placeholders, filled from the arguments
+     * @param arguments values shown in the message (also passed to localized bundles)
+     */
     public DomainException(ErrorKind kind, String code, String message, Object... arguments) {
-        super(message);
+        super(arguments.length == 0 || message == null ? message : message.formatted(arguments));
         this.kind = kind;
         this.code = code;
         this.arguments = List.of(arguments);

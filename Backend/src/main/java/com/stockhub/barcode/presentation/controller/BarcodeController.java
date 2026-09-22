@@ -6,14 +6,13 @@ import com.stockhub.barcode.application.usecase.PrintLabelsUseCase;
 import com.stockhub.barcode.domain.model.Symbology;
 import com.stockhub.barcode.presentation.request.GenerateBarcodeRequest;
 import com.stockhub.barcode.presentation.request.PrintLabelsRequest;
-import com.stockhub.product.ProductSummary;
+import com.stockhub.barcode.presentation.response.GeneratedBarcodeResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import java.time.Duration;
-import java.util.Map;
 import java.util.UUID;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ContentDisposition;
@@ -47,11 +46,11 @@ class BarcodeController {
     @PostMapping("/api/v1/products/{id}/barcode")
     @PreAuthorize("hasAuthority('BARCODE_GENERATE')")
     @Operation(summary = "Generate and assign a unique barcode (EAN-13 in the in-store range, or CODE128)")
-    Map<String, String> generate(@PathVariable UUID id, @RequestBody(required = false) GenerateBarcodeRequest request) {
+    GeneratedBarcodeResponse generate(@PathVariable UUID id,
+                                      @RequestBody(required = false) GenerateBarcodeRequest request) {
         Symbology format = request == null || request.format() == null ? Symbology.CODE128 : request.format();
         boolean replace = request != null && Boolean.TRUE.equals(request.replaceExisting());
-        ProductSummary product = generate.execute(id, format, replace);
-        return Map.of("barcode", product.barcode(), "barcodeFormat", product.barcodeFormat());
+        return GeneratedBarcodeResponse.from(generate.execute(id, format, replace));
     }
 
     @GetMapping(value = "/api/v1/products/{id}/barcode.png", produces = MediaType.IMAGE_PNG_VALUE)

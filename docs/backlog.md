@@ -40,7 +40,8 @@ Corrige les anomalies de `docs/audit/2026-09-22-audit.md` sans nouvelle fonction
 - ✅ Routes Next sans page retirées des constantes (POS, scan, produits, ventes, paramètres)
 - ✅ M-13 suite Playwright `e2e/` (rôles, session, thème, états vides, fuseau + smoke 7 largeurs × thèmes × FR/EN × axe), branchée en CI
 
-## Phase 3 — Catalogue ⏳
+## Phase 3 — Catalogue 🔄
+- ✅ Backend finalisé (22/09/2026, étape 2) : audit ciblé, erreurs 400/415 au lieu de 500 (paramètre, fichier ou type de contenu manquant), messages d'erreur formatés, champ fautif indiqué pour une valeur illisible, Swagger (codes 201/204, réponses `ApiError`, permission par opération, enums), tests d'isolation A/B, matrice des permissions exécutable — référence : `docs/05-catalogue-api.md`
 - ⏳ Emplacements (CRUD, principal, activation) — UX adaptative mono/multi-sites
 - ⏳ Catégories, fournisseurs
 - ⏳ Produits (recherche avancée, image, import CSV/Excel avec prévisualisation)

@@ -9,9 +9,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.stockhub.product.domain.model.ProductImage;
 import com.stockhub.support.AbstractIntegrationTest;
 import com.stockhub.support.ApiFixtures.Session;
 import com.stockhub.support.ApiFixtures.TenantFixture;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -175,6 +177,23 @@ class ProductIntegrationTest extends AbstractIntegrationTest {
 
         mvc.perform(multipart(HttpMethod.PUT, url)
                         .file(new MockMultipartFile("file", "evil.png", "image/png", "<script>".getBytes()))
+                        .header("Authorization", tenant.admin().bearer()))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("PRODUCT_IMAGE_UNSUPPORTED"));
+    }
+
+    @Test
+    void refusesOversizedAndDisguisedImages() throws Exception {
+        String id = createProduct(Map.of()).get("id").asString();
+        byte[] big = Arrays.copyOf(PNG, ProductImage.MAX_BYTES + 1);
+        mvc.perform(multipart(HttpMethod.PUT, "/api/v1/products/" + id + "/image")
+                        .file(new MockMultipartFile("file", "big.png", "image/png", big))
+                        .header("Authorization", tenant.admin().bearer()))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("PRODUCT_IMAGE_TOO_LARGE"));
+        byte[] svg = "<svg xmlns='http://www.w3.org/2000/svg'><script>alert(1)</script></svg>".getBytes();
+        mvc.perform(multipart(HttpMethod.PUT, "/api/v1/products/" + id + "/image")
+                        .file(new MockMultipartFile("file", "x.png", "image/png", svg))
                         .header("Authorization", tenant.admin().bearer()))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("PRODUCT_IMAGE_UNSUPPORTED"));

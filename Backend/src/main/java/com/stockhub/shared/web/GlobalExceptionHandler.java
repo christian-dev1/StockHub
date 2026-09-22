@@ -6,8 +6,10 @@ import com.stockhub.shared.domain.exception.InvalidInputException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.core.JacksonException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
@@ -15,12 +17,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
@@ -65,9 +71,42 @@ public class GlobalExceptionHandler {
         return respond(errors.create(HttpStatus.BAD_REQUEST, "VALIDATION_FAILED", "Validation failed.", null, request, fields));
     }
 
-    @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
-    ResponseEntity<ApiError> handleMalformed(Exception ex, HttpServletRequest request) {
+    /** Unreadable JSON; a value of the wrong type (e.g. an unknown enum constant) names the offending field. */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    ResponseEntity<ApiError> handleMalformed(HttpMessageNotReadableException ex, HttpServletRequest request) {
+        List<ApiError.FieldError> fields = jsonPath(ex)
+                .map(path -> List.of(new ApiError.FieldError(path, "INVALID_VALUE", "Invalid value.")))
+                .orElse(List.of());
+        return respond(errors.create(HttpStatus.BAD_REQUEST, "MALFORMED_REQUEST", "Malformed request.", null, request,
+                fields));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    ResponseEntity<ApiError> handleTypeMismatch(MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
+        return respond(errors.create(HttpStatus.BAD_REQUEST, "INVALID_PARAMETER", "Invalid parameter.", null, request,
+                List.of(new ApiError.FieldError(ex.getName(), "INVALID_VALUE", "Invalid value."))));
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    ResponseEntity<ApiError> handleMissingParameter(MissingServletRequestParameterException ex,
+                                                    HttpServletRequest request) {
+        return missing(ex.getParameterName(), request);
+    }
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    ResponseEntity<ApiError> handleMissingPart(MissingServletRequestPartException ex, HttpServletRequest request) {
+        return missing(ex.getRequestPartName(), request);
+    }
+
+    /** A multipart endpoint called without a multipart body. */
+    @ExceptionHandler(MultipartException.class)
+    ResponseEntity<ApiError> handleMultipart(MultipartException ex, HttpServletRequest request) {
         return respond(errors.create(HttpStatus.BAD_REQUEST, "MALFORMED_REQUEST", request));
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    ResponseEntity<ApiError> handleMediaType(HttpMediaTypeNotSupportedException ex, HttpServletRequest request) {
+        return respond(errors.create(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "UNSUPPORTED_MEDIA_TYPE", request));
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
@@ -121,6 +160,27 @@ public class GlobalExceptionHandler {
             return handleOptimisticLock(lock, request);
         }
         return handleUnexpected(ex, request);
+    }
+
+    private ResponseEntity<ApiError> missing(String name, HttpServletRequest request) {
+        return respond(errors.create(HttpStatus.BAD_REQUEST, "VALIDATION_FAILED", "Validation failed.", null, request,
+                List.of(new ApiError.FieldError(name, "NotNull", "This value is required."))));
+    }
+
+    /** Dotted path of the JSON property that could not be read, e.g. {@code items[0].copies}. */
+    private static Optional<String> jsonPath(HttpMessageNotReadableException ex) {
+        if (!(ex.getMostSpecificCause() instanceof JacksonException jackson) || jackson.getPath().isEmpty()) {
+            return Optional.empty();
+        }
+        StringBuilder path = new StringBuilder();
+        for (JacksonException.Reference reference : jackson.getPath()) {
+            if (reference.getPropertyName() != null) {
+                path.append(path.isEmpty() ? "" : ".").append(reference.getPropertyName());
+            } else if (reference.getIndex() >= 0) {
+                path.append('[').append(reference.getIndex()).append(']');
+            }
+        }
+        return path.isEmpty() ? Optional.empty() : Optional.of(path.toString());
     }
 
     private static ResponseEntity<ApiError> respond(ApiError body) {

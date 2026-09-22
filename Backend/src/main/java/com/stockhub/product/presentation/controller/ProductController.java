@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.Set;
 import java.util.UUID;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -86,6 +88,7 @@ class ProductController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('PRODUCT_CREATE')")
+    @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<ProductResponse> create(@Valid @RequestBody ProductRequest request) {
         var view = create.execute(request.toCommand());
         return ResponseEntity.created(URI.create("/api/v1/products/" + view.id())).body(ProductResponse.from(view));
@@ -112,6 +115,7 @@ class ProductController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('PRODUCT_DELETE')")
     @Operation(summary = "Soft-delete a product that holds no stock")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     ResponseEntity<Void> delete(@PathVariable UUID id) {
         delete.execute(id);
         return ResponseEntity.noContent().build();

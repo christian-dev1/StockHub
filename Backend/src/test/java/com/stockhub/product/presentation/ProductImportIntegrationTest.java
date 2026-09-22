@@ -142,6 +142,25 @@ class ProductImportIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    void rejectsDuplicateBarcodesAndNegativePrices() throws Exception {
+        api.create("/api/v1/products", tenant.admin(),
+                Map.of("sku", "EXIST", "name", "Existant", "unit", "UNIT", "barcode", "4006381333931"));
+        JsonNode report = preview("barcodes.csv", csv("""
+                sku,name,barcode,salePrice
+                A1,Un,5449000000996,100
+                A2,Deux,5449000000996,100
+                A3,Trois,4006381333931,100
+                A4,Quatre,,-5
+                """), false);
+        JsonNode rows = report.get("rows");
+        assertThat(codes(rows.get(0))).isEmpty();
+        assertThat(codes(rows.get(1))).contains("IMPORT_DUPLICATE_BARCODE");
+        assertThat(codes(rows.get(2))).contains("PRODUCT_BARCODE_ALREADY_EXISTS");
+        assertThat(codes(rows.get(3))).contains("PRODUCT_PRICE_NEGATIVE");
+        assertThat(report.get("errorCount").asInt()).isEqualTo(3);
+    }
+
+    @Test
     void templateIsDownloadable() throws Exception {
         String template = mvc.perform(get("/api/v1/products/imports/template").header("Authorization", tenant.admin().bearer()))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
