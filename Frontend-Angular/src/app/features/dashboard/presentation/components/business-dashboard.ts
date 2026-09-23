@@ -103,7 +103,7 @@ import { CompanyDashboardStore } from '../state/company-dashboard.store';
         />
       </div>
 
-      <h2 class="mt-6 mb-3 text-sm font-semibold text-fg-muted">
+      <h2 class="mt-6 mb-3 sh-section-title text-fg-muted">
         {{ 'dashboard.sections.activity' | translate }}
       </h2>
       <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -160,7 +160,7 @@ import { CompanyDashboardStore } from '../state/company-dashboard.store';
       </div>
     }
 
-    <div class="mt-6 grid gap-4 lg:grid-cols-3">
+    <div class="mt-8 grid gap-4 lg:grid-cols-3">
       <app-widget-card
         class="lg:col-span-2"
         [title]="'dashboard.flow.title' | translate"
@@ -199,7 +199,7 @@ import { CompanyDashboardStore } from '../state/company-dashboard.store';
       </app-widget-card>
     </div>
 
-    <div class="mt-4 grid gap-4 lg:grid-cols-3">
+    <div class="mt-6 grid gap-4 lg:grid-cols-3">
       @if (s && s.byLocation.length > 1) {
         <app-widget-card
           [title]="'dashboard.locations.title' | translate"
@@ -244,7 +244,7 @@ import { CompanyDashboardStore } from '../state/company-dashboard.store';
       </app-widget-card>
     </div>
 
-    <div class="mt-4 grid gap-4 lg:grid-cols-2">
+    <div class="mt-6 grid gap-4 lg:grid-cols-2">
       <app-widget-card
         [title]="'dashboard.attention.title' | translate"
         [subtitle]="'dashboard.attention.subtitle' | translate"

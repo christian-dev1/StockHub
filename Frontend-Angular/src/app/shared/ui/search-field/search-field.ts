@@ -36,7 +36,7 @@ let nextId = 0;
         [formControl]="control"
         [placeholder]="label()"
         autocomplete="off"
-        class="w-full rounded-lg border border-border bg-surface py-2 pr-11 pl-9 text-base text-fg placeholder:text-fg-muted focus:border-primary"
+        class="w-full rounded-md border border-border bg-surface py-2 pr-11 pl-9 text-base text-fg placeholder:text-fg-muted focus:border-primary"
       />
       @if (control.value) {
         <button

@@ -77,7 +77,7 @@
           <div class="mt-auto flex flex-wrap gap-2 border-t border-border pt-4">
             <a
               [routerLink]="routes.LOCATIONS.EDIT(location.id)"
-              class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium text-fg hover:bg-surface-muted"
+              class="inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-3 text-sm font-medium text-fg hover:bg-surface-muted"
               [attr.aria-label]="('common.edit' | translate) + ' ' + location.name"
             >
               <i class="pi pi-pencil" aria-hidden="true"></i>{{ 'common.edit' | translate }}
@@ -85,7 +85,7 @@
             @if (!location.primary && location.active) {
               <button
                 type="button"
-                class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium text-fg hover:bg-surface-muted disabled:opacity-50"
+                class="inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-3 text-sm font-medium text-fg hover:bg-surface-muted disabled:opacity-50"
                 [disabled]="busyId() === location.id"
                 (click)="setPrimary(location)"
               >
@@ -96,7 +96,7 @@
             @if (!location.primary) {
               <button
                 type="button"
-                class="inline-flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-medium hover:bg-surface-muted disabled:opacity-50"
+                class="inline-flex min-h-11 items-center gap-2 rounded-md px-3 text-sm font-medium hover:bg-surface-muted disabled:opacity-50"
                 [class.text-danger]="location.active"
                 [class.text-fg]="!location.active"
                 [disabled]="busyId() === location.id"

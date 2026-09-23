@@ -25,7 +25,7 @@ import { ErrorMessages } from '../../utils/error-message';
         <button
           type="button"
           (click)="retry.emit()"
-          class="mt-4 inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-fg hover:bg-surface-muted"
+          class="mt-4 inline-flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 text-sm font-medium text-fg hover:bg-surface-muted"
         >
           <i class="pi pi-refresh" aria-hidden="true"></i>
           {{ 'common.retry' | translate }}

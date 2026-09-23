@@ -13,7 +13,6 @@ import {
   backOfficeGuard,
   permissionGuard,
   platformGuard,
-  salesAppOnlyGuard,
 } from './auth.guards';
 
 describe('auth guards', () => {
@@ -73,32 +72,22 @@ describe('auth guards', () => {
     expect(serialize(result)).toBe('/forbidden');
   });
 
-  it('opens the back-office to back-office roles', async () => {
-    const result = await firstValueFrom(
-      TestBed.runInInjectionContext(() => backOfficeGuard(route(), state)) as Observable<unknown>,
-    );
+  it('opens Angular to back-office roles', () => {
+    const result = TestBed.runInInjectionContext(() => backOfficeGuard(route(), state));
     expect(result).toBe(true);
   });
 
-  it('sends sellers to the sales-app-only page', async () => {
+  it('lets sellers use Angular when authenticated', () => {
     auth['canUseBackOffice'].mockReturnValue(false);
-    const result = await firstValueFrom(
-      TestBed.runInInjectionContext(() => backOfficeGuard(route(), state)) as Observable<unknown>,
-    );
-    expect(serialize(result)).toBe('/sales-app-only');
+    const result = TestBed.runInInjectionContext(() => backOfficeGuard(route(), state));
+    expect(result).toBe(true);
   });
 
-  it('leaves anonymous users to the login redirect of authGuard', async () => {
+  it('does not replace the anonymous redirect owned by authGuard', () => {
     auth['restore'].mockReturnValue(of('anonymous'));
     auth['canUseBackOffice'].mockReturnValue(false);
-    const result = await firstValueFrom(
-      TestBed.runInInjectionContext(() => backOfficeGuard(route(), state)) as Observable<unknown>,
-    );
+    const result = TestBed.runInInjectionContext(() => backOfficeGuard(route(), state));
     expect(result).toBe(true);
   });
 
-  it('keeps back-office users away from the sales-app-only page', () => {
-    const result = TestBed.runInInjectionContext(() => salesAppOnlyGuard(route(), state));
-    expect(serialize(result)).toBe('/dashboard');
-  });
 });

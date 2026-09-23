@@ -10,7 +10,7 @@ import { Language, LanguageStore, SUPPORTED_LANGUAGES } from '../../i18n/languag
     <div
       role="radiogroup"
       [attr.aria-label]="'language.label' | translate"
-      class="inline-flex rounded-lg border border-border bg-surface-muted p-0.5"
+      class="inline-flex rounded-md border border-border bg-surface-muted p-0.5"
     >
       @for (language of languages; track language) {
         <button
@@ -20,7 +20,7 @@ import { Language, LanguageStore, SUPPORTED_LANGUAGES } from '../../i18n/languag
           [attr.aria-label]="'language.' + language | translate"
           [attr.lang]="language"
           (click)="select(language)"
-          class="h-8 min-w-9 rounded-md px-2 text-xs font-semibold uppercase text-fg-muted transition-colors hover:text-fg aria-checked:bg-surface aria-checked:text-primary aria-checked:shadow-card"
+          class="h-8 min-w-9 rounded-sm px-2 text-xs font-semibold uppercase text-fg-muted transition-colors hover:text-fg aria-checked:bg-surface aria-checked:text-primary"
         >
           {{ language }}
         </button>

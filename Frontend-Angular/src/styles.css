@@ -10,15 +10,18 @@
 /*
  * Design tokens. Components only reference these tokens (through the Tailwind
  * colors below), never raw hex values, so light/dark switching is global.
+ *
+ * Sobre / moderne / épuré: a neutral palette with one indigo accent, small
+ * radii, near-invisible shadows and a 4/8/12/16/24/32 spacing scale.
  */
 :root {
   color-scheme: light;
-  --sh-background: #f5f7fa;
+  --sh-background: #f8f9fb;
   --sh-surface: #ffffff;
-  --sh-surface-muted: #eef1f5;
+  --sh-surface-muted: #eff1f4;
   --sh-text-primary: #0f172a;
   --sh-text-secondary: #4b5567;
-  --sh-border: #dde3ea;
+  --sh-border: #e6e9ef;
   --sh-primary: #4338ca;
   --sh-primary-hover: #3730a3;
   --sh-primary-contrast: #ffffff;
@@ -27,33 +30,39 @@
   --sh-danger: #b91c1c;
   --sh-info: #0369a1;
   --sh-focus-ring: #6366f1;
-  --sh-shadow: 0 1px 2px rgb(15 23 42 / 0.06), 0 1px 3px rgb(15 23 42 / 0.08);
+  /* Hairline shadow: just enough to lift a surface, never a halo. */
+  --sh-shadow: 0 1px 2px rgb(15 23 42 / 0.035);
+  /* Radius scale — large radii are deliberately not part of it. */
+  --sh-radius-sm: 0.25rem; /* 4 px — chips, inputs, small buttons */
+  --sh-radius-md: 0.375rem; /* 6 px — cards, panels, menus */
+  --sh-radius-lg: 0.5rem; /* 8 px — modals, drawers */
   /* Chart series (validated for colour-blind separation and 3:1 on the surface). */
   --sh-series-1: #2a78d6;
   --sh-series-2: #eb6834;
-  --sh-chart-grid: #e6eaf0;
+  --sh-chart-grid: #eaedf2;
 }
 
 .dark {
   color-scheme: dark;
-  --sh-background: #0b1020;
-  --sh-surface: #121829;
-  --sh-surface-muted: #1b2336;
+  /* Deep but not pure black; surfaces stay slightly differentiated. */
+  --sh-background: #111621;
+  --sh-surface: #171d2a;
+  --sh-surface-muted: #202737;
   --sh-text-primary: #eef2f8;
   --sh-text-secondary: #9ba7bb;
-  --sh-border: #27314a;
+  --sh-border: #263049;
   --sh-primary: #8b93ff;
   --sh-primary-hover: #a5abff;
-  --sh-primary-contrast: #0b1020;
+  --sh-primary-contrast: #0e1320;
   --sh-success: #4ade80;
   --sh-warning: #fbbf24;
   --sh-danger: #f87171;
   --sh-info: #38bdf8;
   --sh-focus-ring: #a5b4fc;
-  --sh-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+  --sh-shadow: 0 1px 2px rgb(0 0 0 / 0.35);
   --sh-series-1: #3987e5;
   --sh-series-2: #d95926;
-  --sh-chart-grid: #222b40;
+  --sh-chart-grid: #212a41;
 }
 
 @theme inline {
@@ -75,7 +84,29 @@
   --color-chart-grid: var(--sh-chart-grid);
   --color-focus: var(--sh-focus-ring);
   --shadow-card: var(--sh-shadow);
+  /* Radius tokens — the only radii components may use. Larger steps are
+     capped so legacy rounded-xl/2xl classes stay sober without a rewrite. */
+  --radius-sm: var(--sh-radius-sm);
+  --radius-md: var(--sh-radius-md);
+  --radius-lg: var(--sh-radius-lg);
+  --radius-xl: var(--sh-radius-lg);
+  --radius-2xl: var(--sh-radius-lg);
+  --radius-3xl: var(--sh-radius-lg);
+  /* Spacing grid: 4 px base (4/8/12/16/24/32...), Tailwind's default. */
+  --spacing: 0.25rem;
   --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Typography hierarchy: page title, section title, KPI value. */
+  --text-h1: 1.375rem;
+  --text-h1--line-height: 1.875rem;
+  --text-h1--letter-spacing: -0.01em;
+  --text-h1--font-weight: 600;
+  --text-h2: 0.875rem;
+  --text-h2--line-height: 1.25rem;
+  --text-h2--font-weight: 600;
+  --text-kpi: 1.5rem;
+  --text-kpi--line-height: 2rem;
+  --text-kpi--font-weight: 600;
+  --text-kpi--letter-spacing: -0.01em;
 }
 
 @layer base {
@@ -104,13 +135,69 @@
 }
 
 @layer components {
+  /*
+   * Card: fine border, quiet surface, hairline shadow. Variants let pages
+   * soften further (flat) or drop the frame entirely (bare).
+   */
   .sh-card {
-    @apply rounded-xl border border-border bg-surface shadow-card;
+    @apply rounded-md border border-border/80 bg-surface shadow-card;
+  }
+
+  .sh-card-flat {
+    @apply rounded-md border border-border/80 bg-surface;
+  }
+
+  .sh-section-title {
+    @apply text-h2 text-fg;
   }
 
   .sh-skip-link {
     @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-fg;
   }
+}
+
+/*
+ * PrimeNG overlays stay compact and light: small radius, no heavy shadow,
+ * thin border matching the theme.
+ */
+.p-dialog,
+.p-drawer,
+.p-popover,
+.p-select-overlay,
+.p-menu-overlay {
+  --p-dialog-border-radius: var(--sh-radius-lg);
+  --p-drawer-border-radius: 0 var(--sh-radius-lg) var(--sh-radius-lg) 0;
+  --p-popover-border-radius: var(--sh-radius-md);
+  --p-select-overlay-border-radius: var(--sh-radius-md);
+  --p-menu-border-radius: var(--sh-radius-md);
+  box-shadow: 0 4px 16px rgb(15 23 42 / 0.1);
+}
+
+.dark .p-dialog,
+.dark .p-drawer,
+.dark .p-popover,
+.dark .p-select-overlay,
+.dark .p-menu-overlay {
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.45);
+}
+
+/* Keep PrimeNG controls aligned with the quiet B2B visual language. */
+.p-button,
+.p-inputtext,
+.p-select,
+.p-multiselect,
+.p-datepicker-input {
+  border-radius: var(--sh-radius-sm);
+}
+
+.p-button {
+  box-shadow: none;
+  font-weight: 500;
+}
+
+.p-button.p-button-secondary,
+.p-button.p-button-outlined {
+  border-color: var(--sh-border);
 }
 
 /* Search fields bring their own clear button; hide the browser's duplicate. */

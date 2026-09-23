@@ -2,16 +2,16 @@
 
 <div class="flex min-h-dvh">
   <aside
-    class="hidden w-64 shrink-0 flex-col border-r border-border bg-surface lg:flex"
+    class="hidden w-56 shrink-0 flex-col border-r border-border/80 bg-surface lg:flex"
     [attr.aria-label]="'nav.sidebar' | translate"
   >
-    <div class="flex h-16 items-center gap-2 border-b border-border px-5">
-      <span class="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-fg">
-        <i class="pi pi-box" aria-hidden="true"></i>
+    <div class="flex h-14 items-center gap-2.5 border-b border-border/80 px-4">
+      <span class="flex size-6 items-center justify-center rounded-sm bg-primary text-primary-fg">
+        <i class="pi pi-box text-sm" aria-hidden="true"></i>
       </span>
-      <span class="text-lg font-semibold tracking-tight">StockHub</span>
+      <span class="text-sm font-semibold tracking-tight">StockHub</span>
     </div>
-    <div class="flex-1 overflow-y-auto p-3">
+    <div class="flex-1 overflow-y-auto px-2 py-3">
       <app-sidebar-nav />
     </div>
   </aside>
@@ -26,11 +26,11 @@
 
   <div class="flex min-w-0 flex-1 flex-col">
     <header
-      class="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border bg-surface/90 px-4 backdrop-blur sm:px-6"
+      class="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border bg-surface/90 px-4 backdrop-blur sm:px-6"
     >
       <button
         type="button"
-        class="flex size-10 items-center justify-center rounded-lg text-fg-muted hover:bg-surface-muted hover:text-fg lg:hidden"
+        class="flex size-10 items-center justify-center rounded-md text-fg-muted hover:bg-surface-muted hover:text-fg lg:hidden"
         [attr.aria-label]="'nav.openMenu' | translate"
         [attr.aria-expanded]="mobileNavOpen()"
         (click)="mobileNavOpen.set(true)"
@@ -40,19 +40,20 @@
       <span class="text-base font-semibold lg:hidden">StockHub</span>
       @if (auth.company(); as company) {
         <span
-          class="hidden items-center gap-2 rounded-lg bg-surface-muted px-3 py-1.5 text-sm font-medium text-fg lg:inline-flex"
+          class="hidden items-center gap-2 rounded-md bg-surface-muted px-2.5 py-1 text-xs font-medium text-fg-muted lg:inline-flex"
         >
-          <i class="pi pi-building text-fg-muted" aria-hidden="true"></i>{{ company.name }}
+          <i class="pi pi-building text-[0.8em]" aria-hidden="true"></i>{{ company.name }}
         </span>
       } @else if (auth.isSuperAdmin()) {
         <span
-          class="hidden items-center gap-2 rounded-lg bg-danger/10 px-3 py-1.5 text-sm font-medium text-danger lg:inline-flex"
+          class="hidden items-center gap-2 rounded-md bg-surface-muted px-2.5 py-1 text-xs font-medium text-fg-muted lg:inline-flex"
         >
-          <i class="pi pi-shield" aria-hidden="true"></i>{{ 'nav.platformMode' | translate }}
+          <i class="pi pi-shield text-[0.8em]" aria-hidden="true"></i
+          >{{ 'nav.platformMode' | translate }}
         </span>
       }
-      <div class="ml-auto flex items-center gap-2">
-        <div class="hidden items-center gap-2 sm:flex">
+      <div class="ml-auto flex items-center gap-1.5">
+        <div class="hidden items-center gap-1.5 sm:flex">
           <app-language-switcher />
           <app-theme-switcher />
         </div>
@@ -63,7 +64,7 @@
     <main
       id="main-content"
       tabindex="-1"
-      class="mx-auto w-full max-w-screen-2xl flex-1 px-4 py-6 focus:outline-none sm:px-6 lg:px-8"
+      class="mx-auto w-full max-w-7xl flex-1 overflow-x-clip px-4 py-6 focus:outline-none sm:px-6 lg:px-8"
     >
       <router-outlet />
     </main>

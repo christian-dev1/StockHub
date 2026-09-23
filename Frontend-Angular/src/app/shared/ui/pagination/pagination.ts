@@ -22,11 +22,11 @@ export interface PageChange {
           {{ 'table.noResults' | translate }}
         }
       </p>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-1">
         <label class="flex items-center gap-2 text-fg-muted">
           <span>{{ 'table.perPage' | translate }}</span>
           <select
-            class="rounded-md border border-border bg-surface px-2 py-1 text-fg"
+            class="rounded-sm border border-border bg-surface px-2 py-1 text-fg"
             [value]="size()"
             (change)="changeSize($any($event.target).value)"
           >
@@ -37,7 +37,7 @@ export interface PageChange {
         </label>
         <button
           type="button"
-          class="flex size-9 items-center justify-center rounded-md border border-border text-fg hover:bg-surface-muted disabled:opacity-40"
+          class="flex size-9 items-center justify-center rounded-md text-fg-muted hover:bg-surface-muted hover:text-fg disabled:opacity-40"
           [disabled]="page() === 0"
           [attr.aria-label]="'table.previous' | translate"
           (click)="go(page() - 1)"
@@ -47,7 +47,7 @@ export interface PageChange {
         <span class="min-w-16 text-center text-fg-muted">{{ page() + 1 }} / {{ pages() }}</span>
         <button
           type="button"
-          class="flex size-9 items-center justify-center rounded-md border border-border text-fg hover:bg-surface-muted disabled:opacity-40"
+          class="flex size-9 items-center justify-center rounded-md text-fg-muted hover:bg-surface-muted hover:text-fg disabled:opacity-40"
           [disabled]="page() + 1 >= pages()"
           [attr.aria-label]="'table.next' | translate"
           (click)="go(page() + 1)"

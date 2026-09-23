@@ -22,13 +22,13 @@
       <div class="grid gap-6 lg:grid-cols-3">
         <div class="space-y-6 lg:col-span-2">
           <form
-            class="sh-card p-5 sm:p-6"
+            aria-labelledby="sec-profile"
+            class="sh-card-flat p-5 sm:p-6"
             [formGroup]="profile"
             (ngSubmit)="saveProfile()"
             novalidate
-            aria-labelledby="sec-profile"
           >
-            <h2 id="sec-profile" class="mb-5 text-base font-semibold">
+            <h2 id="sec-profile" class="sh-section-title mb-5">
               {{ 'users.sections.identity' | translate }}
             </h2>
             <div class="grid gap-5 sm:grid-cols-2">
@@ -89,13 +89,13 @@
           </form>
 
           <form
-            class="sh-card p-5 sm:p-6"
+            aria-labelledby="sec-access"
+            class="sh-card-flat p-5 sm:p-6"
             [formGroup]="access"
             (ngSubmit)="saveAccess()"
             novalidate
-            aria-labelledby="sec-access"
           >
-            <h2 id="sec-access" class="mb-5 text-base font-semibold">
+            <h2 id="sec-access" class="sh-section-title mb-5">
               {{ 'users.sections.access' | translate }}
             </h2>
             @if (isSelf()) {
@@ -130,7 +130,7 @@
         </div>
 
         <aside class="space-y-6">
-          <section class="sh-card p-5" aria-labelledby="sec-summary">
+          <section class="sh-card-flat p-5" aria-labelledby="sec-summary">
             <h2 id="sec-summary" class="sr-only">{{ 'users.sections.summary' | translate }}</h2>
             <dl class="space-y-3 text-sm">
               <div class="flex items-center justify-between gap-4">
@@ -162,7 +162,7 @@
                 </dd>
               </div>
               @if (user.mustChangePassword) {
-                <div class="rounded-lg bg-warning/10 p-2 text-xs text-warning">
+                <div class="rounded-md bg-warning/10 p-2 text-xs text-warning">
                   {{ 'users.detail.pendingPassword' | translate }}
                 </div>
               }
@@ -170,8 +170,8 @@
           </section>
 
           @if (!isSelf() && (auth.can('USER_DISABLE') || auth.can('USER_UPDATE'))) {
-            <section class="sh-card space-y-3 p-5" aria-labelledby="sec-security">
-              <h2 id="sec-security" class="text-base font-semibold">
+            <section class="sh-card-flat space-y-3 p-5" aria-labelledby="sec-security">
+              <h2 id="sec-security" class="sh-section-title">
                 {{ 'users.sections.security' | translate }}
               </h2>
               @if (auth.can('USER_UPDATE')) {
@@ -225,7 +225,7 @@
             />
             <button
               type="button"
-              class="shrink-0 rounded-lg border border-border px-3 text-sm hover:bg-surface-muted"
+              class="shrink-0 rounded-md border border-border px-3 text-sm hover:bg-surface-muted"
               [attr.aria-label]="'users.actions.generatePassword' | translate"
               (click)="generatePassword()"
             >

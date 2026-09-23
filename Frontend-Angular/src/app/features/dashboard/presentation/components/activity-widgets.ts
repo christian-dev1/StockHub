@@ -25,12 +25,12 @@ const TYPE_STYLE: Record<OperationType, { icon: string; tone: string }> = {
   imports: [RouterLink, TranslatePipe, DateTimePipe, QuantityPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <ol class="divide-y divide-border" data-testid="recent-activity">
+    <ol class="divide-y divide-border overflow-hidden" data-testid="recent-activity">
       @for (op of operations(); track op.documentId) {
         <li>
           <a
             [routerLink]="routes.STOCK.DOCUMENT(op.documentId)"
-            class="flex items-start gap-3 py-3 text-fg no-underline hover:bg-surface-muted/50"
+            class="flex min-w-0 flex-wrap items-start gap-3 py-3 text-fg no-underline hover:bg-surface-muted/50"
           >
             <span
               class="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full"
@@ -66,7 +66,7 @@ const TYPE_STYLE: Record<OperationType, { icon: string; tone: string }> = {
                 · {{ 'dashboard.activity.by' | translate: { name: op.performedByName } }}
               </span>
             </span>
-            <span class="shrink-0 text-right text-xs text-fg-muted">
+            <span class="shrink-0 text-right text-xs text-fg-muted max-sm:ml-11 max-sm:w-full max-sm:text-left">
               <span class="block">{{ op.createdAt | dateTime: 'short' }}</span>
               <span class="block font-mono">{{ op.number }}</span>
             </span>

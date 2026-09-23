@@ -28,14 +28,12 @@
             caption()
           }}
         </caption>
-        <thead
-          class="border-b border-border bg-surface-muted/60 text-xs uppercase tracking-wide text-fg-muted"
-        >
+        <thead class="border-b border-border text-xs uppercase tracking-wide text-fg-muted">
           <tr>
             @for (column of columns(); track column.key) {
               <th
                 scope="col"
-                class="px-4 py-3 font-semibold"
+                class="px-4 py-2.5 font-medium"
                 [class]="
                   (column.hideBelow ? hide[column.hideBelow] : '') +
                   (column.align === 'end' ? ' text-right' : '')
@@ -68,12 +66,12 @@
             }
           </tr>
         </thead>
-        <tbody class="divide-y divide-border">
+        <tbody class="divide-y divide-border/70">
           @if (loading() && rows().length === 0) {
             @for (i of skeletonRows; track i) {
               <tr>
                 @for (column of columns(); track column.key) {
-                  <td class="px-4 py-3" [class]="column.hideBelow ? hide[column.hideBelow] : ''">
+                  <td class="px-4 py-2.5" [class]="column.hideBelow ? hide[column.hideBelow] : ''">
                     <p-skeleton height="1rem" />
                   </td>
                 }
@@ -82,7 +80,7 @@
           } @else {
             @for (row of rows(); track rowKey()(row)) {
               <tr
-                class="transition-colors hover:bg-surface-muted/50"
+                class="transition-colors hover:bg-surface-muted/40"
                 [class.cursor-pointer]="clickable()"
                 [class.opacity-60]="loading()"
                 [attr.tabindex]="clickable() ? 0 : null"
@@ -91,7 +89,7 @@
               >
                 @for (column of columns(); track column.key) {
                   <td
-                    class="px-4 py-3 text-fg"
+                    class="px-4 py-2.5 text-fg"
                     [class]="
                       (column.hideBelow ? hide[column.hideBelow] : '') +
                       (column.align === 'end' ? ' text-right' : '')

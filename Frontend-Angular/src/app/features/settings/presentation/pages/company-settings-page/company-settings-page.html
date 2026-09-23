@@ -14,13 +14,13 @@
   @case ('success') {
     <div class="grid gap-6 xl:grid-cols-2">
       <form
-        class="sh-card p-5 sm:p-6"
+        aria-labelledby="sec-identity"
+        class="sh-card-flat p-5 sm:p-6"
         [formGroup]="profile"
         (ngSubmit)="saveProfile()"
         novalidate
-        aria-labelledby="sec-identity"
       >
-        <h2 id="sec-identity" class="mb-5 text-base font-semibold">
+        <h2 id="sec-identity" class="sh-section-title mb-5">
           {{ 'settings.company.identity' | translate }}
         </h2>
         <div class="grid gap-5 sm:grid-cols-2">
@@ -96,13 +96,13 @@
       </form>
 
       <form
-        class="sh-card p-5 sm:p-6"
+        aria-labelledby="sec-ops"
+        class="sh-card-flat p-5 sm:p-6"
         [formGroup]="settings"
         (ngSubmit)="saveSettings()"
         novalidate
-        aria-labelledby="sec-ops"
       >
-        <h2 id="sec-ops" class="mb-5 text-base font-semibold">
+        <h2 id="sec-ops" class="sh-section-title mb-5">
           {{ 'settings.company.operations' | translate }}
         </h2>
         <div class="grid gap-5 sm:grid-cols-2">
@@ -185,7 +185,7 @@
             />
           </app-form-field>
         </div>
-        <div class="mt-5 flex items-start gap-3 rounded-lg border border-border p-4">
+        <div class="mt-5 flex items-start gap-3 rounded-md bg-surface-muted/60 p-4">
           <p-toggleswitch
             class="shrink-0"
             inputId="s-negative"

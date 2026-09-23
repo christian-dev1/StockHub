@@ -53,7 +53,6 @@ export const APP_PATHS = {
     DOCUMENT: 'documents/:documentId',
   },
   FORBIDDEN: 'forbidden',
-  SALES_APP_ONLY: 'sales-app-only',
   SERVER_ERROR: 'error',
   NOT_FOUND: 'not-found',
 } as const;
@@ -109,7 +108,6 @@ export const APP_ROUTES = {
     DOCUMENT: (id: string) => `/${APP_PATHS.STOCK.ROOT}/${APP_PATHS.STOCK.DOCUMENTS}/${id}`,
   },
   FORBIDDEN: `/${APP_PATHS.FORBIDDEN}`,
-  SALES_APP_ONLY: `/${APP_PATHS.SALES_APP_ONLY}`,
   SERVER_ERROR: `/${APP_PATHS.SERVER_ERROR}`,
   NOT_FOUND: `/${APP_PATHS.NOT_FOUND}`,
 } as const;

@@ -4,6 +4,7 @@ import { AuthStore } from '../../../../../core/auth/auth-store';
 import { DisplayTimeZone } from '../../../../../core/i18n/time-zone';
 import { PageHeader } from '../../../../../shared/ui/page-header/page-header';
 import { zonedToday } from '../../../../../shared/utils/zoned-day';
+import { DASHBOARD_DATA_PROVIDERS } from '../../../dashboard-data.providers';
 import { dashboardVariant } from '../../../domain/entities/dashboard';
 import { BusinessDashboard } from '../../components/business-dashboard';
 import { DashboardFiltersBar } from '../../components/dashboard-filters';
@@ -28,7 +29,7 @@ import { CompanyDashboardStore } from '../../state/company-dashboard.store';
     OperationsDashboard,
     PlatformDashboardView,
   ],
-  providers: [CompanyDashboardStore],
+  providers: [...DASHBOARD_DATA_PROVIDERS, CompanyDashboardStore],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-page-header

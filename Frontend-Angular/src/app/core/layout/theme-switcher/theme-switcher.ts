@@ -15,7 +15,7 @@ interface ThemeOption {
     <div
       role="radiogroup"
       [attr.aria-label]="'theme.label' | translate"
-      class="inline-flex rounded-lg border border-border bg-surface-muted p-0.5"
+      class="inline-flex rounded-md border border-border bg-surface-muted p-0.5"
     >
       @for (option of options; track option.value) {
         <button
@@ -25,7 +25,7 @@ interface ThemeOption {
           [attr.aria-label]="'theme.' + option.value | translate"
           [title]="'theme.' + option.value | translate"
           (click)="theme.setPreference(option.value)"
-          class="flex size-8 items-center justify-center rounded-md text-fg-muted transition-colors hover:text-fg aria-checked:bg-surface aria-checked:text-primary aria-checked:shadow-card"
+          class="flex size-8 items-center justify-center rounded-sm text-fg-muted transition-colors hover:text-fg aria-checked:bg-surface aria-checked:text-primary"
         >
           <i [class]="'pi ' + option.icon" aria-hidden="true"></i>
         </button>

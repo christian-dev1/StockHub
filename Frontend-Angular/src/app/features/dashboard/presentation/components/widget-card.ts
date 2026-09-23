@@ -24,7 +24,7 @@ let nextId = 0;
     >
       <header class="mb-4 flex flex-wrap items-start justify-between gap-2">
         <div class="min-w-0">
-          <h2 [id]="id + '-title'" class="text-base font-semibold text-fg">{{ title() }}</h2>
+          <h2 [id]="id + '-title'" class="sh-section-title">{{ title() }}</h2>
           @if (subtitle()) {
             <p class="mt-0.5 text-xs text-fg-muted">{{ subtitle() }}</p>
           }

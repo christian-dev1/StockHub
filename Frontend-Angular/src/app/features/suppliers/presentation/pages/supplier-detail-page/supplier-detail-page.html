@@ -18,13 +18,13 @@
 
     <div class="grid gap-6 lg:grid-cols-3">
       <form
-        class="sh-card p-5 sm:p-6 lg:col-span-2"
+        class="sh-card-flat p-5 sm:p-6 lg:col-span-2"
         [formGroup]="form"
         (ngSubmit)="submit()"
         novalidate
         aria-labelledby="sup-details"
       >
-        <h2 id="sup-details" class="mb-5 text-base font-semibold">
+        <h2 id="sup-details" class="sh-section-title mb-5">
           {{ 'suppliers.sections.details' | translate }}
         </h2>
         <app-supplier-fields [form]="form" [codeRequired]="true" [readonly]="!canEdit()" />
@@ -41,8 +41,8 @@
         }
       </form>
 
-      <aside class="sh-card h-fit space-y-4 p-5 sm:p-6" aria-labelledby="sup-status">
-        <h2 id="sup-status" class="text-base font-semibold">
+      <aside class="sh-card-flat h-fit space-y-4 p-5 sm:p-6" aria-labelledby="sup-status">
+        <h2 id="sup-status" class="sh-section-title">
           {{ 'suppliers.sections.status' | translate }}
         </h2>
         <app-active-badge [active]="supplier.active" />

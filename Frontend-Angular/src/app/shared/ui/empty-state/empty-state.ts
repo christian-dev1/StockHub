@@ -10,7 +10,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       >
         <i [class]="'pi ' + icon() + ' text-xl'" aria-hidden="true"></i>
       </span>
-      <h2 class="text-base font-semibold text-fg">{{ title() }}</h2>
+      <h2 class="sh-section-title">{{ title() }}</h2>
       @if (description()) {
         <p class="mt-1 max-w-md text-sm text-fg-muted">{{ description() }}</p>
       }

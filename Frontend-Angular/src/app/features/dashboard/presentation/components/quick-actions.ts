@@ -67,10 +67,10 @@ const ACTIONS: readonly QuickAction[] = [
           <li>
             <a
               [routerLink]="action.route"
-              class="flex min-h-12 items-center gap-2 rounded-lg border px-3 text-sm font-medium no-underline"
+              class="flex min-h-11 items-center gap-2 rounded-md border px-3 text-sm font-medium no-underline"
               [class]="
                 first
-                  ? 'border-primary bg-primary text-primary-fg hover:opacity-90'
+                  ? 'border-primary/40 bg-primary/10 text-primary hover:bg-primary/20'
                   : 'border-border bg-surface text-fg hover:bg-surface-muted'
               "
             >

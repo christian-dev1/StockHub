@@ -12,8 +12,8 @@
 </app-page-header>
 
 <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="grid gap-6 pb-8 lg:grid-cols-2">
-  <section class="sh-card p-5 sm:p-6" aria-labelledby="sec-identity">
-    <h2 id="sec-identity" class="mb-5 text-base font-semibold">
+  <section aria-labelledby="sec-identity">
+    <h2 id="sec-identity" class="sh-section-title mb-5">
       {{ 'users.sections.identity' | translate }}
     </h2>
     <div class="grid gap-5 sm:grid-cols-2" formGroupName="profile">
@@ -79,8 +79,8 @@
     </div>
   </section>
 
-  <section class="sh-card p-5 sm:p-6" aria-labelledby="sec-access">
-    <h2 id="sec-access" class="mb-5 text-base font-semibold">
+  <section aria-labelledby="sec-access">
+    <h2 id="sec-access" class="sh-section-title mb-5">
       {{ 'users.sections.access' | translate }}
     </h2>
     <app-user-access-fields
@@ -112,7 +112,7 @@
           />
           <button
             type="button"
-            class="shrink-0 rounded-lg border border-border px-3 text-sm font-medium hover:bg-surface-muted"
+            class="shrink-0 rounded-md border border-border px-3 text-sm font-medium hover:bg-surface-muted"
             (click)="generatePassword()"
           >
             <i class="pi pi-sparkles mr-1" aria-hidden="true"></i

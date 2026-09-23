@@ -16,6 +16,7 @@ import { AuthApi } from '../../../../../core/auth/auth-api';
 import { AuthStore } from '../../../../../core/auth/auth-store';
 import { APP_ROUTES } from '../../../../../core/config/routes/app.routes';
 import { mapHttpError } from '../../../../../core/errors/http-error.mapper';
+import { loginNavigation } from '../../../domain/login-navigation';
 import { FormField } from '../../../../../shared/ui/form-field/form-field';
 import { Notifier } from '../../../../../shared/ui/notifier';
 import { applyServerErrors } from '../../../../../shared/utils/server-errors';
@@ -79,7 +80,11 @@ export class ChangePasswordPage {
         next: () => {
           this.submitting.set(false);
           this.notifier.success('auth.changePassword.success');
-          void this.router.navigateByUrl(APP_ROUTES.ROOT);
+          const navigation = loginNavigation(
+            { mustChangePassword: false },
+            null,
+          );
+          void this.router.navigateByUrl(navigation.route!);
         },
         error: (error: HttpErrorResponse) => {
           this.submitting.set(false);

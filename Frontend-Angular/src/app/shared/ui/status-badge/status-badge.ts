@@ -17,10 +17,10 @@ const TONES: Record<BadgeTone, string> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <span
-      class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset whitespace-nowrap"
+      class="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset whitespace-nowrap"
       [class]="classes[tone()]"
     >
-      <span class="size-1.5 rounded-full bg-current" aria-hidden="true"></span>
+      <span class="size-1 rounded-full bg-current" aria-hidden="true"></span>
       {{ label() }}
     </span>
   `,

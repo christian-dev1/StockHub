@@ -3,6 +3,7 @@ import { NAVIGATION } from './navigation';
 
 /** Permissions seeded per role by the backend (catalogue and administration part). */
 const ROLE_PERMISSIONS: Record<string, Permission[]> = {
+  VENDEUR: ['PRODUCT_VIEW'],
   ADMIN: [
     'COMPANY_VIEW',
     'USER_VIEW',
@@ -75,5 +76,9 @@ describe('navigation per role', () => {
 
   it('gives the MAGASINIER only the dashboard and products', () => {
     expect(menuFor('MAGASINIER')).toEqual(['nav.dashboard', 'nav.products']);
+  });
+
+  it('gives the VENDEUR only the dashboard and products', () => {
+    expect(menuFor('VENDEUR')).toEqual(['nav.dashboard', 'nav.products']);
   });
 });

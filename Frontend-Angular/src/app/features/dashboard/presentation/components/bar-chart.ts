@@ -36,7 +36,7 @@ const AXIS_LEFT = 32;
 const AXIS_BOTTOM = 8;
 const TOP = 8;
 const BAR_GAP = 2;
-const RADIUS = 4;
+const RADIUS = 3;
 
 /**
  * Grouped bars over time (e.g. entries vs exits). Colours are the validated
@@ -180,7 +180,11 @@ const RADIUS = 4;
               @for (serie of series(); track serie.label; let si = $index) {
                 <p class="flex items-center justify-between gap-3 text-fg">
                   <span class="inline-flex items-center gap-1.5">
-                    <span class="size-2 rounded-sm" [class]="serie.color" aria-hidden="true"></span>
+                    <span
+                      class="size-2 rounded-[2px]"
+                      [class]="serie.color"
+                      aria-hidden="true"
+                    ></span>
                     {{ serie.label }}
                   </span>
                   <span class="tabular-nums">

@@ -86,44 +86,10 @@
             }
           </div>
           @if (canManage()) {
-            <div class="flex flex-wrap gap-2">
-              @if (category.level === 1) {
-                <button
-                  type="button"
-                  class="inline-flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-medium text-fg hover:bg-surface-muted"
-                  (click)="openCreate(category)"
-                  [attr.aria-label]="
-                    'categories.actions.addChild' | translate: { name: category.name }
-                  "
-                >
-                  <i class="pi pi-plus" aria-hidden="true"></i
-                  ><span class="sm:sr-only lg:not-sr-only">{{
-                    'categories.actions.addChildShort' | translate
-                  }}</span>
-                </button>
-              }
-              <button
-                type="button"
-                class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium text-fg hover:bg-surface-muted"
-                (click)="openEdit(category)"
-                [attr.aria-label]="('common.edit' | translate) + ' ' + category.name"
-              >
-                <i class="pi pi-pencil" aria-hidden="true"></i>{{ 'common.edit' | translate }}
-              </button>
-              <button
-                type="button"
-                class="inline-flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-medium text-danger hover:bg-surface-muted disabled:cursor-not-allowed disabled:text-fg-muted disabled:opacity-60"
-                [disabled]="!deletable(category)"
-                [attr.title]="
-                  deletable(category) ? null : ('categories.hints.cannotDelete' | translate)
-                "
-                [attr.aria-label]="('categories.actions.delete' | translate) + ' ' + category.name"
-                (click)="remove(category)"
-              >
-                <i class="pi pi-trash" aria-hidden="true"></i
-                >{{ 'categories.actions.delete' | translate }}
-              </button>
-            </div>
+            <app-row-actions
+              [actions]="rowActions(category)"
+              [ariaLabel]="('common.rowActions' | translate) + ' — ' + category.name"
+            />
           }
         </li>
       }

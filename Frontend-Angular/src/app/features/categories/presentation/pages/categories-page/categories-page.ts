@@ -11,6 +11,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { MenuModule } from 'primeng/menu';
 import { SelectModule } from 'primeng/select';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TextareaModule } from 'primeng/textarea';
@@ -33,6 +34,7 @@ import {
 } from '../../../domain/entities/category';
 import { categoryForm, toCategoryDraft } from '../../forms/category-form';
 import { CategoriesStore } from '../../state/categories.store';
+import { RowActions } from '../../../../../shared/ui/row-actions/row-actions';
 
 @Component({
   selector: 'app-categories-page',
@@ -42,6 +44,7 @@ import { CategoriesStore } from '../../state/categories.store';
     ButtonModule,
     DialogModule,
     InputTextModule,
+    MenuModule,
     SelectModule,
     SkeletonModule,
     TextareaModule,
@@ -49,6 +52,7 @@ import { CategoriesStore } from '../../state/categories.store';
     ErrorState,
     FormField,
     PageHeader,
+    RowActions,
     SearchField,
     StatusBadge,
   ],
@@ -77,6 +81,34 @@ export class CategoriesPage implements OnInit {
   protected readonly editing = signal<Category | null>(null);
   protected readonly saving = signal(false);
   protected readonly form = categoryForm(this.fb);
+
+  /** Actions of one row, routed to the shared "..." menu through the handler. */
+  protected readonly rowActions = (category: Category) =>
+    [
+      this.canManage() && category.level === 1
+        ? {
+            key: 'add-child',
+            icon: 'pi pi-plus',
+            labelKey: 'categories.actions.addChildShort',
+            run: () => this.openCreate(category),
+          }
+        : null,
+      {
+        key: 'edit',
+        icon: 'pi pi-pencil',
+        labelKey: 'common.edit',
+        run: () => this.openEdit(category),
+      },
+      {
+        key: 'delete',
+        icon: 'pi pi-trash',
+        labelKey: 'categories.actions.delete',
+        danger: true,
+        disabled: !this.deletable(category),
+        titleKey: !this.deletable(category) ? 'categories.hints.cannotDelete' : null,
+        run: () => void this.remove(category),
+      },
+    ].filter((action): action is NonNullable<typeof action> => action !== null);
   protected readonly parentOptions = computed(() =>
     possibleParents(this.store.categories(), this.editing()).map((c) => ({
       value: c.id,

@@ -14,13 +14,13 @@ import { LanguageStore } from '../../i18n/language-store';
   template: `
     <button
       type="button"
-      class="flex items-center gap-2 rounded-lg p-1 pr-2 hover:bg-surface-muted"
+      class="flex items-center gap-2 rounded-md p-1 pr-2 hover:bg-surface-muted"
       [attr.aria-label]="'nav.userMenu' | translate"
       aria-haspopup="menu"
       (click)="userMenu.toggle($event)"
     >
       <span
-        class="flex size-8 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-fg"
+        class="flex size-8 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary"
         aria-hidden="true"
       >
         {{ initials() }}

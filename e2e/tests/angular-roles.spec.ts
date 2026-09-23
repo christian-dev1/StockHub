@@ -74,17 +74,25 @@ test.describe('MAGASINIER', () => {
 });
 
 test.describe('VENDEUR', () => {
-  test('is refused by the back-office and pointed to the sales app', async ({ page }) => {
+  test('uses Angular dashboard and products while administrative routes remain forbidden', async ({
+    page,
+  }) => {
     await loginAngular(page, ACCOUNTS.VENDEUR);
-    await expect(page).toHaveURL(/\/sales-app-only$/);
-    await expect(page.getByRole('heading', { name: 'Espace réservé au back-office' })).toBeVisible();
+    await expect(page).toHaveURL(/\/dashboard$/);
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await page.goto(`${ANGULAR_URL}/products`);
+    await expect(page).toHaveURL(/\/products$/);
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await expect(page.getByRole('navigation').getByRole('link', { name: 'Produits' })).toBeVisible();
+    await expect(page.getByRole('navigation').getByRole('link', { name: 'Stock' })).toHaveCount(0);
+    await expect(page.getByRole('navigation').getByRole('link', { name: 'Utilisateurs' })).toHaveCount(0);
+    await expect(page.getByRole('navigation').getByRole('link', { name: /Paramètres/ })).toHaveCount(0);
 
-    for (const path of ['/dashboard', '/users', '/settings/company', '/platform/companies']) {
+    for (const path of ['/users', '/settings/company', '/locations/new', '/stock/adjustment']) {
       await page.goto(`${ANGULAR_URL}${path}`);
-      await expect(page).toHaveURL(/\/sales-app-only$/);
+      await expect(page).toHaveURL(/\/forbidden$/);
     }
-
-    await page.getByRole('button', { name: 'Se déconnecter' }).click();
-    await expect(page).toHaveURL(/\/login$/);
+    await page.goto(`${ANGULAR_URL}/dashboard`);
+    await expect(page.getByText('État de la plateforme')).toHaveCount(0);
   });
 });

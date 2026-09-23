@@ -6,8 +6,8 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthStore } from '../../../../../core/auth/auth-store';
-import { APP_ROUTES } from '../../../../../core/config/routes/app.routes';
 import { mapHttpError } from '../../../../../core/errors/http-error.mapper';
+import { loginNavigation } from '../../../domain/login-navigation';
 import { FormField } from '../../../../../shared/ui/form-field/form-field';
 import { ErrorMessages } from '../../../../../shared/utils/error-message';
 import { AuthLayout } from '../../components/auth-layout';
@@ -54,21 +54,16 @@ export class LoginPage {
     this.auth.login(email, password).subscribe({
       next: (session) => {
         this.submitting.set(false);
-        const target = session.mustChangePassword
-          ? APP_ROUTES.CHANGE_PASSWORD
-          : this.safeReturnUrl();
-        void this.router.navigateByUrl(target);
+        const navigation = loginNavigation(
+          session,
+          this.returnUrl(),
+        );
+        void this.router.navigateByUrl(navigation.route!);
       },
       error: (error: HttpErrorResponse) => {
         this.submitting.set(false);
         this.errorMessage.set(this.errors.of(mapHttpError(error)));
       },
     });
-  }
-
-  /** Only same-app relative paths are accepted (no open redirect). */
-  private safeReturnUrl(): string {
-    const url = this.returnUrl();
-    return url && url.startsWith('/') && !url.startsWith('//') ? url : APP_ROUTES.ROOT;
   }
 }

@@ -2,13 +2,11 @@ import { Routes } from '@angular/router';
 import { APP_PATHS } from './core/config/routes/app.routes';
 import {
   authGuard,
-  backOfficeGuard,
   companyGuard,
   guestGuard,
   passwordChangeGuard,
   permissionGuard,
   platformGuard,
-  salesAppOnlyGuard,
 } from './core/guards/auth.guards';
 import { BARCODES_PROVIDERS } from './features/barcodes/barcodes.providers';
 import { CATEGORIES_PROVIDERS } from './features/categories/categories.providers';
@@ -42,8 +40,8 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./core/layout/shell/shell').then((m) => m.Shell),
-    canActivate: [authGuard, backOfficeGuard],
-    canActivateChild: [authGuard, backOfficeGuard],
+    canActivate: [authGuard],
+    canActivateChild: [authGuard],
     children: [
       { path: '', pathMatch: 'full', redirectTo: APP_PATHS.DASHBOARD },
       {
@@ -338,15 +336,6 @@ export const routes: Routes = [
           ),
       },
     ],
-  },
-  {
-    path: APP_PATHS.SALES_APP_ONLY,
-    canActivate: [authGuard, salesAppOnlyGuard],
-    title: 'StockHub',
-    loadComponent: () =>
-      import('./features/auth/presentation/pages/sales-app-only-page/sales-app-only-page').then(
-        (m) => m.SalesAppOnlyPage,
-      ),
   },
   {
     path: APP_PATHS.FORBIDDEN,

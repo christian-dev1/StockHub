@@ -113,6 +113,10 @@ test.describe('Dashboard — ADMIN', () => {
     await expect(page.getByTestId('recent-activity')).toContainText(f.lowName);
     await expect(page.getByTestId('recent-activity')).toContainText('Entrée');
 
+    // The technical platform card never appears on the business dashboard.
+    await expect(page.getByText('État de la plateforme')).toHaveCount(0);
+    await expect(page.getByText('Vérifié à')).toHaveCount(0);
+
     // The low-stock card leads to the filtered stock list.
     await page.getByTestId('kpi-low').click();
     await expect(page).toHaveURL(/\/stock\?state=LOW/);
@@ -143,6 +147,10 @@ test.describe('Dashboard — MANAGER', () => {
     await expect(page.getByTestId('kpi-stock-value')).toBeVisible();
     expect(digits(await page.getByTestId('kpi-stock-value').innerText())).toBe(1000);
     expect(digits(await page.getByTestId('kpi-low').innerText())).toBe(1);
+
+    // No technical card from the old dashboard: it is platform-only.
+    await expect(page.getByText('État de la plateforme')).toHaveCount(0);
+    await expect(page.getByText('Vérifié à')).toHaveCount(0);
 
     // Business dashboard: stock widgets, no company administration.
     await expect(page.getByRole('heading', { name: 'État du stock' })).toBeVisible();
@@ -214,6 +222,8 @@ test.describe('Dashboard — MAGASINIER', () => {
     await expect(page.getByTestId('kpi-stock-value')).toHaveCount(0);
     await expect(page.getByTestId('kpi-quantity')).toHaveCount(0);
     await expect(page.getByText('Valeur du stock')).toHaveCount(0);
+    // No technical platform card either: operational view only.
+    await expect(page.getByText('État de la plateforme')).toHaveCount(0);
 
     // Single site: no location filter to waste space.
     await expect(page.getByRole('combobox', { name: 'Emplacement' })).toHaveCount(0);
@@ -262,6 +272,10 @@ test.describe('Dashboard — SUPER_ADMIN', () => {
       dashboard.totals.users,
     );
     await expect(page.getByTestId('kpi-platform-operations')).toBeVisible();
+
+    // Technical health is available through Actuator, not as a dashboard card.
+    await expect(page.getByText('État de la plateforme')).toHaveCount(0);
+    await expect(page.getByText('Vérifié à')).toHaveCount(0);
 
     // Chart (new companies) and administrative timeline come from the backend.
     await expect(page.getByTestId('platform-chart-total')).toBeVisible();

@@ -12,9 +12,7 @@ import { LanguageStore } from '../../../../core/i18n/language-store';
 import { DateTimePipe } from '../../../../shared/pipes/date-time.pipe';
 import { QuantityPipe } from '../../../../shared/pipes/quantity.pipe';
 import { PeriodCode } from '../../domain/entities/dashboard';
-import { DashboardStore } from '../state/dashboard.store';
 import { PlatformDashboardStore } from '../state/platform-dashboard.store';
-import { SystemStatusCard } from './system-status-card/system-status-card';
 import { BarChart, ChartPoint, ChartSeries } from './bar-chart';
 import { DashboardFiltersBar } from './dashboard-filters';
 import { KpiCard } from './kpi-card';
@@ -33,7 +31,6 @@ type PlatformMetric = 'newCompanies' | 'operations';
     DashboardFiltersBar,
     KpiCard,
     WidgetCard,
-    SystemStatusCard,
   ],
   providers: [PlatformDashboardStore],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -99,7 +96,7 @@ type PlatformMetric = 'newCompanies' | 'operations';
       </div>
     }
 
-    <div class="mt-6 grid gap-4 lg:grid-cols-3">
+    <div class="mt-6">
       <app-widget-card
         class="lg:col-span-2"
         [title]="'dashboard.platform.activityTitle' | translate"
@@ -140,7 +137,6 @@ type PlatformMetric = 'newCompanies' | 'operations';
           />
         }
       </app-widget-card>
-      <app-system-status-card [state]="health.health()" (refresh)="health.loadHealth()" />
     </div>
 
     <div class="mt-4">
@@ -177,7 +173,6 @@ type PlatformMetric = 'newCompanies' | 'operations';
 })
 export class PlatformDashboardView implements OnInit {
   protected readonly store = inject(PlatformDashboardStore);
-  protected readonly health = inject(DashboardStore);
   private readonly translate = inject(TranslateService);
   private readonly language = inject(LanguageStore);
   protected readonly routes = APP_ROUTES;
@@ -205,7 +200,6 @@ export class PlatformDashboardView implements OnInit {
 
   ngOnInit(): void {
     this.store.load();
-    this.health.loadHealth();
   }
 
   protected actionLabel(action: string): string {

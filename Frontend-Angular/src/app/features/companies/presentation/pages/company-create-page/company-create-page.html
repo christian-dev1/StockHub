@@ -12,8 +12,8 @@
 </app-page-header>
 
 <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="space-y-6 pb-8">
-  <section class="sh-card p-5 sm:p-6" aria-labelledby="sec-company">
-    <h2 id="sec-company" class="mb-1 text-base font-semibold">
+  <section aria-labelledby="sec-company">
+    <h2 id="sec-company" class="sh-section-title mb-1">
       {{ 'companies.create.sections.company' | translate }}
     </h2>
     <p class="mb-5 text-sm text-fg-muted">
@@ -22,8 +22,8 @@
     <app-company-profile-fields [form]="form.controls.profile" />
   </section>
 
-  <section class="sh-card p-5 sm:p-6" aria-labelledby="sec-locale">
-    <h2 id="sec-locale" class="mb-5 text-base font-semibold">
+  <section aria-labelledby="sec-locale">
+    <h2 id="sec-locale" class="sh-section-title mb-5">
       {{ 'companies.create.sections.localization' | translate }}
     </h2>
     <div class="grid gap-5 sm:grid-cols-3">
@@ -82,8 +82,8 @@
     </p>
   </section>
 
-  <section class="sh-card p-5 sm:p-6" aria-labelledby="sec-admin">
-    <h2 id="sec-admin" class="mb-1 text-base font-semibold">
+  <section aria-labelledby="sec-admin">
+    <h2 id="sec-admin" class="sh-section-title mb-1">
       {{ 'companies.create.sections.admin' | translate }}
     </h2>
     <p class="mb-5 text-sm text-fg-muted">

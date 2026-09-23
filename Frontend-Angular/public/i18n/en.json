@@ -14,6 +14,7 @@
     "back": "Back",
     "clear": "Clear",
     "edit": "Edit",
+    "rowActions": "Actions",
     "status": {
       "active": "Active",
       "inactive": "Inactive",

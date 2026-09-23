@@ -12,22 +12,24 @@ import { NAVIGATION } from '../navigation';
     <nav [attr.aria-label]="'nav.main' | translate" class="flex flex-col gap-6">
       @for (section of sections(); track section.labelKey) {
         <div>
-          <p class="px-3 pb-2 text-xs font-semibold uppercase tracking-wide text-fg-muted">
+          <p
+            class="px-2 pb-1.5 text-[0.6875rem] font-medium uppercase tracking-[0.12em] text-fg-muted"
+          >
             {{ section.labelKey | translate }}
           </p>
-          <ul class="flex flex-col gap-0.5">
+          <ul class="flex flex-col">
             @for (item of section.items; track item.route) {
               <li>
                 <a
                   [routerLink]="item.route"
-                  routerLinkActive="bg-surface-muted text-primary"
+                  routerLinkActive="border-primary text-fg font-medium"
                   [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
                   ariaCurrentWhenActive="page"
                   (click)="navigate.emit()"
-                  class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-fg hover:bg-surface-muted"
+                  class="relative flex items-center gap-2.5 border-l-2 border-transparent px-2 py-1.5 text-sm text-fg-muted transition-colors hover:bg-surface-muted/50 hover:text-fg"
                 >
-                  <i [class]="'pi ' + item.icon + ' text-base'" aria-hidden="true"></i>
-                  <span>{{ item.labelKey | translate }}</span>
+                  <i [class]="'pi ' + item.icon + ' text-sm'" aria-hidden="true"></i>
+                  <span class="truncate">{{ item.labelKey | translate }}</span>
                 </a>
               </li>
             }
@@ -44,10 +46,17 @@ export class SidebarNav {
 
   /** Sections filtered by audience (platform vs company) and permissions. */
   protected readonly sections = computed(() => {
-    this.auth.session();
+    const role = this.auth.session()?.role;
     const audience = this.auth.isSuperAdmin() ? 'platform' : 'company';
     return NAVIGATION.filter((s) => s.audience === 'all' || s.audience === audience)
-      .map((s) => ({ ...s, items: s.items.filter((i) => this.auth.canAny(i.permissions ?? [])) }))
+      .map((s) => ({
+        ...s,
+        items: s.items.filter((i) =>
+          role === 'VENDEUR'
+            ? i.labelKey === 'nav.dashboard' || i.labelKey === 'nav.products'
+            : this.auth.canAny(i.permissions ?? []),
+        ),
+      }))
       .filter((s) => s.items.length > 0);
   });
 }
