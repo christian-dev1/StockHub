@@ -58,6 +58,7 @@ interface PageSpec {
 /** A product created once per worker for the detail page, with a stock note for the stock pages. */
 let productId = '';
 let documentId = '';
+let saleId = '';
 test.beforeAll(async ({ request }) => {
   productId = await createProductViaApi(request, ACCOUNTS.ADMIN, {
     name: `Smoke ${Date.now()}`,
@@ -73,6 +74,14 @@ test.beforeAll(async ({ request }) => {
     lines: [{ productId, quantity: 12, batchNumber: `SMOKE-${Date.now()}`, expirationDate: inDays(10) }],
   });
   documentId = entry.id;
+  const seller = await Api.as(request, ACCOUNTS.VENDEUR);
+  const sale = await seller.post<{ id: string }>('/sales', {
+    locationId: primary.id,
+    customerName: 'Client smoke',
+    paymentMethod: 'MOBILE_MONEY',
+    lines: [{ productId, quantity: 1 }],
+  });
+  saleId = sale.id;
 });
 
 const PAGES: readonly PageSpec[] = [
@@ -105,6 +114,13 @@ const PAGES: readonly PageSpec[] = [
   { name: 'Next login', app: 'next', path: (lang) => `/${lang}/login` },
   { name: 'Next home', app: 'next', path: (lang) => `/${lang}`, account: ACCOUNTS.VENDEUR },
   { name: 'Change password', app: 'next', path: (lang) => `/${lang}/change-password`, account: ACCOUNTS.VENDEUR },
+  { name: 'Next products', app: 'next', path: (lang) => `/${lang}/products`, account: ACCOUNTS.VENDEUR },
+  { name: 'Next product', app: 'next', path: (lang) => `/${lang}/products/${productId}`, account: ACCOUNTS.VENDEUR },
+  { name: 'Next new sale', app: 'next', path: (lang) => `/${lang}/sales/new`, account: ACCOUNTS.VENDEUR },
+  { name: 'Next my sales', app: 'next', path: (lang) => `/${lang}/sales`, account: ACCOUNTS.VENDEUR },
+  { name: 'Next sale receipt', app: 'next', path: (lang) => `/${lang}/sales/${saleId}?created=1`, account: ACCOUNTS.VENDEUR },
+  { name: 'Next profile', app: 'next', path: (lang) => `/${lang}/profile`, account: ACCOUNTS.VENDEUR },
+  { name: 'Next preferences', app: 'next', path: (lang) => `/${lang}/preferences`, account: ACCOUNTS.VENDEUR },
 ];
 
 async function openPage(browser: Browser, spec: PageSpec, lang: string, theme: string) {

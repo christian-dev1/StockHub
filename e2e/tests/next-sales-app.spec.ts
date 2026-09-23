@@ -59,7 +59,8 @@ test.describe('Sales app (Next.js)', () => {
 
   test('times are shown in the company time zone, not in UTC', async ({ page }) => {
     // The browser runs in Europe/Paris and the server in UTC; the company is in Africa/Douala.
-    await loginNext(page, ACCOUNTS.VENDEUR);
+    // Sellers do not get the platform status card: a manager does (sale times: next-seller.spec).
+    await loginNext(page, ACCOUNTS.MANAGER);
     const checked = page.getByText(/Vérifié à/);
     await expect(checked).toBeVisible();
     const shown = (await checked.innerText()).match(/(\d{2}):(\d{2})/);

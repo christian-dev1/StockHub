@@ -3,7 +3,8 @@
  * (COUNT, SUM, GROUP BY). It never writes and owns no table; it reads the tables of the stock,
  * catalogue, warehouse, company, user and audit modules through SQL only, so it adds no code
  * dependency on their internals. Scope (company, locations) always comes from the authenticated
- * user. Sales figures are intentionally absent until a sale module exists.
+ * user. Company-wide sales figures are not part of these dashboards yet (sellers get their own
+ * figures from the sale module).
  */
 @ApplicationModule(displayName = "Dashboard", allowedDependencies = {"company", "shared"})
 package com.stockhub.dashboard;

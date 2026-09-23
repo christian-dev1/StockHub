@@ -61,5 +61,13 @@ Corrige les anomalies de `docs/audit/2026-09-22-audit.md` sans nouvelle fonction
 - ✅ Tests : backend 243/243, Angular 217/217, Playwright 153/153
 - ⏳ Étape suivante (ventes/POS/achats…) : voir `00-architecture-plan.md` §11 et §13
 
+## Espace VENDEUR — Phase 7, premier lot (23/09/2026) ✅
+- ✅ Backend module `sale` (V6) : vente atomique avec sortie de stock `SALE` (FEFO, stock négatif selon l'entreprise), prix et total calculés par le serveur, nom du client texte optionnel (pas de table client), idempotence, audit, tables immuables
+- ✅ Visibilité : VENDEUR = ses ventes uniquement (filtre serveur, 404 sinon) ; résumé personnel ; catalogue de vente sans prix d'achat
+- ✅ Next : tableau de bord vendeur, produits (lecture seule), nouvelle vente (recherche/scan, panier), mes ventes (filtres), reçu imprimable, profil, préférences ; menu et pages filtrés par permission
+- ✅ Tests : backend 258/258, Next 41/41, Playwright vendeur 13 + smoke 9 pages Next — `docs/11-espace-vendeur.md`
+- ⏳ Décision : place du VENDEUR dans le back-office Angular (voir §7 du document)
+- ⏳ Reste de la phase 7 : ventes ADMIN/MANAGER (toutes les ventes), annulation, rendu de monnaie, scan caméra
+
 ## Phases 5 → 12 ⏳
 Voir `00-architecture-plan.md` §11 et §13.

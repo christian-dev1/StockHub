@@ -1,4 +1,4 @@
-import { ExclamationCircleIcon, InformationCircleIcon } from '@heroicons/react/20/solid';
+import { CheckCircleIcon, ExclamationCircleIcon, InformationCircleIcon } from '@heroicons/react/20/solid';
 import type { ReactNode } from 'react';
 import { cn } from '../utils/cn';
 
@@ -9,6 +9,11 @@ const TONES = {
     role: 'alert',
   },
   info: { classes: 'border-info/30 bg-info/10 text-info', icon: InformationCircleIcon, role: 'status' },
+  success: {
+    classes: 'border-success/40 bg-success/10 text-fg [&>svg]:text-success',
+    icon: CheckCircleIcon,
+    role: 'status',
+  },
 } as const;
 
 export function Alert({

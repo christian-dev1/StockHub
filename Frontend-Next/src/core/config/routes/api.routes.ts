@@ -16,6 +16,15 @@ export const API_ROUTES = {
     CHANGE_PASSWORD: `${API}/auth/change-password`,
   },
   LOCATIONS: `${API}/locations`,
+  CATEGORIES: `${API}/categories`,
+  SALES: {
+    ROOT: `${API}/sales`,
+    ONE: (id: string) => `${API}/sales/${encodeURIComponent(id)}`,
+    MY_SUMMARY: `${API}/sales/me/summary`,
+    SETTINGS: `${API}/sales/settings`,
+    CATALOGUE: `${API}/sales/catalogue`,
+    CATALOGUE_ITEM: (productId: string) => `${API}/sales/catalogue/${encodeURIComponent(productId)}`,
+  },
 } as const;
 
 /** Endpoints that never carry a bearer token nor trigger a refresh. */

@@ -4,9 +4,10 @@ import { CubeIcon } from '@heroicons/react/24/solid';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { cn } from '@/shared/utils/cn';
+import { useSession } from '../auth/use-session';
 import { Link, usePathname } from '../i18n/navigation';
 import { LanguageSwitcher } from './language-switcher';
-import { NAVIGATION } from './navigation';
+import { activeHref, visibleNavigation } from './navigation';
 import { ThemeSwitcher } from './theme-switcher';
 import { UserMenu } from './user-menu';
 
@@ -17,7 +18,10 @@ import { UserMenu } from './user-menu';
 export function AppShell({ children }: { readonly children: ReactNode }) {
   const t = useTranslations();
   const pathname = usePathname();
-  const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
+  const { can } = useSession();
+  const items = visibleNavigation(can);
+  const current = activeHref(pathname, items);
+  const isActive = (href: string) => href === current;
 
   return (
     <>
@@ -35,7 +39,7 @@ export function AppShell({ children }: { readonly children: ReactNode }) {
           <Brand />
           <nav aria-label={t('nav.main')} className="flex-1 p-3">
             <ul className="flex flex-col gap-0.5">
-              {NAVIGATION.map(({ href, icon: Icon, labelKey }) => (
+              {items.map(({ href, icon: Icon, labelKey }) => (
                 <li key={href}>
                   <Link
                     href={href}
@@ -83,21 +87,23 @@ export function AppShell({ children }: { readonly children: ReactNode }) {
         className="border-border bg-surface fixed inset-x-0 bottom-0 z-30 border-t pb-[env(safe-area-inset-bottom)] lg:hidden"
       >
         <ul className="mx-auto flex max-w-md justify-around">
-          {NAVIGATION.map(({ href, icon: Icon, labelKey }) => (
-            <li key={href} className="flex-1">
-              <Link
-                href={href}
-                aria-current={isActive(href) ? 'page' : undefined}
-                className={cn(
-                  'text-fg-muted flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-medium',
-                  isActive(href) && 'text-primary',
-                )}
-              >
-                <Icon className="size-6" aria-hidden="true" />
-                {t(`nav.${labelKey}`)}
-              </Link>
-            </li>
-          ))}
+          {items
+            .filter((item) => item.mobile)
+            .map(({ href, icon: Icon, labelKey }) => (
+              <li key={href} className="flex-1">
+                <Link
+                  href={href}
+                  aria-current={isActive(href) ? 'page' : undefined}
+                  className={cn(
+                    'text-fg-muted flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-medium',
+                    isActive(href) && 'text-primary',
+                  )}
+                >
+                  <Icon className="size-6" aria-hidden="true" />
+                  {t(`nav.${labelKey}`)}
+                </Link>
+              </li>
+            ))}
         </ul>
       </nav>
     </>

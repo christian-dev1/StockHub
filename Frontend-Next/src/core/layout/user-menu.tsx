@@ -1,7 +1,12 @@
 'use client';
 
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
-import { ArrowRightStartOnRectangleIcon, KeyIcon } from '@heroicons/react/20/solid';
+import {
+  AdjustmentsHorizontalIcon,
+  ArrowRightStartOnRectangleIcon,
+  KeyIcon,
+  UserCircleIcon,
+} from '@heroicons/react/20/solid';
 import { useTranslations } from 'next-intl';
 import { logout } from '../auth/auth-api';
 import { useSession } from '../auth/use-session';
@@ -57,6 +62,28 @@ export function UserMenu() {
                 <ThemeSwitcher />
               </div>
             </section>
+            <button
+              type="button"
+              onClick={() => {
+                close();
+                router.push(APP_ROUTES.PROFILE);
+              }}
+              className={`text-fg ${itemClass}`}
+            >
+              <UserCircleIcon className="text-fg-muted size-4" aria-hidden="true" />
+              {t('nav.profile')}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                close();
+                router.push(APP_ROUTES.PREFERENCES);
+              }}
+              className={`text-fg ${itemClass}`}
+            >
+              <AdjustmentsHorizontalIcon className="text-fg-muted size-4" aria-hidden="true" />
+              {t('nav.preferences')}
+            </button>
             <button
               type="button"
               onClick={() => {

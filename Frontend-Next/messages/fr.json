@@ -10,14 +10,24 @@
     "loading": "Chargement…",
     "retry": "Réessayer",
     "save": "Enregistrer",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "pageOf": "Page {page} sur {total}",
+    "print": "Imprimer",
+    "clearSearch": "Effacer la recherche",
+    "error": "Le chargement a échoué."
   },
   "nav": {
     "main": "Navigation principale",
     "sidebar": "Barre latérale",
-    "home": "Accueil",
+    "home": "Tableau de bord",
     "userMenu": "Menu utilisateur",
-    "preferences": "Préférences"
+    "preferences": "Préférences",
+    "products": "Produits",
+    "newSale": "Nouvelle vente",
+    "mySales": "Mes ventes",
+    "profile": "Mon profil"
   },
   "theme": {
     "label": "Thème",
@@ -31,7 +41,7 @@
     "en": "Anglais"
   },
   "home": {
-    "title": "Accueil",
+    "title": "Tableau de bord",
     "subtitle": "Votre espace de vente"
   },
   "system": {
@@ -50,7 +60,7 @@
       "retry": "Réessayer",
       "403": {
         "title": "Accès refusé",
-        "description": "Cette application est réservée aux équipes de vente de votre entreprise. Utilisez le back-office pour l'administration."
+        "description": "Vous n'avez pas les droits nécessaires pour cette page. L'administration se fait dans le back-office."
       },
       "404": {
         "title": "Page introuvable",
@@ -77,7 +87,21 @@
       "AUTH_COMPANY_DISABLED": "Le compte de votre entreprise est désactivé.",
       "AUTH_TOO_MANY_ATTEMPTS": "Trop de tentatives. Réessayez dans quelques minutes.",
       "PASSWORD_CURRENT_INVALID": "Le mot de passe actuel est incorrect.",
-      "PASSWORD_UNCHANGED": "Le nouveau mot de passe doit être différent."
+      "PASSWORD_UNCHANGED": "Le nouveau mot de passe doit être différent.",
+      "SALE_EMPTY": "Le panier est vide.",
+      "SALE_TOO_MANY_LINES": "Trop de produits dans une seule vente (100 au plus).",
+      "SALE_DUPLICATE_PRODUCT": "Un produit apparaît deux fois dans le panier.",
+      "SALE_PAYMENT_METHOD_INVALID": "Choisissez un moyen de paiement.",
+      "QUANTITY_INVALID": "Une quantité est invalide.",
+      "QUANTITY_MUST_BE_WHOLE": "Un produit vendu à l'unité a une quantité non entière.",
+      "INSUFFICIENT_STOCK": "Stock insuffisant pour un produit : le panier a été actualisé, vérifiez les quantités.",
+      "PRODUCT_INACTIVE": "Un produit du panier n'est plus en vente.",
+      "LOCATION_ACCESS_DENIED": "Vous n'avez pas accès à ce point de vente.",
+      "LOCATION_REQUIRED": "Aucun point de vente n'est sélectionné.",
+      "FIELD_TOO_LONG": "Un champ est trop long.",
+      "IDEMPOTENCY_KEY_REUSED": "Cette vente a déjà été soumise. Rechargez la page.",
+      "DATE_RANGE_INVALID": "La date de début est après la date de fin.",
+      "STOCK_CONFLICT": "Le stock est en cours de modification. Réessayez."
     }
   },
   "roles": {
@@ -115,5 +139,180 @@
       "submit": "Mettre à jour"
     },
     "logout": "Se déconnecter"
+  },
+  "units": {
+    "UNIT": "unité",
+    "KG": "kg",
+    "G": "g",
+    "L": "L",
+    "ML": "mL",
+    "M": "m",
+    "BOX": "boîte",
+    "PACK": "paquet"
+  },
+  "location": {
+    "label": "Point de vente",
+    "none": "Aucun point de vente",
+    "noneHint": "Aucun emplacement ne vous est attribué. Contactez votre administrateur."
+  },
+  "catalogue": {
+    "title": "Produits",
+    "subtitle": "Consultez les prix et la disponibilité à {location}.",
+    "search": "Rechercher un produit",
+    "searchPlaceholder": "Nom, SKU ou code-barres",
+    "category": "Catégorie",
+    "allCategories": "Toutes les catégories",
+    "inStockOnly": "En stock uniquement",
+    "results": "{count, plural, =0 {Aucun produit} one {# produit} other {# produits}}",
+    "empty": "Aucun produit",
+    "emptyHint": "Le catalogue de votre entreprise est vide.",
+    "noMatch": "Aucun produit ne correspond à votre recherche",
+    "noMatchHint": "Vérifiez l'orthographe ou le code, ou retirez des filtres.",
+    "resetFilters": "Réinitialiser les filtres",
+    "inStock": "{quantity} en stock",
+    "outOfStock": "Rupture de stock",
+    "salePrice": "Prix de vente",
+    "sku": "SKU",
+    "barcode": "Code-barres",
+    "unit": "Unité",
+    "description": "Description",
+    "availability": "Disponibilité à {location}",
+    "back": "Retour aux produits",
+    "sell": "Vendre ce produit",
+    "readOnly": "Consultation seule : les produits, prix et stocks sont gérés dans le back-office.",
+    "notFound": "Ce produit est introuvable ou n'est plus vendu."
+  },
+  "sales": {
+    "payment": {
+      "CASH": "Espèces",
+      "CARD": "Carte bancaire",
+      "MOBILE_MONEY": "Mobile money",
+      "BANK_TRANSFER": "Virement",
+      "OTHER": "Autre"
+    },
+    "status": {
+      "COMPLETED": "Validée"
+    },
+    "new": {
+      "title": "Nouvelle vente",
+      "subtitle": "Recherchez ou scannez un produit, puis validez la vente.",
+      "search": "Rechercher ou scanner un produit",
+      "searchPlaceholder": "Nom, SKU ou code-barres",
+      "searchHint": "Avec un scanner, le produit est ajouté directement.",
+      "noResult": "Aucun produit trouvé",
+      "add": "Ajouter {name} au panier",
+      "added": "{name} ajouté au panier",
+      "cart": "Panier",
+      "emptyCart": "Le panier est vide",
+      "emptyCartHint": "Ajoutez des produits depuis la recherche.",
+      "decrease": "Diminuer la quantité de {name}",
+      "increase": "Augmenter la quantité de {name}",
+      "quantity": "Quantité de {name}",
+      "remove": "Retirer {name} du panier",
+      "stock": "Stock : {quantity}",
+      "customer": "Nom du client (optionnel)",
+      "customerHint": "Laissez vide pour un client de passage.",
+      "payment": "Moyen de paiement",
+      "subtotal": "Sous-total",
+      "total": "Total",
+      "items": "{count, plural, one {# article} other {# articles}}",
+      "confirm": "Valider la vente",
+      "clear": "Vider le panier",
+      "noTax": "Aucune taxe ni remise n'est configurée : le total est le montant à encaisser.",
+      "serverPrices": "Les montants définitifs sont recalculés par le serveur à la validation.",
+      "fixIssues": "Corrigez les lignes signalées avant de valider.",
+      "issue": {
+        "QUANTITY_INVALID": "Quantité invalide (supérieure à 0, 3 décimales au plus).",
+        "QUANTITY_MUST_BE_WHOLE": "Ce produit se vend à l'unité : quantité entière uniquement.",
+        "INSUFFICIENT_STOCK": "Stock insuffisant : {available} disponible(s)."
+      }
+    },
+    "mine": {
+      "title": "Mes ventes",
+      "subtitle": "Uniquement les ventes que vous avez enregistrées.",
+      "search": "Rechercher",
+      "searchPlaceholder": "N° de vente ou nom du client",
+      "from": "Du",
+      "to": "Au",
+      "payment": "Paiement",
+      "allPayments": "Tous les moyens",
+      "reset": "Réinitialiser les filtres",
+      "count": "{count, plural, =0 {Aucune vente} one {# vente} other {# ventes}}",
+      "empty": "Aucune vente pour le moment",
+      "emptyHint": "Vos ventes apparaîtront ici dès la première validation.",
+      "noMatch": "Aucune vente ne correspond aux filtres",
+      "noMatchHint": "Modifiez la recherche ou les dates.",
+      "walkIn": "Client de passage",
+      "items": "{count, plural, one {# article} other {# articles}}",
+      "number": "N° de vente",
+      "date": "Date",
+      "customer": "Client",
+      "total": "Total"
+    },
+    "detail": {
+      "back": "Retour à mes ventes",
+      "created": "Vente enregistrée",
+      "createdHint": "Le stock a été mis à jour. Vous pouvez imprimer le reçu.",
+      "print": "Imprimer le reçu",
+      "newSale": "Nouvelle vente",
+      "notFound": "Cette vente est introuvable."
+    },
+    "receipt": {
+      "title": "Reçu de vente",
+      "number": "N° de vente",
+      "date": "Date",
+      "seller": "Vendeur",
+      "customer": "Client",
+      "location": "Point de vente",
+      "product": "Produit",
+      "quantity": "Qté",
+      "unitPrice": "Prix unitaire",
+      "amount": "Montant",
+      "total": "Total",
+      "payment": "Paiement",
+      "status": "Statut",
+      "thanks": "Merci de votre visite !"
+    }
+  },
+  "sellerDashboard": {
+    "subtitle": "Votre activité personnelle.",
+    "todayRevenue": "Chiffre d'affaires du jour",
+    "todaySales": "Ventes du jour",
+    "averageBasket": "Panier moyen du jour",
+    "periodRevenue": "Chiffre d'affaires sur {days} jours",
+    "periodSales": "{count, plural, =0 {aucune vente} one {# vente} other {# ventes}}",
+    "recent": "Mes dernières ventes",
+    "viewAll": "Voir toutes mes ventes",
+    "noSales": "Vous n'avez encore enregistré aucune vente.",
+    "topProducts": "Mes produits les plus vendus ({days} jours)",
+    "noTopProducts": "Pas encore de vente sur la période.",
+    "sold": "{quantity} vendu(s)",
+    "newSale": "Nouvelle vente"
+  },
+  "profile": {
+    "title": "Mon profil",
+    "subtitle": "Vos informations personnelles.",
+    "name": "Nom",
+    "email": "Adresse e-mail",
+    "role": "Rôle",
+    "company": "Entreprise",
+    "locations": "Emplacements autorisés",
+    "allLocations": "Tous les emplacements de l'entreprise",
+    "managed": "Ces informations sont gérées par l'administrateur de votre entreprise.",
+    "security": "Sécurité"
+  },
+  "preferences": {
+    "title": "Préférences",
+    "subtitle": "Réglages personnels, enregistrés sur cet appareil.",
+    "language": "Langue",
+    "languageHint": "Langue de l'interface et du format des dates et des nombres.",
+    "theme": "Thème",
+    "themeHint": "Clair, sombre, ou identique au système.",
+    "location": "Point de vente",
+    "locationHint": "Emplacement utilisé pour la caisse et la disponibilité des produits.",
+    "currency": "Devise",
+    "currencyHint": "Définie par l'administrateur de l'entreprise : elle ne se modifie pas ici.",
+    "numbers": "Format des montants",
+    "numbersHint": "Suit la langue choisie. Exemple : {example}"
   }
 }

@@ -88,3 +88,34 @@
     @apply border-border bg-surface shadow-card rounded-xl border;
   }
 }
+
+/*
+ * Receipts are printed with the browser (no PDF library): only the receipt is
+ * printed, in black on white, at ticket-printer width.
+ */
+@media print {
+  @page {
+    margin: 4mm;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .sh-receipt,
+  .sh-receipt * {
+    visibility: visible;
+    color: #000 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+
+  .sh-receipt {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 76mm;
+    border: 0 !important;
+    padding: 0 !important;
+    font-size: 11px;
+  }
+}

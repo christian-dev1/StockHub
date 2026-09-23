@@ -218,13 +218,26 @@ public class StockOperations {
     }
 
     public StockDocument exit(Exit c) {
-        var o = context.begin();
-        context.requireOperableLocation(o.companyId(), c.locationId(), "locationId");
-        lines(c.lines());
         MovementType type = c.type() == null ? MovementType.EXIT : c.type();
         require(
                 type == MovementType.EXIT || type == MovementType.RETURN_SUPPLIER,
                 "INVALID_MOVEMENT_TYPE");
+        return issue(c, type);
+    }
+
+    /**
+     * Goods sold at a point of sale: a goods-issued note whose movements are SALE (FEFO, expired
+     * batches excluded, no negative stock unless the company allows it). Only reachable through
+     * the sales module, never through the stock API.
+     */
+    public StockDocument sale(UUID locationId, String saleNumber, List<OutLine> lines) {
+        return issue(new Exit(locationId, MovementType.SALE, null, saleNumber, lines), MovementType.SALE);
+    }
+
+    private StockDocument issue(Exit c, MovementType type) {
+        var o = context.begin();
+        context.requireOperableLocation(o.companyId(), c.locationId(), "locationId");
+        lines(c.lines());
         c.lines().forEach(l -> product(o, l.productId()));
         var locked =
                 lock(

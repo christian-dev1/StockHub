@@ -1,5 +1,5 @@
 import { Description, Field, Input, Label } from '@headlessui/react';
-import type { InputHTMLAttributes, ReactNode } from 'react';
+import type { InputHTMLAttributes, ReactNode, Ref } from 'react';
 import { cn } from '../utils/cn';
 
 interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'className' | 'children'> {
@@ -7,6 +7,7 @@ interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'cl
   readonly hint?: string;
   readonly error?: string | null;
   readonly trailing?: ReactNode;
+  readonly ref?: Ref<HTMLInputElement>;
 }
 
 /** Labelled input; Headless UI wires label, description and aria-invalid for us. */

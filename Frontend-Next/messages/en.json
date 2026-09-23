@@ -10,14 +10,24 @@
     "loading": "Loading…",
     "retry": "Retry",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {total}",
+    "print": "Print",
+    "clearSearch": "Clear search",
+    "error": "Loading failed."
   },
   "nav": {
     "main": "Main navigation",
     "sidebar": "Sidebar",
-    "home": "Home",
+    "home": "Dashboard",
     "userMenu": "User menu",
-    "preferences": "Preferences"
+    "preferences": "Preferences",
+    "products": "Products",
+    "newSale": "New sale",
+    "mySales": "My sales",
+    "profile": "My profile"
   },
   "theme": {
     "label": "Theme",
@@ -31,7 +41,7 @@
     "en": "English"
   },
   "home": {
-    "title": "Home",
+    "title": "Dashboard",
     "subtitle": "Your sales workspace"
   },
   "system": {
@@ -50,7 +60,7 @@
       "retry": "Try again",
       "403": {
         "title": "Access denied",
-        "description": "This app is for your company's sales teams. Use the back-office for administration."
+        "description": "You do not have the rights needed for this page. Administration is done in the back-office."
       },
       "404": {
         "title": "Page not found",
@@ -77,7 +87,21 @@
       "AUTH_COMPANY_DISABLED": "Your company account is disabled.",
       "AUTH_TOO_MANY_ATTEMPTS": "Too many attempts. Try again in a few minutes.",
       "PASSWORD_CURRENT_INVALID": "The current password is incorrect.",
-      "PASSWORD_UNCHANGED": "The new password must be different."
+      "PASSWORD_UNCHANGED": "The new password must be different.",
+      "SALE_EMPTY": "The cart is empty.",
+      "SALE_TOO_MANY_LINES": "Too many products in one sale (100 at most).",
+      "SALE_DUPLICATE_PRODUCT": "A product appears twice in the cart.",
+      "SALE_PAYMENT_METHOD_INVALID": "Choose a payment method.",
+      "QUANTITY_INVALID": "A quantity is invalid.",
+      "QUANTITY_MUST_BE_WHOLE": "A product sold by unit has a fractional quantity.",
+      "INSUFFICIENT_STOCK": "Not enough stock for a product: the cart was refreshed, check the quantities.",
+      "PRODUCT_INACTIVE": "A product in the cart is no longer sold.",
+      "LOCATION_ACCESS_DENIED": "You do not have access to this point of sale.",
+      "LOCATION_REQUIRED": "No point of sale is selected.",
+      "FIELD_TOO_LONG": "A field is too long.",
+      "IDEMPOTENCY_KEY_REUSED": "This sale was already submitted. Reload the page.",
+      "DATE_RANGE_INVALID": "The start date is after the end date.",
+      "STOCK_CONFLICT": "Stock is being changed. Try again."
     }
   },
   "roles": {
@@ -115,5 +139,180 @@
       "submit": "Update"
     },
     "logout": "Sign out"
+  },
+  "units": {
+    "UNIT": "unit",
+    "KG": "kg",
+    "G": "g",
+    "L": "L",
+    "ML": "mL",
+    "M": "m",
+    "BOX": "box",
+    "PACK": "pack"
+  },
+  "location": {
+    "label": "Point of sale",
+    "none": "No point of sale",
+    "noneHint": "No location is assigned to you. Contact your administrator."
+  },
+  "catalogue": {
+    "title": "Products",
+    "subtitle": "Check prices and availability at {location}.",
+    "search": "Search a product",
+    "searchPlaceholder": "Name, SKU or barcode",
+    "category": "Category",
+    "allCategories": "All categories",
+    "inStockOnly": "In stock only",
+    "results": "{count, plural, =0 {No product} one {# product} other {# products}}",
+    "empty": "No product",
+    "emptyHint": "Your company catalogue is empty.",
+    "noMatch": "No product matches your search",
+    "noMatchHint": "Check the spelling or the code, or remove filters.",
+    "resetFilters": "Reset filters",
+    "inStock": "{quantity} in stock",
+    "outOfStock": "Out of stock",
+    "salePrice": "Sale price",
+    "sku": "SKU",
+    "barcode": "Barcode",
+    "unit": "Unit",
+    "description": "Description",
+    "availability": "Availability at {location}",
+    "back": "Back to products",
+    "sell": "Sell this product",
+    "readOnly": "Read only: products, prices and stock are managed in the back-office.",
+    "notFound": "This product cannot be found or is no longer sold."
+  },
+  "sales": {
+    "payment": {
+      "CASH": "Cash",
+      "CARD": "Card",
+      "MOBILE_MONEY": "Mobile money",
+      "BANK_TRANSFER": "Bank transfer",
+      "OTHER": "Other"
+    },
+    "status": {
+      "COMPLETED": "Completed"
+    },
+    "new": {
+      "title": "New sale",
+      "subtitle": "Search or scan a product, then confirm the sale.",
+      "search": "Search or scan a product",
+      "searchPlaceholder": "Name, SKU or barcode",
+      "searchHint": "With a scanner, the product is added directly.",
+      "noResult": "No product found",
+      "add": "Add {name} to the cart",
+      "added": "{name} added to the cart",
+      "cart": "Cart",
+      "emptyCart": "The cart is empty",
+      "emptyCartHint": "Add products from the search.",
+      "decrease": "Decrease the quantity of {name}",
+      "increase": "Increase the quantity of {name}",
+      "quantity": "Quantity of {name}",
+      "remove": "Remove {name} from the cart",
+      "stock": "Stock: {quantity}",
+      "customer": "Customer name (optional)",
+      "customerHint": "Leave empty for a walk-in customer.",
+      "payment": "Payment method",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "items": "{count, plural, one {# item} other {# items}}",
+      "confirm": "Confirm sale",
+      "clear": "Empty the cart",
+      "noTax": "No tax or discount is configured: the total is the amount to collect.",
+      "serverPrices": "Final amounts are computed again by the server on confirmation.",
+      "fixIssues": "Fix the highlighted lines before confirming.",
+      "issue": {
+        "QUANTITY_INVALID": "Invalid quantity (above 0, at most 3 decimals).",
+        "QUANTITY_MUST_BE_WHOLE": "This product is sold by unit: whole quantities only.",
+        "INSUFFICIENT_STOCK": "Not enough stock: {available} available."
+      }
+    },
+    "mine": {
+      "title": "My sales",
+      "subtitle": "Only the sales you recorded.",
+      "search": "Search",
+      "searchPlaceholder": "Sale number or customer name",
+      "from": "From",
+      "to": "To",
+      "payment": "Payment",
+      "allPayments": "All methods",
+      "reset": "Reset filters",
+      "count": "{count, plural, =0 {No sale} one {# sale} other {# sales}}",
+      "empty": "No sale yet",
+      "emptyHint": "Your sales will show up here after the first one.",
+      "noMatch": "No sale matches the filters",
+      "noMatchHint": "Change the search or the dates.",
+      "walkIn": "Walk-in customer",
+      "items": "{count, plural, one {# item} other {# items}}",
+      "number": "Sale number",
+      "date": "Date",
+      "customer": "Customer",
+      "total": "Total"
+    },
+    "detail": {
+      "back": "Back to my sales",
+      "created": "Sale recorded",
+      "createdHint": "Stock has been updated. You can print the receipt.",
+      "print": "Print receipt",
+      "newSale": "New sale",
+      "notFound": "This sale cannot be found."
+    },
+    "receipt": {
+      "title": "Sales receipt",
+      "number": "Sale number",
+      "date": "Date",
+      "seller": "Seller",
+      "customer": "Customer",
+      "location": "Point of sale",
+      "product": "Product",
+      "quantity": "Qty",
+      "unitPrice": "Unit price",
+      "amount": "Amount",
+      "total": "Total",
+      "payment": "Payment",
+      "status": "Status",
+      "thanks": "Thank you for your visit!"
+    }
+  },
+  "sellerDashboard": {
+    "subtitle": "Your personal activity.",
+    "todayRevenue": "Today's revenue",
+    "todaySales": "Today's sales",
+    "averageBasket": "Today's average basket",
+    "periodRevenue": "Revenue over {days} days",
+    "periodSales": "{count, plural, =0 {no sale} one {# sale} other {# sales}}",
+    "recent": "My latest sales",
+    "viewAll": "See all my sales",
+    "noSales": "You have not recorded any sale yet.",
+    "topProducts": "My best-selling products ({days} days)",
+    "noTopProducts": "No sale over the period yet.",
+    "sold": "{quantity} sold",
+    "newSale": "New sale"
+  },
+  "profile": {
+    "title": "My profile",
+    "subtitle": "Your personal information.",
+    "name": "Name",
+    "email": "Email address",
+    "role": "Role",
+    "company": "Company",
+    "locations": "Allowed locations",
+    "allLocations": "Every location of the company",
+    "managed": "This information is managed by your company administrator.",
+    "security": "Security"
+  },
+  "preferences": {
+    "title": "Preferences",
+    "subtitle": "Personal settings, saved on this device.",
+    "language": "Language",
+    "languageHint": "Language of the interface and of date and number formats.",
+    "theme": "Theme",
+    "themeHint": "Light, dark, or the same as the system.",
+    "location": "Point of sale",
+    "locationHint": "Location used for checkout and product availability.",
+    "currency": "Currency",
+    "currencyHint": "Set by the company administrator: it cannot be changed here.",
+    "numbers": "Amount format",
+    "numbersHint": "Follows the chosen language. Example: {example}"
   }
 }

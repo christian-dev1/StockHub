@@ -10,7 +10,7 @@ public enum MovementType {
     ADJUSTMENT_NEGATIVE(false),
     RETURN_CUSTOMER(true),
     RETURN_SUPPLIER(false),
-    /** Reserved for the sales module (not produced yet). */
+    /** Produced only by the sales module (StockSalePort). */
     SALE(false);
 
     private final boolean increase;

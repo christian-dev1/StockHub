@@ -21,3 +21,6 @@ export type RoleCode = 'SUPER_ADMIN' | 'ADMIN' | 'MANAGER' | 'MAGASINIER' | 'VEN
 
 /** Roles allowed in the sales app; the platform super admin works in the back-office. */
 export const SALES_APP_ROLES: readonly RoleCode[] = ['ADMIN', 'MANAGER', 'MAGASINIER', 'VENDEUR'];
+
+/** Roles that only ever work on their own sales (enforced by the backend as well). */
+export const OWN_SALES_ONLY_ROLES: readonly RoleCode[] = ['VENDEUR'];
